@@ -8,12 +8,12 @@ import UserKYC from '../Pages/User/UserKYC'
 
 const publicRoutes = [
   { path: '/', component: Home },
-  { path: '/admin', component: AdminPage },
-  { path: '/education-kyc', component: EducationKYC },
-  { path: '/mint-request', component: MintRequest },
-  { path: '/all-nfts', component: AllNFTs },
-  { path: '/my-nfts', component: MyNFT },
-  { path: '/user-kyc', component: UserKYC },
+  { path: '/admin', component: AdminPage, role: 'admin' },
+  { path: '/education-kyc', component: EducationKYC, role: 'education' },
+  { path: '/mint-request', component: MintRequest, role: 'education' },
+  { path: '/all-nfts', component: AllNFTs, role: null },
+  { path: '/my-nfts', component: MyNFT, role: 'user' },
+  { path: '/user-kyc', component: UserKYC, role: 'user' },
 ]
 
 const privateRoutes = []

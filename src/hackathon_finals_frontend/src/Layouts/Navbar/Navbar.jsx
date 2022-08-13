@@ -1,11 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../../assets/logo_colored.png'
-
+import { checkRole } from '../../Utils/CheckRole'
 import { ConnectButton, useConnect } from '@connect2ic/react'
+import { publicRoutes } from '../../Routes/index'
 export default function NavBar() {
   // const { principal } = useConnect()
+  const [pathRole, setPathRole] = useState(2)
+  const TEST_ID = 1
+  useEffect(() => {
+    let role = checkRole(TEST_ID)
+    console.log(role)
+    const filterPath = publicRoutes.filter(route => route.role === role)
+    // console.log()
+    setPathRole(1)
+    console.log(pathRole)
+  }, [])
+
   return (
     <Nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
@@ -13,6 +25,9 @@ export default function NavBar() {
           <Link className="navbar-brand" to="/">
             <img className="logo" src={Logo} alt="logo" />
           </Link>
+          {/* {publicRoutes.map((route, index) => {
+            const role = route.role
+          })} */}
           <Link className="navbar-brand" to="/customers">
             <div>Customer lists</div>
           </Link>
