@@ -5,18 +5,19 @@ import Logo from '../../../assets/logo_colored.png'
 import { checkRole } from '../../Utils/CheckRole'
 import { ConnectButton, useConnect } from '@connect2ic/react'
 import { publicRoutes } from '../../Routes/index'
+
+
 export default function NavBar() {
   // const { principal } = useConnect()
-  const [pathRole, setPathRole] = useState(2)
-  const TEST_ID = 1
+  const [pathRoles, setPathRoles] = useState([])
+  // Change TEST_ID for test role, 1 for admin role, 3 for user role, 2 for education role
+  const TEST_ID = 3
   useEffect(() => {
     let role = checkRole(TEST_ID)
-    console.log(role)
     const filterPath = publicRoutes.filter(route => route.role === role)
-    // console.log()
-    setPathRole(1)
-    console.log(pathRole)
+    setPathRoles(filterPath)
   }, [])
+  console.log(pathRoles)
 
   return (
     <Nav className="navbar navbar-expand-lg bg-light">
@@ -25,15 +26,16 @@ export default function NavBar() {
           <Link className="navbar-brand" to="/">
             <img className="logo" src={Logo} alt="logo" />
           </Link>
-          {/* {publicRoutes.map((route, index) => {
+          {pathRoles.map((route, index) => {
             const role = route.role
-          })} */}
-          <Link className="navbar-brand" to="/customers">
+            return ( <Link key={index} className="navbar-brand" to={route.path}>{route.desc}</Link> )
+          })}
+          {/* <Link className="navbar-brand" to="/customers">
             <div>Customer lists</div>
           </Link>
           <Link className="navbar-brand" to="/mint-and-transfer">
             <div>Mint & Transfer NFT</div>
-          </Link>
+          </Link> */}
         </div>
         <div className="d-flex align-items-center h100">
           {/* {principal && <div className="wallet_id">{principal}</div>} */}
