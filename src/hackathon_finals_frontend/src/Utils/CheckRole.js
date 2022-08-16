@@ -10,11 +10,8 @@ const checkRole = principalId => {
     case 2:
       role = 'education'
       break
-    case 3:
-      role = 'user'
-      break
     default:
-      role = null
+      role = 'user'
       break
   }
   return role
