@@ -8,7 +8,6 @@ import Principal "mo:base/Principal";
 
 module {
 
-
   //---------------------------
   public type ApiError = {
     #Unauthorized;
@@ -22,12 +21,20 @@ module {
     #Err : E;
   };
   public type TokenId = Nat64;
+  
   public type Privacy = Result<Bool, ApiError>;
   
   public type Nft = {
+    isPublic : Bool;
+    minter : Principal;
     owner: Principal;
     id: TokenId;
     metadata: FullMetadata;
+  };
+
+  public type Center ={
+    address : Principal;
+    volume : Nat;
   };
 
   public type FullMetadata = {
@@ -45,10 +52,9 @@ module {
   //---------------------------
 
   public type Dip721NonFungibleToken = {
-    logo: LogoResult;
     name: Text;
     symbol: Text;
-    maxLimit : Nat16;
+    address: Principal;
   };
 
   

@@ -17,15 +17,13 @@ import TokenId "mo:base/Nat64";
 import Types "./Types";
 
 
-shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibleToken) = Self {
+shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var transactionId: Types.TransactionId = 0;
   stable var nfts = List.nil<Types.Nft>();
-  stable var custodians = List.make<Principal>(custodian);
-  stable var logo : Types.LogoResult = init.logo;
+  stable var centers = List.nil<Types.Center>();
   stable var name : Text = init.name;
   stable var symbol : Text = init.symbol;
-  stable var maxLimit : Nat16 = init.maxLimit;
-
+  stable var admin : Principal = init.address;
 
   // trade NFT 
   var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
@@ -83,6 +81,8 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
           nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
             if (item.id == token.id) {
               let update : Types.Nft = {
+                isPublic = item.isPublic;
+                minter = item.minter;
                 owner = caller;
                 id = item.id;
                 metadata = token.metadata;
@@ -104,81 +104,126 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
 
   // @public
 
+
+
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
-  //====================================================================================================================
   //Set Privacy Function, this funtion will be called from front-end
   //data: represent the data from database
-  public shared({ caller }) func setPublic(token_id: Types.TokenId, metadata: Types.FullMetadata) : async Text {
+  // private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
+  // public shared({ caller }) func setPrivacy(token_id: Types.TokenId, data : Types.DataNFT) {
 
-    let isPrivacy : Types.Privacy = isPublic(token_id, caller);//Return a Result type with <#Ok, #Err>
-    switch isPrivacy {
+  //   let isPrivacy : Types.Privacy = isPublic(token_id, caller, data.isPublic);//Return a Result type with <#Ok, #Err>
+  //   switch isPrivacy {
+  //     //#Err mean
+  //     //#Unauthorized;
+  //     //#InvalidTokenId;
+  //     //#ZeroAddress;
+  //     //#Other;
+  //     case (#Err(_)) return;
 
-      //#Err mean
-      //#Unauthorized;
-      //#InvalidTokenId;
-      //#ZeroAddress;
-      //#Other;
-      case (#Err(#InvalidTokenId)) return "This token id is invalid, please try again!";
-      case (#Err(#Unauthorized)) return "You don't have permission on this command";
-      case (#Err(_)) return "Unabled to execute this action";
-      //#Ok when pass all Error case
-      //privacy = true => Public -> Need to setPrivate
-      //privacy = false => Private -> Need to setPublic
-      case (#Ok(privacy)) {
-        if(not privacy) {
-          let token = findNFT(token_id);
-          switch (token) {
-            case null {};
-            case (?token) {
-              nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
-              if (item.id == token.id) {
-              let update : Types.Nft = {
-                owner = item.owner;
-                id = item.id;
-                metadata = metadata;
-              };
-              return update;
-              } else {
-              return item;
-              };
-              });
-              return "Change privacy successfully";
-              return "";
-            };
-          };
-        };
-        return "";
-      };
-    };
-  };
+  //     //#Ok when pass all Error case
+  //     //privacy = true => Public -> Need to setPrivate
+  //     //privacy = false => Private -> Need to setPublic
+  //     case (#Ok(privacy)) {
+  //       if(privacy) 
+  //         setPrivate(token_id) else setPublic(token_id, data: Types.DataNFT);
+  //     };
+  //   };
+  // };
 
+  // //Set Private by delete its data from databaseNFT
+  // func setPrivate(token_id: Types.TokenId) {
+  //   let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
+  //   switch(data) {
+  //     case null return;
+  //     case (_) {
+  //       databaseNFT.delete(Nat64.toText(token_id));
+  //     };
+  //   };
+  // };
 
-  //Check if a NFT data is public or not
-  func isPublic(token_id: Types.TokenId, caller : Principal) : Types.Privacy {
+  // //Set Public by put its data to databaseNFT
+  // func setPublic(token_id: Types.TokenId, dataNFT : Types.DataNFT) {
+  //   let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
+  //   switch(data) {
+  //     case null {
+  //       //Pull data from database to here, then push it into the HashMap
+  //       databaseNFT.put(Nat64.toText(token_id), dataNFT);
+  //       //
+  //     };
+  //     case (_) {
+  //       return ;
+  //     };
+  //   };
+  // };
+
+  // //Check if a NFT data is public or not
+  // func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
+  //   let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+  //   switch (item) {
+  //     case null {
+  //       return #Err(#InvalidTokenId);
+  //     };
+  //     case (?token) {
+  //       if(caller != token.owner and not List.some(custodians, func(custodian : Principal) : Bool { custodian == caller }))
+  //       {
+  //         return #Err(#Unauthorized);
+  //       } else {
+        
+  //         if status return #Ok(true)
+  //         else return #Ok(false);
+  //       };
+  //     };
+  //   };
+  // };
+
+  func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case null {
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        if(caller != token.owner)
-        {
-          return #Err(#Unauthorized);
-        } else {
-        
-          if (token.metadata.id == "") return #Ok(false)
-          else return #Ok(true);
-        };
+          #Ok(token.isPublic);
       };
     };
   };
-  //=============================================================================================================
 
-  
+  public shared({ caller }) func setPublic(token_id: Types.TokenId, metadataToSet: Types.FullMetadata) : async Types.TxReceipt {
+    if (caller  != admin) return #Err(#Unauthorized);
+
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+    
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if (token.isPublic == true) return #Err(#Other);
+          nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
+            if (item.id == token.id) {
+              let update : Types.Nft = {
+                isPublic = true;
+                minter = item.minter;
+                owner = item.owner;
+                id = item.id;
+                metadata = metadataToSet;
+              };
+              return update;
+            } else {
+              return item;
+            };
+          });
+          return #Ok(0);   
+      };
+    };
+  };
+
+
   system func preupgrade() {
     entries := Iter.toArray(allowances.entries());
   };
@@ -309,7 +354,7 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
       case (?token) {
         if (
           caller != token.owner and
-          not List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })
+          not (caller != admin)
         ) {
           return #Err(#Unauthorized);
         } else if (Principal.notEqual(from, token.owner)) {
@@ -318,6 +363,8 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
           nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
             if (item.id == token.id) {
               let update : Types.Nft = {
+                isPublic = item.isPublic;
+                minter = item.minter;
                 owner = to;
                 id = item.id;
                 metadata = token.metadata;
@@ -336,10 +383,6 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
 
   public query func supportedInterfacesDip721() : async [Types.InterfaceId] {
     return [#TransferNotification, #Burn, #Mint];
-  };
-
-  public query func logoDip721() : async Types.LogoResult {
-    return logo;
   };
 
   public query func nameDip721() : async Text {
@@ -421,11 +464,6 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
       };
     };
 
-
-  public query func getMaxLimitDip721() : async Nat16 {
-    return maxLimit;
-  };
-
 //   public func getMetadataForUserDip721(user: Principal) : async Types.ExtendedMetadataResult {
 //     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.owner == user });
 //     switch (item) {
@@ -447,16 +485,18 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
 //     return List.toArray(tokenIds);
 //   };
 
-  public shared({ caller }) func mintDip721(to: Principal, cid : Text) : async Types.MintReceipt {
-    // if (not List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
-    //   return #Err(#Unauthorized);
-    // };
+  public shared({ caller }) func mintDip721(to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
+    if (not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
+      return #Err(#Unauthorized);
+    };
 
     let newId = Nat64.fromNat(List.size(nfts));
     let nft : Types.Nft = {
+      isPublic = false;
       owner = to;
       id = newId;
-      metadata = {center = ""; name = ""; id = ""; cid = cid};
+      metadata = metadata;
+      minter = caller;
     };
 
     nfts := List.push(nft, nfts);
