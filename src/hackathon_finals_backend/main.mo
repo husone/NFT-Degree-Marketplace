@@ -510,32 +510,27 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var name : Text = init.name;
   stable var symbol : Text = init.symbol;
   stable var admin : Principal = init.address;
-  // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
+
+  
+  var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+// https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
+  stable var prices : [(Text, Nat)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
-  // add, delete center 
-  public shared({ caller }) func addCenter(center : Types.Center)  {
-    assert caller == admin;
-    if ( List.some(centers, func (c : Types.Center) : Bool { c == center })) {
-      return;
-    };
-    centers := List.push(center,centers);
+  system func preupgrade() {
+    entries := Iter.toArray(allowances.entries());
+    prices := Iter.toArray(nftPrices.entries());
   };
 
-  public shared({ caller }) func deleteCenter(center : Types.Center)  {
-    assert caller == admin;
-    if (not List.some(centers, func (c : Types.Center) : Bool { c == center })) {
-      return;
-    };
-    centers := List.filter(centers, func (c : Types.Center) : Bool {
-      return (c != center);
-    });
+  system func postupgrade() {
+    entries := [];
+    prices := [];
   };
 
-  // trade NFT 
-  var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+
+// trade NFT 
    public shared({ caller }) func listing(tokenID: Nat64, price: Nat) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     switch (item) {
@@ -574,6 +569,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     };
   };
 
+  
   public shared({ caller }) func buyNFT(tokenID: Nat64) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     let price = nftPrices.get(Nat64.toText(tokenID));
@@ -630,7 +626,8 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     };
   };  
 
-  public func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : async Types.Privacy {
+
+  func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case null {
@@ -673,13 +670,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
 
-  system func preupgrade() {
-    entries := Iter.toArray(allowances.entries());
-  };
-
-  system func postupgrade() {
-    entries := [];
-  };
+  
 
   public func getViewers(token_id: Nat64) : async ?List.List<Principal> {
     return allowances.get(Nat64.toText(token_id));
@@ -933,7 +924,6 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 //     let tokenIds = List.map(items, func (item : Types.Nft) : Types.TokenId { item.id });
 //     return List.toArray(tokenIds);
 //   };
-
 
   public shared({ caller }) func mintDip721(to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
     if (not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
