@@ -1,24 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../../assets/logo_colored.png'
 import { checkRole } from '../../Utils/CheckRole'
 import { ConnectButton, useConnect } from '@connect2ic/react'
 import { publicRoutes } from '../../Routes/index'
+import { RoleContext } from '../../context/roleContext'
 
 export default function NavBar() {
+  const [role, setRole] = useContext(RoleContext)
+  const [pathRoles, setPathRoles] = useState([])
+
   const { principal } = useConnect({
     onConnect: () => {
       // Signed in
-      console.log('Signed in')
+      console.log('Connected to Plug')
     },
     onDisconnect: () => {
-      console.log('Signed out')
+      console.log('Disconnected from Plug')
       // Signed out
     },
   })
-  const [role, setRole] = useState(null)
-  const [pathRoles, setPathRoles] = useState([])
+
   // Change TEST_ID for test role, 1 for admin role, 3 for user role, 2 for education role
   const TEST_ID = 4
   useEffect(() => {

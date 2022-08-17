@@ -1,23 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
-import { PlugWallet } from '@connect2ic/core/providers/plug-wallet'
 import axios from 'axios'
+import { RoleContext } from '../../context/roleContext'
 
 function EducationKYC() {
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-  const [file, setFile] = useState()
-  const [fileName, setFileName] = useState('')
+  const [role, setRole] = useContext(RoleContext)
 
   useEffect(() => {
-    const connectWallet = async () => {
-      await connect('plug')
-    }
     if (!isConnected) {
       connectWallet()
     }
   }, [])
+  const connectWallet = async () => {
+    await connect('plug')
+  }
 
   const handleChange = event => {
     const name = event.target.name
@@ -30,28 +29,30 @@ function EducationKYC() {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const formData = new FormData()
-    for (let key in education) {
-      formData.append(key, education[key])
-    }
-
-    const res = await axios.post(
-      'http://localhost:5000/api/v1/education-kyc',
-      formData
-    )
-
-    // Doing something to notification to user
-    if (res.status === 201) {
-      console.log('success')
+    if (!isConnected) {
+      await connectWallet()
     } else {
-      console.log('error')
+      const formData = new FormData()
+      for (let key in education) {
+        formData.append(key, education[key])
+      }
+
+      const res = await axios.post(
+        'http://localhost:5000/api/v1/education-kyc',
+        formData
+      )
+
+      // Doing something to notification to user
+      if (res.status === 201) {
+        console.log('success')
+      } else {
+        console.log('error')
+      }
     }
   }
 
   const getFile = e => {
     let file = e.target.files[0]
-    setFile(file)
-    setFileName(file.name)
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
