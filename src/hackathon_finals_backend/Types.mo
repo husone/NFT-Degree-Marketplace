@@ -21,7 +21,7 @@ module {
     #Ok : S;
     #Err : E;
   };
-  public type TokenId = Text;
+  public type TokenId = Nat64;
   public type Privacy = Result<Bool, ApiError>;
   
   public type Nft = {

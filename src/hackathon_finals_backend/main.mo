@@ -33,39 +33,47 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
   stable var entries : [(Text, List.List<Principal>)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
+  //Set Privacy Function, this funtion will be called from front-end
+  //data: represent the data from database
+  public shared({ caller }) func setPrivacy(token_id: Types.TokenId, data : Types.DataNFT) {
 
-  public shared({ caller }) func setPrivacy(token_id: Types.TokenId) {
-    let isPrivacy : Types.Privacy = isPublic(token_id, caller);
+    let isPrivacy : Types.Privacy = isPublic(token_id, caller, data.isPublic);//Return a Result type with <#Ok, #Err>
     switch isPrivacy {
+      //#Err mean
+      //#Unauthorized;
+      //#InvalidTokenId;
+      //#ZeroAddress;
+      //#Other;
       case (#Err(_)) return;
+
+      //#Ok when pass all Error case
+      //privacy = true => Public -> Need to setPrivate
+      //privacy = false => Private -> Need to setPublic
       case (#Ok(privacy)) {
         if(privacy) 
-          setPrivate(token_id) else setPublic(token_id);
+          setPrivate(token_id) else setPublic(token_id, data: Types.DataNFT);
       };
     };
   };
 
+  //Set Private by delete its data from databaseNFT
   func setPrivate(token_id: Types.TokenId) {
-    let data : ?Types.DataNFT = databaseNFT.get(token_id);
+    let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
     switch(data) {
       case null return;
       case (_) {
-        databaseNFT.delete(token_id);
+        databaseNFT.delete(Nat64.toText(token_id));
       };
     };
   };
 
-  func setPublic(token_id: Types.TokenId) {
-    let data : ?Types.DataNFT = databaseNFT.get(token_id);
+  //Set Public by put its data to databaseNFT
+  func setPublic(token_id: Types.TokenId, dataNFT : Types.DataNFT) {
+    let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
     switch(data) {
       case null {
         //Pull data from database to here, then push it into the HashMap
-        let data : Types.DataNFT = {
-          nationalID = "2019222111";
-          studentID = "DE160097";
-          isPublic = true;
-        };
-        databaseNFT.put(token_id, data);
+        databaseNFT.put(Nat64.toText(token_id), dataNFT);
         //
       };
       case (_) {
@@ -74,7 +82,8 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
     };
   };
 
-  func isPublic(token_id: Types.TokenId, caller : Principal) : Types.Privacy {
+  //Check if a NFT data is public or not
+  func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case null {
@@ -85,10 +94,9 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
         {
           return #Err(#Unauthorized);
         } else {
-          //Call API status of NFT here to check if its privacy is public or not
-          //If public, return #Ok(true), else return #Ok(false)
-
-          return #Ok(true);
+        
+          if status return #Ok(true)
+          else return #Ok(false);
         };
       };
     };
@@ -367,7 +375,7 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
     //   return #Err(#Unauthorized);
     // };
 
-    let newId = Nat.toText(List.size(nfts));
+    let newId = Nat64.fromNat(List.size(nfts));
     let nft : Types.Nft = {
       owner = to;
       id = newId;
