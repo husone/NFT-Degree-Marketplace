@@ -25,8 +25,26 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var symbol : Text = init.symbol;
   stable var admin : Principal = init.address;
 
-  // trade NFT 
+  
   var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+// https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
+  let null_address : Principal = Principal.fromText("aaaaa-aa");
+  stable var entries : [(Text, List.List<Principal>)] = [];
+  stable var prices : [(Text, Nat)] = [];
+  let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
+
+  system func preupgrade() {
+    entries := Iter.toArray(allowances.entries());
+    prices := Iter.toArray(nftPrices.entries());
+  };
+
+  system func postupgrade() {
+    entries := [];
+    prices := [];
+  };
+
+
+// trade NFT 
    public shared({ caller }) func listing(tokenID: Nat64, price: Nat) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     switch (item) {
@@ -106,10 +124,8 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
 
 
-  // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
-  let null_address : Principal = Principal.fromText("aaaaa-aa");
-  stable var entries : [(Text, List.List<Principal>)] = [];
-  let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
+  
+
 
   //Set Privacy Function, this funtion will be called from front-end
   //data: represent the data from database
@@ -224,13 +240,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
 
-  system func preupgrade() {
-    entries := Iter.toArray(allowances.entries());
-  };
-
-  system func postupgrade() {
-    entries := [];
-  };
+  
 
   public func getViewers(token_id: Nat64) : async ?List.List<Principal> {
     return allowances.get(Nat64.toText(token_id));
