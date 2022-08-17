@@ -1,13 +1,11 @@
 {
   "canisters": {
-    "hackathon_finals_backend": {
+    "final_be": {
       "main": "src/hackathon_finals_backend/main.mo",
       "type": "motoko"
     },
-    "hackathon_finals_frontend": {
-      "dependencies": [
-        "hackathon_finals_backend"
-      ],
+    "final_fe": {
+      "dependencies": ["final_be"],
       "frontend": {
         "entrypoint": "src/hackathon_finals_frontend/src/index.html"
       },

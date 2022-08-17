@@ -2,7 +2,12 @@
   "name": "hackathon_finals_frontend",
   "version": "0.1.0",
   "description": "Internet Computer starter application",
-  "keywords": ["Internet Computer", "Motoko", "JavaScript", "Canister"],
+  "keywords": [
+    "Internet Computer",
+    "Motoko",
+    "JavaScript",
+    "Canister"
+  ],
   "scripts": {
     "build": "webpack",
     "prebuild": "npm run copy:types",
@@ -15,12 +20,21 @@
     "@dfinity/candid": "0.13.1",
     "@dfinity/principal": "0.13.1",
     "assert": "2.0.0",
+    "autoprefixer": "^10.4.8",
     "buffer": "6.0.3",
+    "css-loader": "^6.7.1",
     "events": "3.3.0",
     "html-webpack-plugin": "5.5.0",
+    "postcss-loader": "^7.0.1",
     "process": "0.11.10",
+    "sass": "^1.54.4",
+    "sass-loader": "^13.0.2",
     "stream-browserify": "3.0.0",
+    "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.3",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "url-loader": "^4.1.1",
     "util": "0.12.4",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0",
@@ -34,5 +48,15 @@
     "last 2 firefox version",
     "last 2 safari version",
     "last 2 edge version"
-  ]
+  ],
+  "dependencies": {
+    "@connect2ic/core": "^0.1.6",
+    "@connect2ic/react": "^0.1.4",
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5"
+  }
 }
