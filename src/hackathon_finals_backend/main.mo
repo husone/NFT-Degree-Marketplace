@@ -26,6 +26,8 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
   stable var symbol : Text = init.symbol;
   stable var maxLimit : Nat16 = init.maxLimit;
 
+
+  private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
