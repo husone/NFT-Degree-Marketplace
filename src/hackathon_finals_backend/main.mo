@@ -27,6 +27,84 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
   stable var maxLimit : Nat16 = init.maxLimit;
 
 
+  // trade NFT 
+  var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+   public shared({ caller }) func listing(tokenID: Nat64, price: Nat) : async Types.TxReceipt {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if (
+          caller != token.owner
+        ) {
+          return #Err(#Unauthorized);
+        } else {
+           nftPrices.put(Nat64.toText(tokenID), price);
+           return #Ok(0);
+        };
+      };
+    };
+  };
+
+  public shared({ caller }) func cancelListing(tokenID: Nat64) : async Types.TxReceipt {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if (
+          caller != token.owner
+        ) {
+          return #Err(#Unauthorized);
+        } else {
+           nftPrices.put(Nat64.toText(tokenID), 0);
+           return #Ok(0);
+        };
+      };
+    };
+  };
+
+  public shared({ caller }) func buyNFT(tokenID: Nat64) : async Types.TxReceipt {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
+    let price = nftPrices.get(Nat64.toText(tokenID));
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if (
+          caller == token.owner or price == ?0 
+        ) {
+          return #Err(#Unauthorized);
+        } else {
+          nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
+            if (item.id == token.id) {
+              let update : Types.Nft = {
+                owner = caller;
+                id = item.id;
+                metadata = token.metadata;
+              };
+              return update;
+            } else {
+              return item;
+            };
+          });
+
+          // transfer ICP 
+           nftPrices.put(Nat64.toText(tokenID), 0);
+           return #Ok(0);
+        };
+      };
+    };
+  };
+
+
+  // @public
+
+
   private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
