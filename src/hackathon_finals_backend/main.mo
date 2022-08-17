@@ -104,94 +104,58 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   // @public
 
-
-
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
+  //====================================================================================================================
   //Set Privacy Function, this funtion will be called from front-end
   //data: represent the data from database
   // private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
   // public shared({ caller }) func setPrivacy(token_id: Types.TokenId, data : Types.DataNFT) {
 
-  //   let isPrivacy : Types.Privacy = isPublic(token_id, caller, data.isPublic);//Return a Result type with <#Ok, #Err>
-  //   switch isPrivacy {
-  //     //#Err mean
-  //     //#Unauthorized;
-  //     //#InvalidTokenId;
-  //     //#ZeroAddress;
-  //     //#Other;
-  //     case (#Err(_)) return;
+    // let isPrivacy : Types.Privacy = isPublic(token_id, caller);//Return a Result type with <#Ok, #Err>
+    // switch isPrivacy {
 
-  //     //#Ok when pass all Error case
-  //     //privacy = true => Public -> Need to setPrivate
-  //     //privacy = false => Private -> Need to setPublic
-  //     case (#Ok(privacy)) {
-  //       if(privacy) 
-  //         setPrivate(token_id) else setPublic(token_id, data: Types.DataNFT);
-  //     };
-  //   };
+    //   //#Err mean
+    //   //#Unauthorized;
+    //   //#InvalidTokenId;
+    //   //#ZeroAddress;
+    //   //#Other;
+    //   case (#Err(#InvalidTokenId)) return "This token id is invalid, please try again!";
+    //   case (#Err(#Unauthorized)) return "You don't have permission on this command";
+    //   case (#Err(_)) return "Unabled to execute this action";
+    //   //#Ok when pass all Error case
+    //   //privacy = true => Public -> Need to setPrivate
+    //   //privacy = false => Private -> Need to setPublic
+    //   case (#Ok(privacy)) {
+    //     if(not privacy) {
+    //       let token = findNFT(token_id);
+    //       switch (token) {
+    //         case null {};
+    //         case (?token) {
+    //           nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
+    //           if (item.id == token.id) {
+    //           let update : Types.Nft = {
+    //             owner = item.owner;
+    //             id = item.id;
+    //             metadata = metadata;
+    //           };
+    //           return update;
+    //           } else {
+    //           return item;
+    //           };
+    //           });
+    //           return "Change privacy successfully";
+    //           return "";
+    //         };
+    //       };
+    //     };
+    //     return "";
+    //   };
+    // };
   // };
-
-  // //Set Private by delete its data from databaseNFT
-  // func setPrivate(token_id: Types.TokenId) {
-  //   let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
-  //   switch(data) {
-  //     case null return;
-  //     case (_) {
-  //       databaseNFT.delete(Nat64.toText(token_id));
-  //     };
-  //   };
-  // };
-
-  // //Set Public by put its data to databaseNFT
-  // func setPublic(token_id: Types.TokenId, dataNFT : Types.DataNFT) {
-  //   let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
-  //   switch(data) {
-  //     case null {
-  //       //Pull data from database to here, then push it into the HashMap
-  //       databaseNFT.put(Nat64.toText(token_id), dataNFT);
-  //       //
-  //     };
-  //     case (_) {
-  //       return ;
-  //     };
-  //   };
-  // };
-
-  // //Check if a NFT data is public or not
-  // func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
-  //   let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-  //   switch (item) {
-  //     case null {
-  //       return #Err(#InvalidTokenId);
-  //     };
-  //     case (?token) {
-  //       if(caller != token.owner and not List.some(custodians, func(custodian : Principal) : Bool { custodian == caller }))
-  //       {
-  //         return #Err(#Unauthorized);
-  //       } else {
-        
-  //         if status return #Ok(true)
-  //         else return #Ok(false);
-  //       };
-  //     };
-  //   };
-  // };
-
-  func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-          #Ok(token.isPublic);
-      };
-    };
-  };
 
   public shared({ caller }) func setPublic(token_id: Types.TokenId, metadataToSet: Types.FullMetadata) : async Types.TxReceipt {
     if (caller  != admin) return #Err(#Unauthorized);

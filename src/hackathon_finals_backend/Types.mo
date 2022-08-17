@@ -44,11 +44,6 @@ module {
     cid: Text;
   };
 
-  public type DataNFT = {
-    nationalID : Text;
-    studentID : Text;
-    isPublic : Bool;
-  };
   //---------------------------
 
   public type Dip721NonFungibleToken = {
