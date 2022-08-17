@@ -7,13 +7,9 @@ import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
 
 module {
-  public type Dip721NonFungibleToken = {
-    logo: LogoResult;
-    name: Text;
-    symbol: Text;
-    maxLimit : Nat16;
-  };
 
+
+  //---------------------------
   public type ApiError = {
     #Unauthorized;
     #InvalidTokenId;
@@ -25,13 +21,46 @@ module {
     #Ok : S;
     #Err : E;
   };
+  public type TokenId = Text;
+  public type Privacy = Result<Bool, ApiError>;
+  
+  public type Nft = {
+    owner: Principal;
+    id: TokenId;
+    metadata: FullMetadata;
+  };
+
+  public type FullMetadata = {
+    center : Text;
+    name : Text;
+    id : Text;
+    cid: Text;
+  };
+
+  public type DataNFT = {
+    nationalID : Text;
+    studentID : Text;
+    isPublic : Bool;
+  };
+  //---------------------------
+
+  public type Dip721NonFungibleToken = {
+    logo: LogoResult;
+    name: Text;
+    symbol: Text;
+    maxLimit : Nat16;
+  };
+
+  
+
+  
 
   public type OwnerResult = Result<Principal, ApiError>;
   public type TxReceipt = Result<Nat, ApiError>;
   
   public type TransactionId = Nat;
-  public type TokenId = Nat64;
-
+  
+  
   public type InterfaceId = {
     #Approval;
     #TransactionHistory;
@@ -45,11 +74,7 @@ module {
     data: Text;
   };
 
-  public type Nft = {
-    owner: Principal;
-    id: TokenId;
-    metadata: FullMetadata;
-  };
+  
 
   public type ExtendedMetadataResult = Result<{
     metadata_desc: FullMetadata;
@@ -58,12 +83,7 @@ module {
 
   public type MetadataResult = Result<FullMetadata, ApiError>;
 
-  public type FullMetadata = {
-    center : Text;
-    name : Text;
-    id : Text;
-    cid: Text;
-  };
+  
 
   public type MetadataPurpose = {
     #Preview;

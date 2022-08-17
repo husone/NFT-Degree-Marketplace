@@ -1,17 +1,20 @@
+import Array "mo:base/Array";
+import Bool "mo:base/Bool";
+import Buffer "mo:base/Buffer";
+import Hash "mo:base/Hash";
+import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
+import List "mo:base/List";
 import Nat "mo:base/Nat";
-import Nat8 "mo:base/Nat8";
 import Nat16 "mo:base/Nat16";
 import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
-import List "mo:base/List";
-import Array "mo:base/Array";
+import Nat8 "mo:base/Nat8";
 import Option "mo:base/Option";
-import Bool "mo:base/Bool";
 import Principal "mo:base/Principal";
+import Text "mo:base/Text";
+import TokenId "mo:base/Array";
 import Types "./Types";
-
-import Iter "mo:base/Iter";
-import Buffer "mo:base/Buffer";
 
 shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibleToken) = Self {
   stable var transactionId: Types.TransactionId = 0;
@@ -22,9 +25,76 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
   stable var symbol : Text = init.symbol;
   stable var maxLimit : Nat16 = init.maxLimit;
 
+  private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
 
+  //--------------------------------------------------------------
+
+  public shared({ caller }) func setPrivacy(token_id: Types.TokenId) {
+    let isPrivacy : Types.Privacy = isPublic(token_id, caller);
+    switch isPrivacy {
+      case (#Err(_)) return;
+      case (#Ok(privacy)) {
+        if(privacy) 
+          setPrivate(token_id) else setPublic(token_id);
+      };
+    };
+  };
+
+  func setPrivate(token_id: Types.TokenId) {
+    let data : ?Types.DataNFT = databaseNFT.get(token_id);
+    switch(data) {
+      case null return;
+      case (_) {
+        databaseNFT.delete(token_id);
+      };
+    };
+  };
+
+  func setPublic(token_id: Types.TokenId) {
+    let data : ?Types.DataNFT = databaseNFT.get(token_id);
+    switch(data) {
+      case null {
+        //Pull data from database to here, then push it into the HashMap
+        let data : Types.DataNFT = {
+          nationalID = "2019222111";
+          studentID = "DE160097";
+          isPublic = true;
+        };
+        databaseNFT.put(token_id, data);
+        //
+      };
+      case (_) {
+        return ;
+      };
+    };
+  };
+
+  func isPublic(token_id: Types.TokenId, caller : Principal) : Types.Privacy {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if(caller != token.owner and not List.some(custodians, func(custodian : Principal) : Bool { custodian == caller }))
+        {
+          return #Err(#Unauthorized);
+        } else {
+          //Call API status of NFT here to check if its privacy is public or not
+          //If public, return #Ok(true), else return #Ok(false)
+
+          return #Ok(true);
+        };
+
+      };
+    };
+  };
+
+
+
+  //--------------------------------------------------------------
   public query func balanceOfDip721(user: Principal) : async Nat64 {
     return Nat64.fromNat(
       List.size(
@@ -209,7 +279,7 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
     //   return #Err(#Unauthorized);
     // };
 
-    let newId = Nat64.fromNat(List.size(nfts));
+    let newId = Nat.toText(List.size(nfts));
     let nft : Types.Nft = {
       owner = to;
       id = newId;
