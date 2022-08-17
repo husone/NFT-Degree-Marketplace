@@ -50,6 +50,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   // trade NFT 
   var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+  stable var prices : [(Text, Nat)] = [];
    public shared({ caller }) func listing(tokenID: Nat64, price: Nat) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     switch (item) {
@@ -189,10 +190,12 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   system func preupgrade() {
     entries := Iter.toArray(allowances.entries());
+    prices := Iter.toArray(nftPrices.entries());
   };
 
   system func postupgrade() {
     entries := [];
+    prices := [];
   };
 
   public func getViewers(token_id: Nat64) : async ?List.List<Principal> {
