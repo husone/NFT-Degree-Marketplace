@@ -11,7 +11,7 @@ import { createClient } from '@connect2ic/core'
 import { PlugWallet } from '@connect2ic/core/providers/plug-wallet'
 import { canisterId } from '../../declarations/final_be/index.js'
 import { idlFactory } from '../../declarations/final_be/final_be.did.js'
-import RoleProvider from './context/roleContext'
+import Provider from './hooks/index'
 
 const canisterDefinitions = {
   superheroes: { idlFactory, canisterId },
@@ -25,8 +25,8 @@ function App() {
   return (
     <Connect2ICProvider client={client}>
       <Router>
-        <Container>
-          <RoleProvider>
+        <Provider>
+          <Container>
             <Routes>
               {publicRoutes.map((route, index) => {
                 const Layout = DefaultLayout
@@ -44,9 +44,9 @@ function App() {
                 )
               })}
             </Routes>
-          </RoleProvider>
-          <ConnectDialog className="wallet_dialog" />
-        </Container>
+            <ConnectDialog className="wallet_dialog" />
+          </Container>
+        </Provider>
       </Router>
     </Connect2ICProvider>
   )

@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
-import { RoleContext } from '../../context/roleContext'
+import { Context } from '../../hooks/index'
 
 function EducationKYC() {
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-  const [role, setRole] = useContext(RoleContext)
+  const [role, setRole] = useContext(Context)
 
   useEffect(() => {
     if (!isConnected) {

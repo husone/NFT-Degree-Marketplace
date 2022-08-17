@@ -5,10 +5,10 @@ import Logo from '../../../assets/logo_colored.png'
 import { checkRole } from '../../Utils/CheckRole'
 import { ConnectButton, useConnect } from '@connect2ic/react'
 import { publicRoutes } from '../../Routes/index'
-import { RoleContext } from '../../context/roleContext'
+import { Context } from '../../hooks/index'
 
 export default function NavBar() {
-  const [role, setRole] = useContext(RoleContext)
+  const [role, setRole] = useContext(Context)
   const [pathRoles, setPathRoles] = useState([])
 
   const { principal } = useConnect({
@@ -23,13 +23,14 @@ export default function NavBar() {
   })
 
   // Change TEST_ID for test role, 1 for admin role, 3 for user role, 2 for education role
-  const TEST_ID = 4
+  // const TEST_ID = 4
   useEffect(() => {
-    let role = checkRole(TEST_ID)
+    let role = checkRole(principal)
     setRole(role)
+    console.log(role)
     const filterPath = publicRoutes.filter(route => route.role === role)
     setPathRoles(filterPath)
-  }, [])
+  }, [principal])
 
   return (
     <Nav className="navbar navbar-expand-lg bg-light">
