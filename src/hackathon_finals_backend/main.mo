@@ -13,8 +13,9 @@ import Nat8 "mo:base/Nat8";
 import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
-import TokenId "mo:base/Array";
+import TokenId "mo:base/Nat64";
 import Types "./Types";
+
 
 shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibleToken) = Self {
   stable var transactionId: Types.TransactionId = 0;
@@ -25,11 +26,11 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
   stable var symbol : Text = init.symbol;
   stable var maxLimit : Nat16 = init.maxLimit;
 
-  private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
+  stable var entries : [(Text, List.List<Principal>)] = [];
+  let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
-  //--------------------------------------------------------------
 
   public shared({ caller }) func setPrivacy(token_id: Types.TokenId) {
     let isPrivacy : Types.Privacy = isPublic(token_id, caller);
@@ -87,14 +88,99 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
 
           return #Ok(true);
         };
+      };
+    };
+  };
+
+  system func preupgrade() {
+    entries := Iter.toArray(allowances.entries());
+  };
+
+  system func postupgrade() {
+    entries := [];
+  };
+
+  public func getViewers(token_id: Nat64) : async ?List.List<Principal> {
+    return allowances.get(Nat64.toText(token_id));
+  };
+
+
+  public shared({caller}) func approveView(token_id: Nat64, user: Principal) {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+    switch (item) {
+      case (null) {
+        return;
+      };
+      case (?token) {
+        assert token.owner == caller;
+        var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
+        switch (viewers) {
+          case (null) {
+            var new_viewers : List.List<Principal> = List.fromArray([user]);
+            allowances.put(Nat64.toText(token_id), new_viewers);
+          };
+          case (?(viewer)) {
+            var test : [var Principal] = List.toVarArray(viewer);
+            let buf : Buffer.Buffer<Principal> = Buffer.Buffer(test.size());
+            for (value in test.vals()) {
+                buf.add(value);
+            };
+            buf.add(user);
+            var new_viewer : List.List<Principal> = List.fromArray(buf.toArray());
+            allowances.put(Nat64.toText(token_id), new_viewer);
+
+          }; 
+        };
 
       };
     };
   };
 
 
+  public shared({caller}) func rejectView(token_id: Nat64, user: Principal) {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+    switch (item) {
+      case (null) {
+        return;
+      };
+      case (?token) {
+        assert token.owner == caller;
+        var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
+        switch (viewers) {
+          case (null) {
+            return;
+          };
+          case (?(viewer)) {
+            var test : [var Principal] = List.toVarArray(viewer);
+            let buf : Buffer.Buffer<Principal> = Buffer.Buffer(test.size());
+            for (value in test.vals()) {
+              if (value != user) {
+                buf.add(value);
+              }
+            };
+            var new_viewer : List.List<Principal> = List.fromArray(buf.toArray());
+            allowances.put(Nat64.toText(token_id), new_viewer);
+          }; 
+        };
+      };
+    };
+  };
 
-  //--------------------------------------------------------------
+  public shared({caller}) func rejectAllView(token_id: Nat64) {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+    switch (item) {
+      case (null) {
+        return;
+      };
+      case (?token) {
+        assert token.owner == caller;
+        allowances.delete(Nat64.toText(token_id));
+      };
+    };
+  };
+
+  
+
   public query func balanceOfDip721(user: Principal) : async Nat64 {
     return Nat64.fromNat(
       List.size(
