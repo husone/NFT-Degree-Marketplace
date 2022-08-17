@@ -104,82 +104,81 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
 
   // @public
 
-
-  private var databaseNFT = HashMap.HashMap<Text,Types.DataNFT>(1, Text.equal, Text.hash);
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
+  //====================================================================================================================
   //Set Privacy Function, this funtion will be called from front-end
   //data: represent the data from database
-  public shared({ caller }) func setPrivacy(token_id: Types.TokenId, data : Types.DataNFT) {
+  public shared({ caller }) func setPublic(token_id: Types.TokenId, metadata: Types.FullMetadata) : async Text {
 
-    let isPrivacy : Types.Privacy = isPublic(token_id, caller, data.isPublic);//Return a Result type with <#Ok, #Err>
+    let isPrivacy : Types.Privacy = isPublic(token_id, caller);//Return a Result type with <#Ok, #Err>
     switch isPrivacy {
+
       //#Err mean
       //#Unauthorized;
       //#InvalidTokenId;
       //#ZeroAddress;
       //#Other;
-      case (#Err(_)) return;
-
+      case (#Err(#InvalidTokenId)) return "This token id is invalid, please try again!";
+      case (#Err(#Unauthorized)) return "You don't have permission on this command";
+      case (#Err(_)) return "Unabled to execute this action";
       //#Ok when pass all Error case
       //privacy = true => Public -> Need to setPrivate
       //privacy = false => Private -> Need to setPublic
       case (#Ok(privacy)) {
-        if(privacy) 
-          setPrivate(token_id) else setPublic(token_id, data: Types.DataNFT);
+        if(not privacy) {
+          let token = findNFT(token_id);
+          switch (token) {
+            case null {};
+            case (?token) {
+              nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
+              if (item.id == token.id) {
+              let update : Types.Nft = {
+                owner = item.owner;
+                id = item.id;
+                metadata = metadata;
+              };
+              return update;
+              } else {
+              return item;
+              };
+              });
+              return "Change privacy successfully";
+              return "";
+            };
+          };
+        };
+        return "";
       };
     };
   };
 
-  //Set Private by delete its data from databaseNFT
-  func setPrivate(token_id: Types.TokenId) {
-    let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
-    switch(data) {
-      case null return;
-      case (_) {
-        databaseNFT.delete(Nat64.toText(token_id));
-      };
-    };
-  };
-
-  //Set Public by put its data to databaseNFT
-  func setPublic(token_id: Types.TokenId, dataNFT : Types.DataNFT) {
-    let data : ?Types.DataNFT = databaseNFT.get(Nat64.toText(token_id));
-    switch(data) {
-      case null {
-        //Pull data from database to here, then push it into the HashMap
-        databaseNFT.put(Nat64.toText(token_id), dataNFT);
-        //
-      };
-      case (_) {
-        return ;
-      };
-    };
-  };
 
   //Check if a NFT data is public or not
-  func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : Types.Privacy {
+  func isPublic(token_id: Types.TokenId, caller : Principal) : Types.Privacy {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case null {
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        if(caller != token.owner and not List.some(custodians, func(custodian : Principal) : Bool { custodian == caller }))
+        if(caller != token.owner)
         {
           return #Err(#Unauthorized);
         } else {
         
-          if status return #Ok(true)
-          else return #Ok(false);
+          if (token.metadata.id == "") return #Ok(false)
+          else return #Ok(true);
         };
       };
     };
   };
+  //=============================================================================================================
 
+  
   system func preupgrade() {
     entries := Iter.toArray(allowances.entries());
   };
@@ -448,7 +447,7 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
 //     return List.toArray(tokenIds);
 //   };
 
-  public shared({ caller }) func mintDip721(to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
+  public shared({ caller }) func mintDip721(to: Principal, cid : Text) : async Types.MintReceipt {
     // if (not List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
     //   return #Err(#Unauthorized);
     // };
@@ -457,7 +456,7 @@ shared actor class Dip721NFT(custodian: Principal, init : Types.Dip721NonFungibl
     let nft : Types.Nft = {
       owner = to;
       id = newId;
-      metadata = metadata;
+      metadata = {center = ""; name = ""; id = ""; cid = cid};
     };
 
     nfts := List.push(nft, nfts);
