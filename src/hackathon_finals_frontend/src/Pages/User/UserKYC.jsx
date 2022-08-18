@@ -29,26 +29,37 @@ function UserKYC() {
     }))
   }
 
-  const IPFS_LINK = 'https://dweb.link/ipfs/'
   const handleSubmit = async e => {
     const { certificate, name } = user
     e.preventDefault()
     if (!isConnected) {
       await connectWallet()
     } else {
+      console.log('Minting')
+      console.log(process.env.IPFS_LINK)
       const cid = await storeFiles([fileImg])
-      console.log(cid)
-      // const nFile = new File(
-      //   [
-      //     JSON.stringify({
-      //       name,
-      //       certificate,
-      //       image: `${IPFS_LINK}${cid}/${}`,
-      //     }),
-      //   ],
-      //   `${values?.name}.json`,
-      //   { type: 'text/plain' }
-      // );
+      const fileNameImg = fileImg.name
+      const fileName = new Date().getTime().toString()
+      const nFile = new File(
+        [
+          JSON.stringify({
+            // name,
+            // certificate,
+            image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
+          }),
+        ],
+        `${fileName}.json`,
+        { type: 'text/plain' }
+      )
+      const metadataCID = await storeFiles([nFile])
+      // Call backend to mint the token
+      const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
+      console.log(tokenURI)
+
+      // const res = await superheroes.mint(Principal.fromText(principal), [
+      //   { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
+      // ]);
+
       // const res = await axios.post(
       //   'http://localhost:5000/api/v1/education-kyc',
       //   formData
@@ -59,6 +70,7 @@ function UserKYC() {
       // } else {
       //   console.log('error')
       // }
+      console.log('Minted')
     }
   }
 
