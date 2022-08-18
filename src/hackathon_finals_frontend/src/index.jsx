@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { publicRoutes } from './Routes/index'
 import DefaultLayout from './Layouts/DefaultLayout/DefaultLayout'
-
+import 'antd/dist/antd.css'
 import styled from 'styled-components'
 
 import { Connect2ICProvider, ConnectDialog } from '@connect2ic/react'
