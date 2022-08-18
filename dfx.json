@@ -10,7 +10,7 @@
         "entrypoint": "src/hackathon_finals_frontend/src/index.html"
       },
       "source": [
-        "src/hackathon_finals_frontend/assets",
+        "src/hackathon_finals_frontend/Assets",
         "dist/hackathon_finals_frontend/"
       ],
       "type": "assets"

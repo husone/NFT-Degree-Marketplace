@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import Logo from '../../../assets/logo_colored.png'
+import Logo from "../../Assets/Images/logo.png"
 import { checkRole } from '../../Utils/CheckRole'
 import { ConnectButton, useConnect } from '@connect2ic/react'
 import { publicRoutes } from '../../Routes/index'
@@ -37,12 +37,30 @@ export default function NavBar() {
       <div className="container-fluid">
         <div className="d-flex">
           <Link className="navbar-brand" to="/">
-            Home
+            <img src={Logo} alt="Home" />
           </Link>
+          {pathRoles.map((route, index) => {
+            const role = route.role
+            if (role === 'user') {
+              if (!route.dropdown) {
+                return (
+                  <Link key={index} className="navbar-brand" to={route.path}>
+                    {route.desc}
+                  </Link>
+                )
+              }
+            } else {
+              return (
+                <Link key={index} className="navbar-brand" to={route.path}>
+                  {route.desc}
+                </Link>
+              )
+            }
+          })}
           {role === 'user' && (
             <div className="dropdown">
               <button
-                className="btn btn-secondary dropdown-toggle"
+                className="btn dropdown-toggle custom_dropdown"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -66,24 +84,6 @@ export default function NavBar() {
               </ul>
             </div>
           )}
-          {pathRoles.map((route, index) => {
-            const role = route.role
-            if (role === 'user') {
-              if (!route.dropdown) {
-                return (
-                  <Link key={index} className="navbar-brand" to={route.path}>
-                    {route.desc}
-                  </Link>
-                )
-              }
-            } else {
-              return (
-                <Link key={index} className="navbar-brand" to={route.path}>
-                  {route.desc}
-                </Link>
-              )
-            }
-          })}
         </div>
         <div className="d-flex align-items-center h100">
           {principal && <div className="wallet_id">{principal}</div>}
@@ -98,9 +98,7 @@ const Nav = styled.nav`
   height: 60px;
   border-bottom: 1px solid #ccc;
   img {
-    width: 35px;
     height: 35px;
-    border-radius: 50%;
   }
   .connect-button {
     background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
@@ -119,5 +117,12 @@ const Nav = styled.nav`
     border-radius: 30px;
     padding: 0px 10px;
     margin-right: 15px;
+  }
+  .custom_dropdown {
+    border: 0px;
+    font-size: 1.25rem;
+    &:hover{
+      border: 0px;
+    }
   }
 `
