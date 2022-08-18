@@ -15,6 +15,7 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import TokenId "mo:base/Nat64";
 import Types "./Types";
+import Debug "mo:base/Debug";
 
 
 shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
@@ -46,6 +47,11 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     centers := List.filter(centers, func (c : Types.Center) : Bool {
       return (c != center);
     });
+  };
+
+  public shared({ caller }) func getCenters() : async [Types.Center]  {
+    assert caller == admin;
+    return List.toArray(centers);
   };
 
   // trade NFT 
@@ -88,6 +94,11 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       };
     };
   };
+
+  //  public shared(msg) func callerPrincipal() : async Principal {
+  //       admin := msg.caller;
+  //       return msg.caller;
+  //   };
 
   public shared({ caller }) func buyNFT(tokenID: Nat64) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
@@ -145,7 +156,28 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     };
   };  
 
-  public func isPublic(token_id: Types.TokenId, caller : Principal, status : Bool) : async Types.Privacy {
+  public shared({ caller }) func getPrice(tokenID: Nat64) : async Nat {
+    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
+    let price = nftPrices.get(Nat64.toText(tokenID));
+    switch (item) {
+      case null {
+        return 0;
+      };
+      case (?token) {
+          switch (price){
+            case null{
+              return 0;
+            };
+            case (?Price){
+              return Price;
+          };
+        };
+      };
+    };
+  };  
+
+
+  public func isPublic(token_id: Types.TokenId) : async Types.Privacy {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case null {
@@ -476,13 +508,13 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     });
   };
 
-  public query func getAllTokens() : async [Types.FullMetadata] {
-    let iter : Iter.Iter<Types.Nft> = List.toIter(nfts);
-    var array = Buffer.Buffer<Types.FullMetadata>(Iter.size(iter));
-    for(i in iter){
-      array.add(i.metadata);
-    };
-    return array.toArray();
+  public query func getAllTokens() : async [Types.Nft] {
+    // let iter : Iter.Iter<Types.Nft> = List.toIter(nfts);
+    // var array = Buffer.Buffer<Types.Nft>(Iter.size(iter));
+    // for(i in iter){
+      // array.add(i);
+    // };
+    return List.toArray(nfts);
   };
 
 }
