@@ -42,7 +42,7 @@ function NavBar(props) {
   // const TEST_ID = 4
 
   return (
-    role !== null && (
+    role && (
       <Nav className="navbar navbar-expand-lg bg-light">
         <div className="container-fluid">
           <div className="d-flex">

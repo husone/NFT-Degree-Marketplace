@@ -9,13 +9,41 @@ import ListRequests from '../Pages/User/ListRequests'
 
 const publicRoutes = [
   { path: '/', component: Home },
-  { path: '/admin', component: AdminPage, role: 'admin', desc : 'Admin page' },
-  { path: '/mint-request', component: MintRequest, role: 'education', desc : 'List of requests' },
-  { path: '/mint-nft', component: UserKYC, role: 'user', desc : 'Mint NFT' , dropdown: true},
-  { path: '/education-kyc', component: EducationKYC, role: 'user', desc : 'KYC for education', dropdown: true },
-  { path: '/requests', component: ListRequests, role: 'user', desc : 'List of requests' },
-  { path: '/my-nfts', component: MyNFT, role: 'user', desc : 'My nfts' },
-  { path: '/all-nfts', component: AllNFTs, role: null, desc : 'All nfts' },
+  { path: '/admin', component: AdminPage, role: 'admin', desc: 'Admin page' },
+  {
+    path: '/mint-request',
+    component: MintRequest,
+    role: 'education',
+    desc: 'List of requests',
+  },
+  {
+    path: '/minted',
+    component: MintRequest,
+    role: 'education',
+    desc: 'Minted NFT',
+  },
+  {
+    path: '/mint-nft',
+    component: UserKYC,
+    role: 'user',
+    desc: 'Mint NFT',
+    dropdown: true,
+  },
+  {
+    path: '/education-kyc',
+    component: EducationKYC,
+    role: 'user',
+    desc: 'KYC for education',
+    dropdown: true,
+  },
+  {
+    path: '/requests',
+    component: ListRequests,
+    role: 'user',
+    desc: 'List of requests',
+  },
+  { path: '/my-nfts', component: MyNFT, role: 'user', desc: 'My nfts' },
+  { path: '/all-nfts', component: AllNFTs, role: null, desc: 'All nfts' },
 ]
 
 const privateRoutes = []

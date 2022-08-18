@@ -10,7 +10,8 @@ const Provider = props => {
 
   useEffect(() => {
     console.log('index.jsx')
-    let role = checkRole(principal)
+    const TEST_ID = 2
+    let role = checkRole(TEST_ID)
     setRole(role)
   }, [principal])
 
