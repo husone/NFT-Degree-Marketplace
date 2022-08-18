@@ -52,6 +52,7 @@ function UserKYC() {
         { type: 'text/plain' }
       )
       const metadataCID = await storeFiles([nFile])
+
       // Call backend to mint the token
       const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
       console.log(tokenURI)
