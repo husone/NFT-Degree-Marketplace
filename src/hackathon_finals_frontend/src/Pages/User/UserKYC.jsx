@@ -2,17 +2,20 @@ import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { Context } from '../../hooks/index'
+import { storeFiles } from '../../Utils/web3Storage'
 
 function UserKYC() {
   const { principal, connect, isConnected } = useConnect()
   const [user, setUser] = useState({})
   const [imgUri, setImgUri] = useState('')
+  const [fileImg, setFileImg] = useState(null)
 
   useEffect(() => {
     if (!isConnected) {
       connectWallet()
     }
   }, [])
+
   const connectWallet = async () => {
     await connect('plug')
   }
@@ -26,22 +29,30 @@ function UserKYC() {
     }))
   }
 
+  const IPFS_LINK = 'https://dweb.link/ipfs/'
   const handleSubmit = async e => {
+    const { certificate, name } = user
     e.preventDefault()
     if (!isConnected) {
       await connectWallet()
     } else {
-      const formData = new FormData()
-      for (let key in user) {
-        formData.append(key, user[key])
-      }
-
-      console.log(user)
+      const cid = await storeFiles([fileImg])
+      console.log(cid)
+      // const nFile = new File(
+      //   [
+      //     JSON.stringify({
+      //       name,
+      //       certificate,
+      //       image: `${IPFS_LINK}${cid}/${}`,
+      //     }),
+      //   ],
+      //   `${values?.name}.json`,
+      //   { type: 'text/plain' }
+      // );
       // const res = await axios.post(
       //   'http://localhost:5000/api/v1/education-kyc',
       //   formData
       // )
-
       // // Doing something to notification to user
       // if (res.status === 201) {
       //   console.log('success')
@@ -64,6 +75,7 @@ function UserKYC() {
           principal,
         }))
       }
+      setFileImg(file)
       reader.readAsDataURL(file)
     }
   }
@@ -72,23 +84,14 @@ function UserKYC() {
       <h1>User KYC page</h1>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         {/* INPUT */}
-        <label htmlFor="firstName">First Name</label>
+        <label htmlFor="name">Your Name</label>
         <input
           type="text"
-          name="firstName"
-          id="firstName"
-          value={user.firstName || ''}
+          name="name"
+          id="name"
+          value={user.name || ''}
           onChange={handleChange}
-          required
-        />
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          type="text"
-          name="lastName"
-          id="lastName"
-          value={user.lastName || ''}
-          onChange={handleChange}
-          required
+          // required
         />
         <label htmlFor="dob">Date of Birth</label>
         <input
@@ -97,7 +100,7 @@ function UserKYC() {
           id="dob"
           value={user.dob || ''}
           onChange={handleChange}
-          required
+          // required
         />
         <label htmlFor="education">Education</label>
         <input
@@ -106,7 +109,7 @@ function UserKYC() {
           id="education"
           value={user.education || ''}
           onChange={handleChange}
-          required
+          // required
         />
         <label htmlFor="nationID">Nation ID Number</label>
         <input
@@ -115,7 +118,7 @@ function UserKYC() {
           id="nationID"
           value={user.nationID || ''}
           onChange={handleChange}
-          required
+          // required
         />
         <label htmlFor="studentID">Student ID Number</label>
         <input
@@ -124,7 +127,7 @@ function UserKYC() {
           id="studentID"
           value={user.studentID || ''}
           onChange={handleChange}
-          required
+          // required
         />
         <label htmlFor="certificate">Name of certificate</label>
         <input
@@ -133,7 +136,7 @@ function UserKYC() {
           id="certificate"
           value={user.certificate || ''}
           onChange={handleChange}
-          required
+          // required
         />
 
         {/* UPLOAD FILE, IMG PREVIEW */}
@@ -145,7 +148,7 @@ function UserKYC() {
             id="fileUpload"
             accept=".jpeg,.jpg,.png,.gif,image/*"
             onChange={e => getFile(e)}
-            required
+            // required
           />
           <label htmlFor="fileUpload">
             <div className="upload_label">

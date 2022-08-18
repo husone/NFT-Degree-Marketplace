@@ -10,7 +10,7 @@ import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 
 function NavBar(props) {
-  console.log(props)
+  // console.log(props)
   const { role, logout, setRole } = props
   const [pathRoles, setPathRoles] = useState([])
   const [Component, setComponent] = useState(null)
