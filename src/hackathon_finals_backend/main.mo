@@ -517,4 +517,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     return List.toArray(nfts);
   };
 
+  public func hello() : async Text {
+    return "hello";
+  };
 }
