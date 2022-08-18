@@ -4,10 +4,10 @@ import axios from 'axios'
 import { Context } from '../../hooks/index'
 
 function EducationKYC() {
+  const { role, setRole } = useContext(Context)
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-  const [role, setRole] = useContext(Context)
 
   useEffect(() => {
     if (!isConnected) {

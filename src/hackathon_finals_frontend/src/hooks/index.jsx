@@ -1,36 +1,28 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, useLayoutEffect } from 'react'
 import { checkRole } from '../Utils/CheckRole'
 import { useConnect } from '@connect2ic/react'
 
 export const Context = createContext()
 
 const Provider = props => {
-  const [prinpId, setprinpId] = useState(localStorage.getItem('prinpId'))
   const { principal, isConnected } = useConnect()
   const [role, setRole] = useState(null)
 
   useEffect(() => {
-    console.log(prinpId)
-    if (prinpId && principal) {
-      // getUserInfo();
-    }
-  }, [prinpId, principal])
-
-  const setPrinpId = value => {
-    localStorage.setItem('prinpId', value)
-    setprinpId(value)
-  }
+    console.log('index.jsx')
+    let role = checkRole(principal)
+    setRole(role)
+  }, [principal])
 
   const logout = () => {
     console.log('logout')
-    setprinpId()
-    localStorage.clear()
+    setRole(null)
   }
 
   const value = {
-    prinpId,
-    setPrinpId,
+    role,
     logout,
+    setRole,
   }
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>
