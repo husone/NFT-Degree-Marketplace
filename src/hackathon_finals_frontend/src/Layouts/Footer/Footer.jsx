@@ -3,11 +3,11 @@ import Logo from '../../Assets/Images/logo.png'
 
 function Footer() {
   return (
-    <FooterWrapper className="d-flex justify-content-center py-4">
+    <FooterWrapper className="d-flex justify-content-center py-3">
       <div className="footer_about">
-        <div className="footer_logo d-flex">
+        <div className="footer_logo">
           <img src={Logo} alt="footer" className="footer_logo" />
-          <h3>DnBoiz</h3>
+          <h3 className="text-white text-center">DnBoiz</h3>
         </div>
         <div className="footer_contact d-flex align-items-center justify-content-between">
           <div className="contact_wrapper contact_wrapper_active d-flex justify-content-center align-items-center">
@@ -51,7 +51,7 @@ function Footer() {
           </div>
         </div>
       </div>
-      <div className="footer_navs">Relate links</div>
+      {/* <div className="footer_navs">Relate links</div> */}
     </FooterWrapper>
   )
 }
@@ -83,5 +83,8 @@ const FooterWrapper = styled.div`
     width: 18px;
     height: 18px;
     fill: #fff;
+  }
+  .footer_contact{
+    column-gap: 15px;
   }
 `
