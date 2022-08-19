@@ -1,13 +1,27 @@
 import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
-import { Context } from '../../hooks/index'
+import { Context } from '../../hooks/index';
+import { PlusOutlined } from '@ant-design/icons';
+import {
+  Form,
+  Input,
+  Button,
+  DatePicker,
+  Upload,
+} from 'antd';
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
 function EducationKYC() {
   const { role, setRole } = useContext(Context)
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
+  const onFormLayoutChange = (event) => {
+    console.log(event.target.value)
+  };
+
 
   useEffect(() => {
     if (!isConnected) {
@@ -71,6 +85,49 @@ function EducationKYC() {
   return (
     <div>
       <h1>Education KYC page</h1>
+      <Form
+        layout="horizontal"
+        onValuesChange={handleChange}
+        encType="multipart/form-data"
+        style={{ display: "block", marginRight: "0px", minWidth: "75vw" }}
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+      >
+        <Form.Item label="Your center education name">
+          <Input name="name" />
+        </Form.Item>
+        <Form.Item label="Legal representative">
+          <Input name="legalRepresentative" />
+        </Form.Item>
+        <Form.Item label="Address">
+          <Input name="address" />
+        </Form.Item>
+        <Form.Item
+          label="Add NFT"
+        >
+          <Upload listType="picture-card">
+            <div>
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </Upload>
+        </Form.Item>
+        <Form.Item        >
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
       {/* FORM */}
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label htmlFor="name">Your center education name</label>
