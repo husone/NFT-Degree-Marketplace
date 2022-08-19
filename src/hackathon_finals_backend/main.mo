@@ -16,15 +16,17 @@ import Text "mo:base/Text";
 import TokenId "mo:base/Nat64";
 import Types "./Types";
 import Debug "mo:base/Debug";
+import token "./token";
 
 
-shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
+shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken, initToken : token.Token) = Self {
   stable var transactionId: Types.TransactionId = 0;
   stable var nfts = List.nil<Types.Nft>();
   stable var centers = List.nil<Types.Center>();
   stable var name : Text = init.name;
   stable var symbol : Text = init.symbol;
   stable var admin : Principal = init.address;
+  stable var DBZ : token.Token = initToken; 
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
