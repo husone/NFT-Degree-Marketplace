@@ -70,6 +70,9 @@ export default withContext(NavBar)
 const Nav = styled.nav`
   height: 60px;
   border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0px;
+  z-index: 1;
   img {
     height: 35px;
   }

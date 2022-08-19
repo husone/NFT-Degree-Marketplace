@@ -58,10 +58,8 @@ function Footer() {
 
 export default Footer
 const FooterWrapper = styled.div`
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
   width: 100%;
+  height: 150px;
   border-top: 1px solid #ccc;
   background-color: #101020;
   column-gap: 25px;

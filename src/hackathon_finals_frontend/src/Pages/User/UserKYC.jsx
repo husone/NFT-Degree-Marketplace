@@ -2,7 +2,14 @@ import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { Context } from '../../hooks/index'
-import { storeFiles } from '../../Utils/web3Storage'
+import { storeFiles } from '../../Utils/web3Storage';
+import { PlusOutlined } from '@ant-design/icons';
+
+import {
+  Form,
+  Input,
+  Button
+} from "antd"
 
 function UserKYC() {
   const { principal, connect, isConnected } = useConnect()
@@ -94,84 +101,133 @@ function UserKYC() {
   }
   return (
     <div>
-      <h1>User KYC page</h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        {/* INPUT */}
-        <label htmlFor="name">Your Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={user.name || ''}
-          onChange={handleChange}
-          // required
-        />
-        <label htmlFor="dob">Date of Birth</label>
-        <input
-          type="text"
-          name="dob"
-          id="dob"
-          value={user.dob || ''}
-          onChange={handleChange}
-          // required
-        />
-        <label htmlFor="education">Education</label>
-        <input
-          type="text"
-          name="education"
-          id="education"
-          value={user.education || ''}
-          onChange={handleChange}
-          // required
-        />
-        <label htmlFor="nationID">Nation ID Number</label>
-        <input
-          type="text"
-          name="nationID"
-          id="nationID"
-          value={user.nationID || ''}
-          onChange={handleChange}
-          // required
-        />
-        <label htmlFor="studentID">Student ID Number</label>
-        <input
-          type="text"
-          name="studentID"
-          id="studentID"
-          value={user.studentID || ''}
-          onChange={handleChange}
-          // required
-        />
-        <label htmlFor="certificate">Name of certificate</label>
-        <input
-          type="text"
-          name="certificate"
-          id="certificate"
-          value={user.certificate || ''}
-          onChange={handleChange}
-          // required
-        />
+      <h1 className="py-4">User KYC page</h1>
+      <Form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        style={{ maxWidth: "60vw", margin: "0px auto" }}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 20 }}
+      >
+
+        <Form.Item
+          label="Your Name"
+        >
+          <Input
+            name="name"
+            id="name"
+            value={user.name || ''}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Date of Birth"
+        >
+          <Input
+            type="text"
+            name="dob"
+            id="dob"
+            value={user.dob || ''}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Education"
+        >
+          <Input
+            type="text"
+            name="education"
+            id="education"
+            value={user.education || ''}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Nation ID Number"
+        >
+          <Input
+            type="text"
+            name="nationID"
+            id="nationID"
+            value={user.nationID || ''}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Student ID Number"
+        >
+          <Input
+            type="text"
+            name="studentID"
+            id="studentID"
+            value={user.studentID || ''}
+            onChange={handleChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Name of Certificate"
+        >
+          <Input
+            type="text"
+            name="certificate"
+            id="certificate"
+            value={user.certificate || ''}
+            onChange={handleChange}
+          />
+        </Form.Item>
 
         {/* UPLOAD FILE, IMG PREVIEW */}
-        <div className="wrap-upload input-group mb-3 d-flex justify-content-center">
-          {imgUri && <img className="previewImg" src={imgUri} alt="preview" />}
-          <input
-            type="file"
-            name="file"
-            id="fileUpload"
-            accept=".jpeg,.jpg,.png,.gif,image/*"
-            onChange={e => getFile(e)}
-            // required
-          />
-          <label htmlFor="fileUpload">
-            <div className="upload_label">
-              {/* <img src={UploadGif} alt="upload gif" /> */}
-              <h3>Click to upload Item</h3>
-            </div>
-          </label>
-        </div>
-        <input type="submit" value="Submit" />
-      </form>
+        <Form.Item label="Add NFT" valuePropName="fileList">
+          <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
+            {
+              imgUri &&
+              <img
+                className="previewImg"
+                src={imgUri}
+                alt="preview"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  borderRadius: "5px",
+                  border: "1px solid green",
+                  marginLeft: "0px",
+                  marginRight: "15px",
+                  objectFit: "cover"
+                }}
+              />}
+            <input
+              type="file"
+              name="file"
+              id="fileUpload"
+              accept=".jpeg,.jpg,.png,.gif,image/*"
+              onChange={e => getFile(e)}
+              required
+              style={{ display: "none" }}
+            />
+            <label
+              htmlFor="fileUpload"
+              className="d-flex justify-content-center align-items-center"
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "5px",
+                border: "1px dashed #ccc"
+              }}
+            >
+              <PlusOutlined />
+            </label>
+          </div>
+        </Form.Item>
+
+        <Form.Item label="Click to upload NFT">
+          <Button type="primary" className="my-5">Upload NFT</Button>
+        </Form.Item>
+      </Form>
     </div>
   )
 }

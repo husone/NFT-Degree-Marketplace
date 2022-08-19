@@ -7,25 +7,13 @@ import {
   Form,
   Input,
   Button,
-  DatePicker,
 } from 'antd';
-import styled from "styled-components";
-
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
 
 function EducationKYC() {
   const { role, setRole } = useContext(Context)
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-  // const onFormLayoutChange = (event) => {
-  //   console.log(event.target.value)
-  // };
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState([])
 
 
   useEffect(() => {
@@ -90,7 +78,7 @@ function EducationKYC() {
 
   return (
     <div>
-      <h1 className="my-5">Education KYC page</h1>
+      <h1 className="py-4">Education KYC page</h1>
 
       {/* FORM */}
       <Form
