@@ -23,7 +23,7 @@ import Cap "./cap/Cap";
 import Root "./cap/Root";
 
 module {
-    public shared(msg) actor class Token(
+    public class Token(
     _logo: Text,
     _name: Text,
     _symbol: Text,
@@ -60,21 +60,21 @@ module {
         };
     };
 
-    private stable var owner_ : Principal = _owner;
-    private stable var logo_ : Text = _logo;
-    private stable var name_ : Text = _name;
-    private stable var decimals_ : Nat8 = _decimals;
-    private stable var symbol_ : Text = _symbol;
-    private stable var totalSupply_ : Nat = _totalSupply;
-    private stable var blackhole : Principal = Principal.fromText("aaaaa-aa");
-    private stable var feeTo : Principal = owner_;
-    private stable var fee : Nat = _fee;
-    private stable var balanceEntries : [(Principal, Nat)] = [];
-    private stable var allowanceEntries : [(Principal, [(Principal, Nat)])] = [];
+    private var owner_ : Principal = _owner;
+    private var logo_ : Text = _logo;
+    private var name_ : Text = _name;
+    private var decimals_ : Nat8 = _decimals;
+    private var symbol_ : Text = _symbol;
+    private var totalSupply_ : Nat = _totalSupply;
+    private var blackhole : Principal = Principal.fromText("aaaaa-aa");
+    private var feeTo : Principal = owner_;
+    private var fee : Nat = _fee;
+    private var balanceEntries : [(Principal, Nat)] = [];
+    private var allowanceEntries : [(Principal, [(Principal, Nat)])] = [];
     private var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
     private var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
     balances.put(owner_, totalSupply_);
-    private stable let genesis : TxRecord = {
+    private let genesis : TxRecord = {
         caller = ?owner_;
         op = #mint;
         index = 0;
@@ -86,7 +86,7 @@ module {
         status = #succeeded;
     };
     
-    private stable var txcounter: Nat = 0;
+    private var txcounter: Nat = 0;
     private var cap: ?Cap.Cap = null;
     private func addRecord(
         caller: Principal,
@@ -95,7 +95,7 @@ module {
         ): async () {
         let c = switch(cap) {
             case(?c) { c };
-            case(_) { Cap.Cap(Principal.fromActor(this), 2_000_000_000_000) };
+            case(_) { Cap.Cap(owner_, 2_000_000_000_000) };
         };
         cap := ?c;
         let record: Root.IndefiniteEvent = {
@@ -151,7 +151,7 @@ module {
     *   Core interfaces:
     *       update calls:
     *           transfer/transferFrom/approve
-    *       query calls:
+    *        calls:
     *           logo/name/symbol/decimal/totalSupply/balanceOf/allowance/getMetadata
     *           historySize/getTransaction/getTransactions
     */
@@ -276,39 +276,39 @@ module {
         return #Ok(txcounter - 1);
     };
 
-    public query func logo() : async Text {
+    public  func logo() : async Text {
         return logo_;
     };
 
-    public query func name() : async Text {
+    public  func name() : async Text {
         return name_;
     };
 
-    public query func symbol() : async Text {
+    public  func symbol() : async Text {
         return symbol_;
     };
 
-    public query func decimals() : async Nat8 {
+    public  func decimals() : async Nat8 {
         return decimals_;
     };
 
-    public query func totalSupply() : async Nat {
+    public  func totalSupply() : async Nat {
         return totalSupply_;
     };
 
-    public query func getTokenFee() : async Nat {
+    public  func getTokenFee() : async Nat {
         return fee;
     };
 
-    public query func balanceOf(who: Principal) : async Nat {
+    public  func balanceOf(who: Principal) : async Nat {
         return _balanceOf(who);
     };
 
-    public query func allowance(owner: Principal, spender: Principal) : async Nat {
+    public  func allowance(owner: Principal, spender: Principal) : async Nat {
         return _allowance(owner, spender);
     };
 
-    public query func getMetadata() : async Metadata {
+    public  func getMetadata() : async Metadata {
         return {
             logo = logo_;
             name = name_;
@@ -321,7 +321,7 @@ module {
     };
 
     /// Get transaction history size
-    public query func historySize() : async Nat {
+    public  func historySize() : async Nat {
         return txcounter;
     };
 
@@ -331,30 +331,6 @@ module {
     *       getUserTransactionsAmount/getUserTransactions
     *       getTokenInfo/getHolders/getUserApprovals
     */
-    public shared(msg) func setName(name: Text) {
-        assert(msg.caller == owner_);
-        name_ := name;
-    };
-
-    public shared(msg) func setLogo(logo: Text) {
-        assert(msg.caller == owner_);
-        logo_ := logo;
-    };
-
-    public shared(msg) func setFeeTo(to: Principal) {
-        assert(msg.caller == owner_);
-        feeTo := to;
-    };
-
-    public shared(msg) func setFee(_fee: Nat) {
-        assert(msg.caller == owner_);
-        fee := _fee;
-    };
-
-    public shared(msg) func setOwner(_owner: Principal) {
-        assert(msg.caller == owner_);
-        owner_ := _owner;
-    };
 
     public type TokenInfo = {
         metadata: Metadata;
@@ -365,7 +341,7 @@ module {
         holderNumber: Nat;
         cycles: Nat;
     };
-    public query func getTokenInfo(): async TokenInfo {
+    public  func getTokenInfo(): async TokenInfo {
         {
             metadata = {
                 logo = logo_;
@@ -384,7 +360,7 @@ module {
         }
     };
 
-    public query func getHolders(start: Nat, limit: Nat) : async [(Principal, Nat)] {
+    public  func getHolders(start: Nat, limit: Nat) : async [(Principal, Nat)] {
         let temp =  Iter.toArray(balances.entries());
         func order (a: (Principal, Nat), b: (Principal, Nat)) : Order.Order {
             return Nat.compare(b.1, a.1);
@@ -402,7 +378,7 @@ module {
         return Array.freeze(res);
     };
 
-    public query func getAllowanceSize() : async Nat {
+    public  func getAllowanceSize() : async Nat {
         var size : Nat = 0;
         for ((k, v) in allowances.entries()) {
             size += v.size();
@@ -410,7 +386,7 @@ module {
         return size;
     };
 
-    public query func getUserApprovals(who : Principal) : async [(Principal, Nat)] {
+    public func getUserApprovals(who : Principal) : async [(Principal, Nat)] {
         switch (allowances.get(who)) {
             case (?allowance_who) {
                 return Iter.toArray(allowance_who.entries());
@@ -424,7 +400,7 @@ module {
     /*
     * upgrade functions
     */
-    system func preupgrade() {
+    func preupgrade() {
         balanceEntries := Iter.toArray(balances.entries());
         var size : Nat = allowances.size();
         var temp : [var (Principal, [(Principal, Nat)])] = Array.init<(Principal, [(Principal, Nat)])>(size, (owner_, []));
@@ -436,7 +412,7 @@ module {
         allowanceEntries := Array.freeze(temp);
     };
 
-    system func postupgrade() {
+    func postupgrade() {
         balances := HashMap.fromIter<Principal, Nat>(balanceEntries.vals(), 1, Principal.equal, Principal.hash);
         balanceEntries := [];
         for ((k, v) in allowanceEntries.vals()) {
