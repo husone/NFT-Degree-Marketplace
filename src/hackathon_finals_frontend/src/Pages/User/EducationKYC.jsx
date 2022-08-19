@@ -1,20 +1,15 @@
 import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
-import { Context } from '../../hooks/index';
-import { PlusOutlined } from '@ant-design/icons';
-import {
-  Form,
-  Input,
-  Button,
-} from 'antd';
+import { Context } from '../../hooks/index'
+import { PlusOutlined } from '@ant-design/icons'
+import { Form, Input, Button } from 'antd'
 
 function EducationKYC() {
   const { role, setRole } = useContext(Context)
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-
 
   useEffect(() => {
     if (!isConnected) {
@@ -84,14 +79,19 @@ function EducationKYC() {
       <Form
         onSubmit={handleSubmit}
         encType="multipart/form-data"
-        style={{ maxWidth: "60vw", margin: "0px auto" }}
+        style={{ maxWidth: '60vw', margin: '0px auto' }}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 20 }}
       >
         <Form.Item
           label="Your center education name"
           name="name"
-          rules={[{ required: true, message: 'Please input your center education name!' }]}
+          rules={[
+            {
+              required: true,
+              message: 'Please input your center education name!',
+            },
+          ]}
         >
           <Input
             type="text"
@@ -99,13 +99,14 @@ function EducationKYC() {
             value={education.name || ''}
             onChange={handleChange}
           />
-
         </Form.Item>
 
         <Form.Item
           label="Legal representative"
           name="legalRepresentative"
-          rules={[{ required: true, message: 'Please input legal representative!' }]}
+          rules={[
+            { required: true, message: 'Please input legal representative!' },
+          ]}
         >
           <Input
             value={education.legalRepresentative || ''}
@@ -118,30 +119,27 @@ function EducationKYC() {
           name="address"
           rules={[{ required: true, message: 'Please input address!' }]}
         >
-          <Input
-            value={education.address || ''}
-            onChange={handleChange}
-          />
+          <Input value={education.address || ''} onChange={handleChange} />
         </Form.Item>
 
         <Form.Item label="Add NFT" valuePropName="fileList">
           <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
-            {
-              imgUri &&
+            {imgUri && (
               <img
                 className="previewImg"
                 src={imgUri}
                 alt="preview"
                 style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "5px",
-                  border: "1px solid green",
-                  marginLeft: "0px",
-                  marginRight: "15px",
-                  objectFit: "cover"
+                  width: '100px',
+                  height: '100px',
+                  borderRadius: '5px',
+                  border: '1px solid green',
+                  marginLeft: '0px',
+                  marginRight: '15px',
+                  objectFit: 'cover',
                 }}
-              />}
+              />
+            )}
             <input
               type="file"
               name="file"
@@ -149,16 +147,16 @@ function EducationKYC() {
               accept=".jpeg,.jpg,.png,.gif,image/*"
               onChange={e => getFile(e)}
               required
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
             <label
               htmlFor="fileUpload"
               className="d-flex justify-content-center align-items-center"
               style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "5px",
-                border: "1px dashed #ccc"
+                width: '100px',
+                height: '100px',
+                borderRadius: '5px',
+                border: '1px dashed #ccc',
               }}
             >
               <PlusOutlined />
@@ -173,4 +171,4 @@ function EducationKYC() {
   )
 }
 
-export default EducationKYC;
+export default EducationKYC
