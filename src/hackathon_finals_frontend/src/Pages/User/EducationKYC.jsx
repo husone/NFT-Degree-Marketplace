@@ -3,18 +3,13 @@ import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { Context } from '../../hooks/index'
 import { PlusOutlined } from '@ant-design/icons'
-import { Form, Input, Button, DatePicker, Upload } from 'antd'
-const { RangePicker } = DatePicker
-const { TextArea } = Input
+import { Form, Input, Button } from 'antd'
 
 function EducationKYC() {
   const { role, setRole } = useContext(Context)
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-  const onFormLayoutChange = event => {
-    console.log(event.target.value)
-  }
 
   useEffect(() => {
     if (!isConnected) {
@@ -78,99 +73,102 @@ function EducationKYC() {
 
   return (
     <div>
-      <h1>Education KYC page</h1>
+      <h1 className="py-4">Education KYC page</h1>
+
+      {/* FORM */}
       <Form
-        layout="horizontal"
-        onValuesChange={handleChange}
+        onSubmit={handleSubmit}
         encType="multipart/form-data"
-        style={{ display: 'block', marginRight: '0px', minWidth: '75vw' }}
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
+        style={{ maxWidth: '60vw', margin: '0px auto' }}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 20 }}
       >
-        <Form.Item label="Your center education name">
-          <Input name="name" />
+        <Form.Item
+          label="Your center education name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your center education name!',
+            },
+          ]}
+        >
+          <Input
+            type="text"
+            id="name"
+            value={education.name || ''}
+            onChange={handleChange}
+          />
         </Form.Item>
-        <Form.Item label="Legal representative">
-          <Input name="legalRepresentative" />
+
+        <Form.Item
+          label="Legal representative"
+          name="legalRepresentative"
+          rules={[
+            { required: true, message: 'Please input legal representative!' },
+          ]}
+        >
+          <Input
+            value={education.legalRepresentative || ''}
+            onChange={handleChange}
+          />
         </Form.Item>
-        <Form.Item label="Address">
-          <Input name="address" />
+
+        <Form.Item
+          label="Address"
+          name="address"
+          rules={[{ required: true, message: 'Please input address!' }]}
+        >
+          <Input value={education.address || ''} onChange={handleChange} />
         </Form.Item>
-        <Form.Item label="Add NFT">
-          <Upload listType="picture-card">
-            <div>
-              <PlusOutlined />
-              <div
+
+        <Form.Item label="Add NFT" valuePropName="fileList">
+          <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
+            {imgUri && (
+              <img
+                className="previewImg"
+                src={imgUri}
+                alt="preview"
                 style={{
-                  marginTop: 8,
+                  width: '100px',
+                  height: '100px',
+                  borderRadius: '5px',
+                  border: '1px solid green',
+                  marginLeft: '0px',
+                  marginRight: '15px',
+                  objectFit: 'cover',
                 }}
-              >
-                Upload
-              </div>
-            </div>
-          </Upload>
+              />
+            )}
+            <input
+              type="file"
+              name="file"
+              id="fileUpload"
+              accept=".jpeg,.jpg,.png,.gif,image/*"
+              onChange={e => getFile(e)}
+              required
+              style={{ display: 'none' }}
+            />
+            <label
+              htmlFor="fileUpload"
+              className="d-flex justify-content-center align-items-center"
+              style={{
+                width: '100px',
+                height: '100px',
+                borderRadius: '5px',
+                border: '1px dashed #ccc',
+              }}
+            >
+              <PlusOutlined />
+            </label>
+          </div>
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
+        <Form.Item label="Click to upload NFT">
+          <Button type="primary" className="">
+            Upload NFT
           </Button>
         </Form.Item>
       </Form>
-      {/* FORM */}
-      {/* <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label htmlFor="name">Your center education name</label> */}
-      {/* INPUT */}
-      {/* <input
-          type="text"
-          name="name"
-          id="name"
-          value={education.name || ''}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="legalRepresentative">Legal representative</label>
-        <input
-          type="text"
-          name="legalRepresentative"
-          id="legalRepresentative"
-          value={education.legalRepresentative || ''}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="address">Address</label>
-        <input
-          type="text"
-          name="address"
-          id="address"
-          value={education.address || ''}
-          onChange={handleChange}
-          required
-        /> */}
-
-      {/* UPLOAD FILE, IMG PREVIEW */}
-      {/* <div className="wrap-upload input-group mb-3 d-flex justify-content-center">
-          {imgUri && <img className="previewImg" src={imgUri} alt="preview" />}
-          <input
-            type="file"
-            name="file"
-            id="fileUpload"
-            accept=".jpeg,.jpg,.png,.gif,image/*"
-            onChange={e => getFile(e)}
-            required
-          />
-          <label htmlFor="fileUpload">
-            <div className="upload_label"> */}
-      {/* <img src={UploadGif} alt="upload gif" /> */}
-      {/* <h3>Click to upload Item</h3>
-            </div>
-          </label>
-        </div>
-        <input type="submit" value="Submit" />
-      </form> */}
     </div>
   )
 }
