@@ -1,27 +1,20 @@
 import { useEffect, useState, useContext } from 'react'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
-import { Context } from '../../hooks/index';
-import { PlusOutlined } from '@ant-design/icons';
-import {
-  Form,
-  Input,
-  Button,
-  DatePicker,
-  Upload,
-} from 'antd';
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
+import { Context } from '../../hooks/index'
+import { PlusOutlined } from '@ant-design/icons'
+import { Form, Input, Button, DatePicker, Upload } from 'antd'
+const { RangePicker } = DatePicker
+const { TextArea } = Input
 
 function EducationKYC() {
   const { role, setRole } = useContext(Context)
   const { principal, connect, isConnected } = useConnect()
   const [education, setEducation] = useState({})
   const [imgUri, setImgUri] = useState('')
-  const onFormLayoutChange = (event) => {
+  const onFormLayoutChange = event => {
     console.log(event.target.value)
-  };
-
+  }
 
   useEffect(() => {
     if (!isConnected) {
@@ -89,7 +82,7 @@ function EducationKYC() {
         layout="horizontal"
         onValuesChange={handleChange}
         encType="multipart/form-data"
-        style={{ display: "block", marginRight: "0px", minWidth: "75vw" }}
+        style={{ display: 'block', marginRight: '0px', minWidth: '75vw' }}
         labelCol={{
           span: 8,
         }}
@@ -106,9 +99,7 @@ function EducationKYC() {
         <Form.Item label="Address">
           <Input name="address" />
         </Form.Item>
-        <Form.Item
-          label="Add NFT"
-        >
+        <Form.Item label="Add NFT">
           <Upload listType="picture-card">
             <div>
               <PlusOutlined />
@@ -122,17 +113,17 @@ function EducationKYC() {
             </div>
           </Upload>
         </Form.Item>
-        <Form.Item        >
+        <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
       </Form>
       {/* FORM */}
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label htmlFor="name">Your center education name</label>
-        {/* INPUT */}
-        <input
+      {/* <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <label htmlFor="name">Your center education name</label> */}
+      {/* INPUT */}
+      {/* <input
           type="text"
           name="name"
           id="name"
@@ -157,10 +148,10 @@ function EducationKYC() {
           value={education.address || ''}
           onChange={handleChange}
           required
-        />
+        /> */}
 
-        {/* UPLOAD FILE, IMG PREVIEW */}
-        <div className="wrap-upload input-group mb-3 d-flex justify-content-center">
+      {/* UPLOAD FILE, IMG PREVIEW */}
+      {/* <div className="wrap-upload input-group mb-3 d-flex justify-content-center">
           {imgUri && <img className="previewImg" src={imgUri} alt="preview" />}
           <input
             type="file"
@@ -171,14 +162,14 @@ function EducationKYC() {
             required
           />
           <label htmlFor="fileUpload">
-            <div className="upload_label">
-              {/* <img src={UploadGif} alt="upload gif" /> */}
-              <h3>Click to upload Item</h3>
+            <div className="upload_label"> */}
+      {/* <img src={UploadGif} alt="upload gif" /> */}
+      {/* <h3>Click to upload Item</h3>
             </div>
           </label>
         </div>
         <input type="submit" value="Submit" />
-      </form>
+      </form> */}
     </div>
   )
 }
