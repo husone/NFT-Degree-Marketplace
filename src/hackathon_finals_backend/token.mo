@@ -22,7 +22,8 @@ import ExperimentalCycles "mo:base/ExperimentalCycles";
 import Cap "./cap/Cap";
 import Root "./cap/Root";
 
-shared(msg) actor class Token(
+module {
+    public shared(msg) actor class Token(
     _logo: Text,
     _name: Text,
     _symbol: Text,
@@ -445,3 +446,5 @@ shared(msg) actor class Token(
         allowanceEntries := [];
     };
 };
+
+}

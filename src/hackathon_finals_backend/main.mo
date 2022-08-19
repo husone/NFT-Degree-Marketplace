@@ -16,7 +16,7 @@ import Text "mo:base/Text";
 import TokenId "mo:base/Nat64";
 import Types "./Types";
 import Debug "mo:base/Debug";
-import token "./token";
+import token "token";
 
 
 shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken, initToken : token.Token) = Self {
