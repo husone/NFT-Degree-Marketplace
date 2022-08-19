@@ -166,7 +166,7 @@ function EducationKYC() {
           </div>
         </Form.Item>
         <Form.Item label="Click to upload NFT">
-          <Button type="primary" className="">Upload NFT</Button>
+          <Input type="submit" value="Upload NFT" className="bg-primary" style={{width: "fit-content"}}/>
         </Form.Item>
       </Form>
     </div>
