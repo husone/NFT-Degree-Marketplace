@@ -147,7 +147,7 @@ function EducationKYC() {
               accept=".jpeg,.jpg,.png,.gif,image/*"
               onChange={e => getFile(e)}
               required
-              style={{ display: 'none' }}
+              // style={{ display: 'none' }}
             />
             <label
               htmlFor="fileUpload"
