@@ -197,7 +197,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   //       return msg.caller;
   //   };
 
-  public shared({ caller }) func buyNFT(tokenID: Nat64) : async Types.TxReceipt {
+  public shared({ caller }) func buyNFT(tokenID: Nat64) : async (Types.TxReceipt, ) {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     let price = nftPrices.get(Nat64.toText(tokenID));
     switch (item) {
@@ -214,10 +214,18 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
             case null{
               return #Err(#Other);
             };
-            case (?_price){
-              let t : TxReceipt = await DBZ.transfer(caller,token.owner, _price);
-              if (t!=#Ok(0)) {
-                return #Err(#Other);
+            case (? _price){
+              var t : TxReceipt = await DBZ.transfer(caller,token.owner, _price);
+              // if (t!=#Ok(_)) {
+              //   return #Err(#Other);
+              //  };
+               switch (t) {
+                case ( #Ok(_)) {
+
+                };
+                case (_) {
+                  return #Err(#Other);
+                }
                };
               nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
                 if (item.id == token.id) {
