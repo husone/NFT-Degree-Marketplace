@@ -1,15 +1,15 @@
 import styled from 'styled-components'
-import Logo from '../../Assets/Images/logo.png'
+import Logo from '../../Assets/Images/logo.png';
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <FooterWrapper className="d-flex justify-content-center py-3">
+    <FooterWrapper className="d-flex justify-content-around py-3">
       <div className="footer_about">
-        <div className="footer_logo">
+        <div className="footer_logo d-flex flex-column align-items-start">
           <img src={Logo} alt="footer" className="footer_logo" />
-          <h3 className="text-white text-center">DnBoiz</h3>
         </div>
-        <div className="footer_contact d-flex align-items-center justify-content-between">
+        <div className="footer_contact d-flex align-items-center justify-content-between my-3">
           <div className="contact_wrapper contact_wrapper_active d-flex justify-content-center align-items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,21 @@ function Footer() {
           </div>
         </div>
       </div>
-      {/* <div className="footer_navs">Relate links</div> */}
+      <ul className="footer_navs">
+        <li>
+          <Link to="/">Mobile app</Link>
+        </li>
+        <li>
+          <Link to="/">Community</Link>
+        </li>
+        <li>
+          <Link to="/">About us</Link>
+        </li>
+      </ul>
+      <div>
+        <h3 className="text-white">DnBoiz</h3>
+        <i className="text-white">© DnBoiZ, Inc. 2022. We love our users!</i>
+      </div>
     </FooterWrapper>
   )
 }
@@ -68,6 +82,7 @@ const FooterWrapper = styled.div`
     color: #fff;
     img {
       height: 35px;
+      margin: 0px;
     }
   }
   .contact_wrapper {
@@ -86,5 +101,16 @@ const FooterWrapper = styled.div`
   }
   .footer_contact{
     column-gap: 15px;
+  }
+  .footer_navs{
+    list-style: none;
+    a{
+      color: rgb(200, 200, 200);
+      font-size: 16px;
+      line-height: 35px;
+      &:hover{
+        color: #fff;
+      }
+    }
   }
 `

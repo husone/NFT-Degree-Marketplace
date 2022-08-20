@@ -24,7 +24,7 @@ function Home() {
   return (
     <div>
       <Search
-        placeholder="input search text"
+        placeholder="Search certificate"
         allowClear
         enterButton="Search"
         size="large"
