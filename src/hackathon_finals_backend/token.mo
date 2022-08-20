@@ -157,12 +157,12 @@ module {
     */
 
     /// Transfers value amount of tokens to Principal to.
-    public shared(msg) func transfer(to: Principal, value: Nat) : async TxReceipt {
-        if (_balanceOf(msg.caller) < value + fee) { return #Err(#InsufficientBalance); };
-        _chargeFee(msg.caller, fee);
-        _transfer(msg.caller, to, value);
+    public func transfer(caller : Principal,to: Principal, value: Nat) : async TxReceipt {
+        if (_balanceOf(caller) < value + fee) { return #Err(#InsufficientBalance); };
+        _chargeFee(caller, fee);
+        _transfer(caller, to, value);
         ignore addRecord(
-            msg.caller, "transfer",
+            caller, "transfer",
             [
                 ("to", #Principal(to)),
                 ("value", #U64(u64(value))),
@@ -174,27 +174,27 @@ module {
     };
 
     /// Transfers value amount of tokens from Principal from to Principal to.
-    public shared(msg) func transferFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
+    public func transferFrom(caller : Principal, from: Principal, to: Principal, value: Nat) : async TxReceipt {
         if (_balanceOf(from) < value + fee) { return #Err(#InsufficientBalance); };
-        let allowed : Nat = _allowance(from, msg.caller);
+        let allowed : Nat = _allowance(from, caller);
         if (allowed < value + fee) { return #Err(#InsufficientAllowance); };
         _chargeFee(from, fee);
         _transfer(from, to, value);
         let allowed_new : Nat = allowed - value - fee;
         if (allowed_new != 0) {
             let allowance_from = Types.unwrap(allowances.get(from));
-            allowance_from.put(msg.caller, allowed_new);
+            allowance_from.put(caller, allowed_new);
             allowances.put(from, allowance_from);
         } else {
             if (allowed != 0) {
                 let allowance_from = Types.unwrap(allowances.get(from));
-                allowance_from.delete(msg.caller);
+                allowance_from.delete(caller);
                 if (allowance_from.size() == 0) { allowances.delete(from); }
                 else { allowances.put(from, allowance_from); };
             };
         };
         ignore addRecord(
-            msg.caller, "transferFrom",
+            caller, "transferFrom",
             [
                 ("from", #Principal(from)),
                 ("to", #Principal(to)),
@@ -208,26 +208,26 @@ module {
 
     /// Allows spender to withdraw from your account multiple times, up to the value amount.
     /// If this function is called again it overwrites the current allowance with value.
-    public shared(msg) func approve(spender: Principal, value: Nat) : async TxReceipt {
-        if(_balanceOf(msg.caller) < fee) { return #Err(#InsufficientBalance); };
-        _chargeFee(msg.caller, fee);
+    public func approve(caller : Principal, spender: Principal, value: Nat) : async TxReceipt {
+        if(_balanceOf(caller) < fee) { return #Err(#InsufficientBalance); };
+        _chargeFee(caller, fee);
         let v = value + fee;
-        if (value == 0 and Option.isSome(allowances.get(msg.caller))) {
-            let allowance_caller = Types.unwrap(allowances.get(msg.caller));
+        if (value == 0 and Option.isSome(allowances.get(caller))) {
+            let allowance_caller = Types.unwrap(allowances.get(caller));
             allowance_caller.delete(spender);
-            if (allowance_caller.size() == 0) { allowances.delete(msg.caller); }
-            else { allowances.put(msg.caller, allowance_caller); };
-        } else if (value != 0 and Option.isNull(allowances.get(msg.caller))) {
+            if (allowance_caller.size() == 0) { allowances.delete(caller); }
+            else { allowances.put(caller, allowance_caller); };
+        } else if (value != 0 and Option.isNull(allowances.get(caller))) {
             var temp = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
             temp.put(spender, v);
-            allowances.put(msg.caller, temp);
-        } else if (value != 0 and Option.isSome(allowances.get(msg.caller))) {
-            let allowance_caller = Types.unwrap(allowances.get(msg.caller));
+            allowances.put(caller, temp);
+        } else if (value != 0 and Option.isSome(allowances.get(caller))) {
+            let allowance_caller = Types.unwrap(allowances.get(caller));
             allowance_caller.put(spender, v);
-            allowances.put(msg.caller, allowance_caller);
+            allowances.put(caller, allowance_caller);
         };
         ignore addRecord(
-            msg.caller, "approve",
+            caller, "approve",
             [
                 ("to", #Principal(spender)),
                 ("value", #U64(u64(value))),
@@ -238,15 +238,15 @@ module {
         return #Ok(txcounter - 1);
     };
 
-    public shared(msg) func mint(to: Principal, value: Nat): async TxReceipt {
-        if(msg.caller != owner_) {
+    public func mint(caller : Principal, to: Principal, value: Nat): async TxReceipt {
+        if(caller != owner_) {
             return #Err(#Unauthorized);
         };
         let to_balance = _balanceOf(to);
         totalSupply_ += value;
         balances.put(to, to_balance + value);
         ignore addRecord(
-            msg.caller, "mint",
+            caller, "mint",
             [
                 ("to", #Principal(to)),
                 ("value", #U64(u64(value))),
@@ -257,17 +257,17 @@ module {
         return #Ok(txcounter - 1);
     };
 
-    public shared(msg) func burn(amount: Nat): async TxReceipt {
-        let from_balance = _balanceOf(msg.caller);
+    public func burn(caller : Principal, amount: Nat): async TxReceipt {
+        let from_balance = _balanceOf(caller);
         if(from_balance < amount) {
             return #Err(#InsufficientBalance);
         };
         totalSupply_ -= amount;
-        balances.put(msg.caller, from_balance - amount);
+        balances.put(caller, from_balance - amount);
         ignore addRecord(
-            msg.caller, "burn",
+            caller, "burn",
             [
-                ("from", #Principal(msg.caller)),
+                ("from", #Principal(caller)),
                 ("value", #U64(u64(amount))),
                 ("fee", #U64(u64(0)))
             ]
