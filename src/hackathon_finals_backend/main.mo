@@ -227,6 +227,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
               //transfer ICP 
               // 
               //
+              let t : TxReceipt = await transferFromDIP20(caller,token.owner,Price);
 
               centers := List.map(centers, func (center : Types.Center) : Types.Center {
                 if (center.address == token.minter) {
