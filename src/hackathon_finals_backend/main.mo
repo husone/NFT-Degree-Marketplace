@@ -17,6 +17,7 @@ import TokenId "mo:base/Nat64";
 import Types "./Types";
 import Debug "mo:base/Debug";
 import token "token";
+import types "types";
 
 
 shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
@@ -26,13 +27,41 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var name : Text = init.name;
   stable var symbol : Text = init.symbol;
   stable var admin : Principal = init.address;
-  let DBZ : token.Token = token.Token("","","",1,1,Principal.fromText("2vxsx-fae"),1); 
+  let DBZ : token.Token = token.Token("","DNBOIZ","DBZ",18,1000000000000000,Principal.fromText("2vxsx-fae"),0); 
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
   //DIP20
+
+  type Operation = types.Operation;
+    type TransactionStatus = types.TransactionStatus;
+    type TxRecord = types.TxRecord;
+    type Metadata = {
+        logo : Text;
+        name : Text;
+        symbol : Text;
+        decimals : Nat8;
+        totalSupply : Nat;
+        owner : Principal;
+        fee : Nat;
+    };
+    // returns tx index or error msg
+    public type TxReceipt = {
+        #Ok: Nat;
+        #Err: {
+            #InsufficientAllowance;
+            #InsufficientBalance;
+            #ErrorOperationStyle;
+            #Unauthorized;
+            #LedgerTrap;
+            #ErrorTo;
+            #Other: Text;
+            #BlockUsed;
+            #AmountTooSmall;
+        };
+    };
   public shared(msg) func transferDIP20(to: Principal, value: Nat) : async TxReceipt{
     let receipt = await DBZ.transfer(msg.caller, to, value);
     return receipt;
@@ -49,7 +78,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared(msg) func transferFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.transferFrom(caller, from, to, value);
+    let receipt = await DBZ.transferFrom(msg.caller, from, to, value);
     return receipt;
   };
 
@@ -63,25 +92,9 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     return receipt;
   };
 
-  public shared(msg) func burnFromDIP20(from: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.burnFrom(msg.caller, from, value);
-    return receipt;
-  };
+  
 
-  public shared(msg) func mintFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.mintFrom(msg.caller, from, to, value);
-    return receipt;
-  };
-
-  public shared(msg) func safeTransferDIP20(to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.safeTransfer(msg.caller, to, value);
-    return receipt;
-  };
-
-  public shared(msg) func safeTransferFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.safeTransferFrom(msg.caller, from, to, value);
-    return receipt;
-  };
+  
 
   public func balanceOfDIP20(owner: Principal) : async Nat{
     let balance = await DBZ.balanceOf(owner);
@@ -103,15 +116,11 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     return name;
   };
 
-  public func decimalsDIP20() : async Nat{
+  public func decimalsDIP20() : async Nat8{
     let decimals = await DBZ.decimals();
     return decimals;
   };
 
-  public func allowanceDIP20() : async Nat{
-    let allowance = await DBZ.allowance();
-    return allowance;
-  }
 
   // add, delete center 
   public shared({ caller }) func addCenter(center : Types.Center)  {
