@@ -26,7 +26,8 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var centers = List.nil<Types.Center>();
   stable var name : Text = init.name;
   stable var symbol : Text = init.symbol;
-  stable var admin : Principal = init.address;
+  // Test
+  stable var ad : Principal = init.address;
   let DBZ : token.Token = token.Token("","DNBOIZ","DBZ",18,1000000000000000,Principal.fromText("2vxsx-fae"),0); 
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
@@ -34,6 +35,10 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
   //DIP20
+
+  public shared(msg) func callerToText() : async [Text] {
+    return [Principal.toText(msg.caller), Principal.toText(ad)];
+  };
 
   type Operation = types.Operation;
     type TransactionStatus = types.TransactionStatus;
@@ -124,7 +129,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   // add, delete center 
   public shared({ caller }) func addCenter(center : Types.Center)  {
-    assert caller == admin;
+    assert caller == ad;
     if ( List.some(centers, func (c : Types.Center) : Bool { c == center })) {
       return;
     };
@@ -132,7 +137,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared({ caller }) func deleteCenter(center : Types.Center)  {
-    assert caller == admin;
+    assert caller == ad;
     if (not List.some(centers, func (c : Types.Center) : Bool { c == center })) {
       return;
     };
@@ -142,7 +147,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared({ caller }) func getCenters() : async [Types.Center]  {
-    assert caller == admin;
+    assert caller == ad;
     return List.toArray(centers);
   };
 
@@ -188,7 +193,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   //  public shared(msg) func callerPrincipal() : async Principal {
-  //       admin := msg.caller;
+  //       ad := msg.caller;
   //       return msg.caller;
   //   };
 
@@ -209,7 +214,8 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
             case null{
               return #Err(#Other);
             };
-            case (?Price){
+            case (?_price){
+              var t : TxReceipt = await transferDIP20(token.owner,_price);
               nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
                 if (item.id == token.id) {
                   let update : Types.Nft = {
@@ -227,13 +233,13 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
               //transfer ICP 
               // 
               //
-              let t : TxReceipt = await transferFromDIP20(caller,token.owner,Price);
+              
 
               centers := List.map(centers, func (center : Types.Center) : Types.Center {
                 if (center.address == token.minter) {
                   let update : Types.Center = {
                     address = center.address;
-                    volume = center.volume + Price;
+                    volume = center.volume + _price;
                   };
                   return update;
                 } else {
@@ -283,7 +289,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared({ caller }) func setPublic(token_id: Types.TokenId, metadataToSet: Types.FullMetadata) : async Types.TxReceipt {
-    if (caller  != admin) return #Err(#Unauthorized);
+    if (caller  != ad) return #Err(#Unauthorized);
 
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     
@@ -445,7 +451,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       case (?token) {
         if (
           caller != token.owner and
-          not (caller != admin)
+          not (caller != ad)
         ) {
           return #Err(#Unauthorized);
         } else if (Principal.notEqual(from, token.owner)) {
