@@ -32,6 +32,87 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var entries : [(Text, List.List<Principal>)] = [];
   let allowances = HashMap.fromIter<Text, List.List<Principal> >(entries.vals(), 0, Text.equal, Text.hash);
 
+  //DIP20
+  public shared(msg) func transferDIP20(to: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.transfer(msg.caller, to, value);
+    return receipt;
+  };
+
+  public shared(msg) func approveDIP20(spender: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.approve(msg.caller, spender, value);
+    return receipt;
+  };
+
+  public func allowanceDIP20(owner: Principal, spender: Principal) : async Nat{
+    let allowance = await DBZ.allowance(owner, spender);
+    return allowance;
+  };
+
+  public shared(msg) func transferFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.transferFrom(caller, from, to, value);
+    return receipt;
+  };
+
+  public shared(msg) func burnDIP20(value: Nat) : async TxReceipt{
+    let receipt = await DBZ.burn(msg.caller, value);
+    return receipt;
+  };
+
+  public shared(msg) func mintDIP20(to: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.mint(msg.caller, to, value);
+    return receipt;
+  };
+
+  public shared(msg) func burnFromDIP20(from: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.burnFrom(msg.caller, from, value);
+    return receipt;
+  };
+
+  public shared(msg) func mintFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.mintFrom(msg.caller, from, to, value);
+    return receipt;
+  };
+
+  public shared(msg) func safeTransferDIP20(to: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.safeTransfer(msg.caller, to, value);
+    return receipt;
+  };
+
+  public shared(msg) func safeTransferFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
+    let receipt = await DBZ.safeTransferFrom(msg.caller, from, to, value);
+    return receipt;
+  };
+
+  public func balanceOfDIP20(owner: Principal) : async Nat{
+    let balance = await DBZ.balanceOf(owner);
+    return balance;
+  };
+
+  public func totalSupplyDIP20() : async Nat{
+    let supply = await DBZ.totalSupply();
+    return supply;
+  };
+
+  public func symbolDIP20() : async Text{
+    let symbol = await DBZ.symbol();
+    return symbol;
+  };
+
+  public func nameDIP20() : async Text{
+    let name = await DBZ.name();
+    return name;
+  };
+
+  public func decimalsDIP20() : async Nat{
+    let decimals = await DBZ.decimals();
+    return decimals;
+  };
+
+  public func allowanceDIP20() : async Nat{
+    let allowance = await DBZ.allowance();
+    return allowance;
+  }
+
   // add, delete center 
   public shared({ caller }) func addCenter(center : Types.Center)  {
     assert caller == admin;
