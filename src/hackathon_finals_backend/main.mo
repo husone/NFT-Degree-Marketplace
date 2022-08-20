@@ -215,7 +215,10 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
               return #Err(#Other);
             };
             case (?_price){
-              var t : TxReceipt = await transferDIP20(token.owner,_price);
+              let t : TxReceipt = await DBZ.transfer(caller,token.owner, _price);
+              if (t!=#Ok(0)) {
+                return #Err(#Other);
+               };
               nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
                 if (item.id == token.id) {
                   let update : Types.Nft = {
@@ -247,7 +250,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
                 };
               });
               nftPrices.put(Nat64.toText(tokenID), 0);
-              return #Ok(0);
+              return #Ok(_price);
             };
           };
         };

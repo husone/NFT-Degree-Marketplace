@@ -203,7 +203,7 @@ module {
             ]
         );
         txcounter += 1;
-        return #Ok(txcounter - 1);
+        return #Ok(0);
     };
 
     /// Allows spender to withdraw from your account multiple times, up to the value amount.
