@@ -1,7 +1,9 @@
 import { publicRoutes } from '../../../Routes/index'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+
+import "../Navbar.scss"
+
 function NavbarUser() {
   const [pathRoles, setPathRoles] = useState([])
 

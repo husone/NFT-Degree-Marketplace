@@ -192,56 +192,103 @@ function UserKYC() {
               />
             </Form.Item>
           </div>
-          </div>
-          <Form.Item label='Add NFT' valuePropName='fileList'>
-            <div className='wrap-upload input-group mb-3 d-flex justify-content-start'>
-              {imgUri && (
-                <img
-                  className='previewImg'
-                  src={imgUri}
-                  alt='preview'
+        </div>
+        <div className="row">
+          <div className="col">
+            <Form.Item label='Add NFT' valuePropName='fileList'>
+              <div className='wrap-upload input-group mb-3 d-flex justify-content-start'>
+                {imgUri && (
+                  <img
+                    className='previewImg'
+                    src={imgUri}
+                    alt='preview'
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      borderRadius: '5px',
+                      border: '1px solid green',
+                      marginLeft: '0px',
+                      marginRight: '15px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                )}
+                <input
+                  type='file'
+                  name='file'
+                  id='fileUpload'
+                  accept='.jpeg,.jpg,.png,.gif,image/*'
+                  onChange={(e) => getFile(e)}
+                  required
+                  style={{ display: 'none' }}
+                />
+                <label
+                  htmlFor='fileUpload'
+                  className='d-flex justify-content-center align-items-center'
                   style={{
                     width: '100px',
                     height: '100px',
                     borderRadius: '5px',
-                    border: '1px solid green',
-                    marginLeft: '0px',
-                    marginRight: '15px',
-                    objectFit: 'cover',
+                    border: '1px dashed #ccc',
                   }}
+                >
+                  <PlusOutlined />
+                </label>
+              </div>
+            </Form.Item>
+          </div>
+          <div className="col">
+            <Form.Item label='Add KYC Image' valuePropName='fileList'>
+              <div className='wrap-upload input-group mb-3 d-flex justify-content-start'>
+                {imgUri && (
+                  <img
+                    className='previewImg'
+                    src={imgUri}
+                    alt='preview'
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      borderRadius: '5px',
+                      border: '1px solid green',
+                      marginLeft: '0px',
+                      marginRight: '15px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                )}
+                <input
+                  type='file'
+                  name='file'
+                  id='kycImage'
+                  accept='.jpeg,.jpg,.png,.gif,image/*'
+                  onChange={(e) => getFile(e)}
+                  required
+                  style={{ display: 'none' }}
                 />
-              )}
-              <input
-                type='file'
-                name='file'
-                id='fileUpload'
-                accept='.jpeg,.jpg,.png,.gif,image/*'
-                onChange={(e) => getFile(e)}
-                required
-                style={{ display: 'none' }}
-              />
-              <label
-                htmlFor='fileUpload'
-                className='d-flex justify-content-center align-items-center'
-                style={{
-                  width: '100px',
-                  height: '100px',
-                  borderRadius: '5px',
-                  border: '1px dashed #ccc',
-                }}
-              >
-                <PlusOutlined />
-              </label>
-            </div>
-          </Form.Item>
+                <label
+                  htmlFor='kycImage'
+                  className='d-flex justify-content-center align-items-center'
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '5px',
+                    border: '1px dashed #ccc',
+                  }}
+                >
+                  <PlusOutlined />
+                </label>
+              </div>
+            </Form.Item>
+          </div>
+        </div>
         <Form.Item className="button-submit">
-            <Input
-              type='submit'
-              value='Upload NFT'
-              className="btn-submit-custom"
-              style={{ width: 'fit-content' }}
-            />
-          </Form.Item>
+          <Input
+            type='submit'
+            value='Upload NFT'
+            className="btn-submit-custom"
+            style={{ width: 'fit-content' }}
+          />
+        </Form.Item>
       </Form>
     </div>
   );

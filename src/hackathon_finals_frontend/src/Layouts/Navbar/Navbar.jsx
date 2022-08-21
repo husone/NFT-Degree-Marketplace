@@ -111,12 +111,6 @@ const Nav = styled.nav`
     border: 0px;
     font-size: 16px;
     font-weight: 500;
-    &:hover {
-      border: 0px;
-      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
   }
   .dropdown-menu {
     width: 120%;
@@ -128,7 +122,7 @@ const Nav = styled.nav`
     &:hover {
       background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
       background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-text-fill-color: #fff;
     }
   }
   .dropdown-toggle::after {
@@ -144,11 +138,15 @@ const Nav = styled.nav`
       -webkit-text-fill-color: transparent;
     }
   }
-  @keyframes anime 
-   0%
-     background-position 0% 50%
-   50%
-     background-position 100% 50%
-   100%
-     background-position 0% 50%;
+  @keyframes anime {
+   0%{
+     background-position: 0% 50%;
+   }
+   50%{
+     background-position: 100% 50%;
+   }
+   100%{
+     background-position: 0% 50%;
+   }
+  }
 `
