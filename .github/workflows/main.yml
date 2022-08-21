@@ -55,7 +55,6 @@ jobs:
         run : |
           dfx start --background
           dfx deploy --argument "(
-
             record {
               name = \"My DIP721\";
               symbol = \"DFXB\";
