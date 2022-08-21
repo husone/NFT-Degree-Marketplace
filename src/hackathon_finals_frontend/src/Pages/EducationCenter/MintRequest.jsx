@@ -76,7 +76,7 @@ function MintRequest() {
   };
 
   return (
-    <Container>
+    <div>
       <h1 className="my-4">MINT REQUESTS</h1>
       <Table columns={columns} dataSource={data} />
 
@@ -150,12 +150,15 @@ function MintRequest() {
               <Input value={"temp name of certificate"} />
             </Form.Item>
           </Form>
-          <div className="wrap_img" style={{ width: "350px", height: "350px", borderRadius: "8px", border: "1px dashed #ccc" }}>
-            <img src="" alt="" srcset="" />
-          </div>
+          <Container className="wrap_img">
+            {
+              false && // render image if exist, replace false by uri
+              <img src="" alt="preview image" srcset="" />
+            }
+          </Container>
         </div>
       </Modal>
-    </Container>
+    </div>
   )
 }
 
@@ -163,4 +166,14 @@ export default MintRequest;
 
 
 const Container = styled.div`
+  width: 350px;
+  height: 350px;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  overflow: hidden;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
