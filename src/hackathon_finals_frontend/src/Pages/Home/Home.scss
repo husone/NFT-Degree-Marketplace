@@ -1,0 +1,52 @@
+.ant-input-search .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+.ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button {
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  background: #f052a4 !important;
+  border-color: #f052a4 !important;
+  color: white !important;
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
+.ant-tabs-tab:hover,
+.ant-card-actions > li > span > .anticon:hover {
+  color: #f052a4 !important;
+}
+.ant-tabs-ink-bar {
+  background: #f052a4 !important;
+}
+.ant-pagination-item-active {
+  border-color: #f052a4 !important;
+}
+.ant-pagination-disabled .ant-pagination-item-link,
+.ant-table-pagination > * {
+  border-radius: 50% !important;
+}
+.ant-card-cover img,
+.ant-card-bordered {
+  border-radius: 15px 15px 0 0 !important;
+}
+.ant-card-bordered:hover {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+  transition: 0.4s;
+  cursor: pointer;
+}
+.ant-card-bordered {
+    transition: 0.4s;
+}
+.ant-card-actions,
+.ant-card {
+  border-radius: 15px !important;
+}
+
+.ant-input-affix-wrapper{
+    &:focus, &:hover {
+        border-color: #f052a480 !important;
+        box-shadow: 0 0 0 2px #f052a480 !important;
+      }
+}

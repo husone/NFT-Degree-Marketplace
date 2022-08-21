@@ -1,5 +1,5 @@
 function AdminPage() {
-  return <h1>Admin Page</h1>
+  return <h2>Admin Page</h2>
 }
 
 export default AdminPage
