@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Table, Button, Tag, Modal, Form, Input } from 'antd';
 import styled from "styled-components";
+import './index.scss'
 function ListRequests() {
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -79,7 +80,7 @@ function ListRequests() {
 
     return (
         <div>
-            <h1 className="my-4">LIST OF USER'S REQUEST</h1>
+            <h2 className="my-4">LIST OF USER'S REQUEST</h2>
             <Table columns={columns} dataSource={data} />
 
         </div>

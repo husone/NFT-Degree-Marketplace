@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './Home.scss'
 import { final_be } from '../../../../declarations/final_be';
 import { Input, Tabs } from "antd";
 import Item from "./Item"
@@ -32,7 +33,7 @@ function Home() {
         className="my-4"
       />
 
-      <h1>Explore Collections</h1>
+      <h2>Explore Collections</h2>
 
       <Tabs defaultActiveKey="1" onChange={onChange}>
         <TabPane tab="Search" key="1" className="my-5">

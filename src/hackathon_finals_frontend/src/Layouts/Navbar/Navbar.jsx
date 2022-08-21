@@ -43,9 +43,9 @@ function NavBar(props) {
 
   return (
     role && (
-      <Nav className="navbar navbar-expand-lg bg-light">
-        <div className="container-fluid">
-          <div className="d-flex">
+      <Nav className="navbar navbar-expand-lg">
+        <div className="container-fluid px-5">
+          <div className="d-flex gap-4">
             <Link className="navbar-brand" to="/">
               <img src={Logo} alt="Home" />
             </Link>
@@ -69,19 +69,29 @@ export default withContext(NavBar)
 
 const Nav = styled.nav`
   height: 60px;
-  border-bottom: 1px solid #ccc;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  background: #fff;
   position: sticky;
   top: 0px;
   z-index: 100;
   img {
-    height: 35px;
+    height: 30px;
   }
   .connect-button {
-    background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
     color: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
     border: 0px;
-    padding: 5px 15px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff00aa, #3f35ff);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    transition: background-position .5s;
+    box-shadow: 0 4px 14px 0 var(--nextui-colors-successShadow);
+    &:hover {
+      background-position: right center;
+      background-position: 0 0;
+    }
   }
   .wallet_id {
     width: 100px;
@@ -96,9 +106,48 @@ const Nav = styled.nav`
   }
   .custom_dropdown {
     border: 0px;
-    font-size: 1.25rem;
+    font-size: 16px;
+    font-weight: 500;
     &:hover {
       border: 0px;
+      background-image: linear-gradient(45deg,#ff00aa,#3f35ff);;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   }
+  .dropdown-menu {
+    width: 120%;
+  }
+  .dropdown-item {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    min-width: 5rem;
+    &:hover {
+      background-image: linear-gradient(45deg,#ff00aa,#3f35ff);;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  .dropdown-toggle::after {
+    border: none;
+    margin-left: 1rem;
+  }
+  .navbar-brand {
+    font-weight: 500;
+    font-size: 16px;
+    &:hover {
+      background-image: linear-gradient(45deg,#ff00aa,#3f35ff);;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  @keyframes anime 
+   0%
+     background-position 0% 50%
+   50%
+     background-position 100% 50%
+   100%
+     background-position 0% 50%
+  
+ 
 `

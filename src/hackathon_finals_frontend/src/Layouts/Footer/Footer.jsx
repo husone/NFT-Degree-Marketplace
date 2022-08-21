@@ -6,11 +6,11 @@ function Footer() {
   return (
     <FooterWrapper className="d-flex justify-content-around py-3">
       <div className="footer_about">
+        <div className="footer_contact d-flex align-items-center justify-content-between my-3">
         <div className="footer_logo d-flex flex-column align-items-start">
           <img src={Logo} alt="footer" className="footer_logo" />
         </div>
-        <div className="footer_contact d-flex align-items-center justify-content-between my-3">
-          <div className="contact_wrapper contact_wrapper_active d-flex justify-content-center align-items-center">
+          <div className="contact_wrapper d-flex justify-content-center align-items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="url(#gradient)"
@@ -50,6 +50,9 @@ function Footer() {
             </svg>
           </div>
         </div>
+        <div>
+        <i className="text-white">© DnBoiZ, Inc. 2022. We love our users!</i>
+      </div>
       </div>
       <ul className="footer_navs">
         <li>
@@ -62,10 +65,6 @@ function Footer() {
           <Link to="/">About us</Link>
         </li>
       </ul>
-      <div>
-        <h3 className="text-white">DnBoiz</h3>
-        <i className="text-white">© DnBoiZ, Inc. 2022. We love our users!</i>
-      </div>
     </FooterWrapper>
   )
 }
@@ -74,8 +73,8 @@ export default Footer
 const FooterWrapper = styled.div`
   width: 100%;
   height: 150px;
-  border-top: 1px solid #ccc;
-  background-color: #101020;
+  border-top: 1px solid rgba(19, 21, 21, 0.7);
+background-color: rgba(0, 0, 0, 0.91);
   column-gap: 25px;
   .footer_logo {
     column-gap: 10px;
@@ -101,6 +100,7 @@ const FooterWrapper = styled.div`
   }
   .footer_contact{
     column-gap: 15px;
+    cursor: pointer;
   }
   .footer_navs{
     list-style: none;
@@ -109,7 +109,7 @@ const FooterWrapper = styled.div`
       font-size: 16px;
       line-height: 35px;
       &:hover{
-        color: #fff;
+        color: #f052a4;
       }
     }
   }

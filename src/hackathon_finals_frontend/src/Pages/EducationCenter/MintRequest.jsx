@@ -77,7 +77,7 @@ function MintRequest() {
 
   return (
     <div>
-      <h1 className="my-4">MINT REQUESTS</h1>
+      <h2 className="my-4">MINT REQUESTS</h2>
       <Table columns={columns} dataSource={data} />
 
       <Modal

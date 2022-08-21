@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
+import './index.scss'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { Context } from '../../hooks/index'
@@ -73,7 +74,7 @@ function EducationKYC() {
 
   return (
     <div>
-      <h1 className="py-4">Education KYC page</h1>
+      <h2 className="py-4">Education KYC page</h2>
 
       {/* FORM */}
       <Form
@@ -163,8 +164,8 @@ function EducationKYC() {
             </label>
           </div>
         </Form.Item>
-        <Form.Item label="Click to upload NFT">
-          <Input type="submit" value="Upload NFT" className="bg-primary" style={{width: "fit-content"}}/>
+        <Form.Item  className="button-submit">
+          <Input type="submit" value="Upload NFT" className="btn-submit-custom" style={{width: "fit-content"}}/>
         </Form.Item>
       </Form>
     </div>
