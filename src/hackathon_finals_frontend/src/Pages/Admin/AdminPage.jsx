@@ -9,6 +9,26 @@ function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false)
 
+  useEffect(() => {
+    fetchRequestKYC()
+  }, [])
+
+  const fetchRequestKYC = async () => {
+    const res = await axios.get(
+      'http://localhost:5000/api/v1/education?isKYCVerified=false'
+    )
+    const filteredRequest = res.data.education.map(education => {
+      return {
+        ...education,
+        createdAt: Moment(new Date(education.createdAt)).format(
+          'DD-MM-YYYY HH:mm:ss'
+        ),
+        key: education._id,
+      }
+    })
+    setRequestKYC(filteredRequest)
+    console.log(res.data)
+  }
   const columns = [
     {
       title: 'Name',
@@ -17,27 +37,27 @@ function AdminPage() {
     },
     {
       title: 'Tax Code',
-      dataIndex: 'taxCode',
-      key: 'taxCode',
+      dataIndex: 'legalRepresentative',
+      key: 'legalRepresentative',
     },
     {
-      title: 'Timestamp',
-      dataIndex: 'timestamp',
-      key: 'timestamp',
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (_, { status }) => {
-        let color = 'green'
-        if (status === 'Deny') {
-          color = 'volcano'
-          return <Tag color={color}>Deny</Tag>
-        }
-        return <Tag color={color}>Accept</Tag>
-      },
-    },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (_, { status }) => {
+    //     let color = 'green'
+    //     if (status === 'Deny') {
+    //       color = 'volcano'
+    //       return <Tag color={color}>Deny</Tag>
+    //     }
+    //     return <Tag color={color}>Accept</Tag>
+    //   },
+    // },
     {
       title: 'Preview',
       key: 'preview',
@@ -52,26 +72,6 @@ function AdminPage() {
       ),
     },
   ]
-  const data = [
-    {
-      taxCode: 'ax01shax',
-      name: 'John Brown',
-      timestamp: '07302022',
-      status: 'Deny',
-    },
-    {
-      taxCode: 'ax01shax',
-      name: 'Jim Green',
-      timestamp: '07302022',
-      status: 'Accept',
-    },
-    {
-      taxCode: 'ax01shax',
-      name: 'Joe Black',
-      timestamp: '07302022',
-      status: 'Accept',
-    },
-  ]
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -82,18 +82,6 @@ function AdminPage() {
 
   const handleCancel = () => {
     setIsModalVisible(false)
-  }
-
-  useEffect(() => {
-    fetchRequestKYC()
-  }, [])
-
-  const fetchRequestKYC = async () => {
-    const res = await axios.get(
-      'http://localhost:5000/api/v1/education?isKYCVerified=false'
-    )
-    setRequestKYC(res.data.education)
-    console.log(res.data)
   }
 
   const approveRequest = () => {}
@@ -129,7 +117,7 @@ function AdminPage() {
             </li>
           )
         })}
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={requestKYC} />
 
         <Modal
           title="Minted NFT"
