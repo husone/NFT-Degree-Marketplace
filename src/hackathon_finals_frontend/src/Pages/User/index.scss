@@ -6,7 +6,7 @@ colgroup {
   background: rgba(230, 227, 227, 0.42);
 }
 .ant-table-tbody > tr.ant-table-row:hover > td {
-  background:  rgba(240, 82, 164, 0.1)  !important ;
+  background: rgba(240, 82, 164, 0.1) !important ;
   cursor: pointer;
 }
 .ant-btn-primary {
@@ -36,7 +36,7 @@ colgroup {
   height: 2.5rem;
 }
 .btn-submit-custom:hover {
-  background: #41EC8B !important;
+  background: #41ec8b !important;
   transition: 0.3s;
   background-position: right center;
   border: none !important;
@@ -44,4 +44,37 @@ colgroup {
 }
 #fileUpload {
   display: none;
+}
+.ant-form-horizontal .ant-form-item-label {
+  text-align: left !important;
+}
+.ant-modal {
+  &-header {
+    border-radius: 20px 20px 0 0 !important;
+    text-align: center;
+  }
+  &-content {
+    border-radius: 20px !important;
+  }
+  &-title {
+    font-weight: bold !important;
+  }
+  &-footer {
+    display: flex;
+    justify-content: center;
+    padding: 0px 16px 30px 16px !important;
+    border-top: none !important;
+  }
+
+  .ant-btn {
+    width: 100% !important;
+    &:hover {
+      border: 1px solid #f052a444 !important;
+      box-shadow: 0 0 0 2px #f052a444 !important;
+      color: #f052a4 !important;
+    }
+  }
+  .ant-form-item-label > label {
+    color: rgb(111, 110, 110);
+}
 }
