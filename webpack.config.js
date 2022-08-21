@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const Dotenv = require('dotenv-webpack')
 
 function initCanisterEnv() {
   let localCanisters, prodCanisters
@@ -73,10 +72,7 @@ module.exports = {
   module: {
     rules: [
       { test: /\.(ts|tsx|jsx)$/, loader: 'ts-loader' },
-      {
-        test: /\.(css|scss)$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
       { test: /\.(png|jpg|gif|svg|eot|ttf)$/i, loader: 'url-loader' },
     ],
   },
@@ -97,7 +93,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: 'react',
     }),
-    new Dotenv(),
   ],
   // proxy /api to port 8000 during development
   devServer: {
