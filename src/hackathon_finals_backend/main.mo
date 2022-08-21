@@ -629,15 +629,15 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
 
   public type Role = {
-    #Admin;
+    #ad;
     #Center;
     #User;
   };
 
   public shared({caller}) func getRole() : async Role {
     if (caller == ad){
-      return #Admin;
-    } else if (List.some(centers, func (center : Type.Center) : Bool { center.address == caller })) {
+      return #ad;
+    } else if (List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
       return #Center;
     } else {
       return #User;
@@ -647,24 +647,24 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   let centerTest : Types.Center = {
     address = Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae");
-    name = "Center Test";
+    volume = 0;
   };
 
-  public func setAdmin() {
-    admin = Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae");
-    centers := List.filter(centers, func (center : Types.Center) : Bool { center.name != "Center Test" });
+  public func setad() {
+    ad := Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae");
+    centers := List.filter(centers, func (center : Types.Center) : Bool { center.address != Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae") });
   };
 
 
   public func setCenter(){
     centers := List.push(centerTest, centers);
-    dmin = Principal.fromText("2vxsx-fae");
+    ad := Principal.fromText("2vxsx-fae");
   };
 
   public func setUser() {
-    admin = Principal.fromText("2vxsx-fae");
+    ad := Principal.fromText("2vxsx-fae");
     //delete center Test in centers
-    centers := List.filter(centers, func (center : Types.Center) : Bool { center.name != "Center Test" });
+    centers := List.filter(centers, func (center : Types.Center) : Bool { center.address != Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae") });
     
   };
 
