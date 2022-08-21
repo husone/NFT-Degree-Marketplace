@@ -8,6 +8,7 @@ import { publicRoutes } from '../../Routes/index'
 import { withContext } from '../../hooks/index'
 import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
+import NavbarAdmin from './components/NavbarAdmin'
 
 function NavBar(props) {
   // console.log(props)
@@ -51,6 +52,7 @@ function NavBar(props) {
             </Link>
             {role === 'user' && <NavbarUser />}
             {role === 'education' && <NavbarEducation />}
+            {role === 'admin' && <NavbarAdmin />}
           </div>
           <div className="d-flex align-items-center h100">
             {principal && <div className="wallet_id">{principal}</div>}
@@ -69,7 +71,8 @@ export default withContext(NavBar)
 
 const Nav = styled.nav`
   height: 60px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   background: #fff;
   position: sticky;
   top: 0px;
@@ -86,7 +89,7 @@ const Nav = styled.nav`
     background: linear-gradient(45deg, #ff00aa, #3f35ff);
     background-size: 200% 100%;
     background-position: 100% 0;
-    transition: background-position .5s;
+    transition: background-position 0.5s;
     box-shadow: 0 4px 14px 0 var(--nextui-colors-successShadow);
     &:hover {
       background-position: right center;
@@ -110,7 +113,7 @@ const Nav = styled.nav`
     font-weight: 500;
     &:hover {
       border: 0px;
-      background-image: linear-gradient(45deg,#ff00aa,#3f35ff);;
+      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -123,7 +126,7 @@ const Nav = styled.nav`
     padding-bottom: 0.5rem;
     min-width: 5rem;
     &:hover {
-      background-image: linear-gradient(45deg,#ff00aa,#3f35ff);;
+      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -136,7 +139,7 @@ const Nav = styled.nav`
     font-weight: 500;
     font-size: 16px;
     &:hover {
-      background-image: linear-gradient(45deg,#ff00aa,#3f35ff);;
+      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -147,7 +150,5 @@ const Nav = styled.nav`
    50%
      background-position 100% 50%
    100%
-     background-position 0% 50%
-  
- 
+     background-position 0% 50%;
 `
