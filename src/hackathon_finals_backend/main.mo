@@ -1,6 +1,7 @@
 import Array "mo:base/Array";
 import Bool "mo:base/Bool";
 import Buffer "mo:base/Buffer";
+import Debug "mo:base/Debug";
 import Hash "mo:base/Hash";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
@@ -14,8 +15,8 @@ import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import TokenId "mo:base/Nat64";
+import Type "Types";
 import Types "./Types";
-import Debug "mo:base/Debug";
 import token "token";
 import types "types";
 
@@ -136,13 +137,11 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     centers := List.push(center,centers);
   };
 
-  public shared({ caller }) func deleteCenter(center : Types.Center)  {
+  public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
     assert caller == ad;
-    if (not List.some(centers, func (c : Types.Center) : Bool { c == center })) {
-      return;
-    };
+    var center  = List.find(centers, func (c : Types.Center) : Bool { c.address == centerPrincipal});
     centers := List.filter(centers, func (c : Types.Center) : Bool {
-      return (c != center);
+      return (?c != center);
     });
   };
 
@@ -377,7 +376,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
 
-  public shared({caller}) func rejectView(token_id: Nat64, user: Principal) {
+  public shared({caller}) func removeView(token_id: Nat64, user: Principal) {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case (null) {
@@ -406,7 +405,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     };
   };
 
-  public shared({caller}) func rejectAllView(token_id: Nat64) {
+  public shared({caller}) func removeAllView(token_id: Nat64) {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case (null) {
@@ -629,15 +628,15 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
 
   public type Role = {
-    #ad;
+    #Admin;
     #Center;
     #User;
   };
 
-  public shared({caller}) func getRole() : async Role {
-    if (caller == ad){
-      return #ad;
-    } else if (List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
+  public query func getRole(principal : Principal) : async Role {
+    if (principal == ad){
+      return #Admin;
+    } else if (List.some(centers, func (center : Types.Center) : Bool { center.address == principal })) {
       return #Center;
     } else {
       return #User;
@@ -667,6 +666,86 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     centers := List.filter(centers, func (center : Types.Center) : Bool { center.address != Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae") });
     
   };
+
+  // func to get NFTs owner by a principal 
+  public query func getNFTsFromUser(owner: Principal) : async [Types.Nft] {
+    let items = List.filter(nfts, func(token: Types.Nft) : Bool { token.owner == owner });
+    return List.toArray(items);
+  };
+
+  //func to get NFTs which mint by a principal
+  public query func getNFTsFromCenter(center: Principal) : async [Types.Nft] {
+    let items = List.filter(nfts, func(token: Types.Nft) : Bool { token.minter == center });
+    return List.toArray(items);
+  };
+
+  // func transfer DIP721 
+  public shared({ caller }) func transferDIP721(token_id: Types.TokenId, to: Principal) : async Types.TxReceipt {
+    let item = findNFT(token_id);
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if (not List.some(nfts, func (nft : Types.Nft) : Bool { nft.owner == caller })) {
+          return #Err(#Unauthorized);
+        };
+        nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
+            if (item.id == token.id) {
+              let update : Types.Nft = {
+                isPublic = item.isPublic;
+                minter = item.minter;
+                owner = to;
+                id = item.id;
+                metadata = token.metadata;
+              };
+              return update;
+            } else {
+              return item;
+            };
+          });
+          transactionId += 1;
+          return #Ok(transactionId);   
+      };
+    };
+  };
+
+  // func check viewer is viewer of NFT or not 
+  public shared({ caller }) func isViewer(token_id: Types.TokenId, viewer: Principal) : async Type.TxReceipt {
+    let item = findNFT(token_id);
+    switch (item) {
+      case null {
+        return #Err(#InvalidTokenId);
+      };
+      case (?token) {
+        if (token.isPublic) {
+          return #Ok(0);
+        } else {
+          if (token.owner == viewer) {
+            return #Ok(0);
+          };
+          var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
+          switch (viewers) {
+            case (null) {
+              return #Err(#Other);
+            };
+            case (?(viewers)) {
+              var v = (List.find(viewers, func (v : Principal) : Bool { return v == viewer }));
+              switch (v){
+                case (null) {
+                  return #Err(#Other);
+                };
+                case (?v) {
+                  return #Ok(0);
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+
 
 
 }
