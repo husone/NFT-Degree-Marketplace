@@ -1,0 +1,16 @@
+.ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button {
+  background: #101020;
+  border: #101020;
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+.ant-input-search .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+.ant-input-group {
+  box-shadow: rgba(2, 1, 1, 0.1) 0px 5px 5px -5px;
+}
