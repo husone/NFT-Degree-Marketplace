@@ -7,7 +7,6 @@ import AllNFTs from '../Pages/NFTs/AllNFTs'
 import MyNFT from '../Pages/User/MyNFT'
 import UserKYC from '../Pages/User/UserKYC'
 import ListRequests from '../Pages/User/ListRequests'
-import MintedNFT from '../Pages/EducationCenter/MintedNFT'
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -20,11 +19,7 @@ const publicRoutes = [
   },
   {
     path: '/minted',
-<<<<<<< HEAD
-    component: MintedNFT,
-=======
     component: MintedRequest,
->>>>>>> 46c18bba9d95f47146ad6fed33884b9df06b1a76
     role: 'education',
     desc: 'Minted NFT',
   },

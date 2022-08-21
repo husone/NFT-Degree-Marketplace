@@ -2,6 +2,8 @@ import { publicRoutes } from '../../../Routes/index'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import '../Navbar.scss'
+
 function NavbarEducation() {
   const [pathRoles, setPathRoles] = useState([])
 
@@ -13,7 +15,11 @@ function NavbarEducation() {
     <>
       {pathRoles.map((route, index) => {
         return (
-          <Link key={index} className="navbar-brand" to={route.path}>
+          <Link
+            key={index}
+            className="navbar-brand custom_dropdown"
+            to={route.path}
+          >
             {route.desc}
           </Link>
         )

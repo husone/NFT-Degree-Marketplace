@@ -25,7 +25,7 @@ function UserKYC() {
 
   const getEducations = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?isKYCVerified=true'
+      'http://localhost:5000/api/v1/education?isKYCVerified=false'
     )
     setEducationList(res.data.education)
   }
@@ -132,22 +132,6 @@ function UserKYC() {
     }
   }
 
-  const uploadImage = async base64EncodedImage => {
-    try {
-      const res = await axios.post('http://localhost:5000/api/v1/request', {
-        data: base64EncodedImage,
-      })
-      // await fetch('/api/upload', {
-      //     method: 'POST',
-      //     body: JSON.stringify({ data: base64EncodedImage }),
-      //     headers: { 'Content-Type': 'application/json' },
-      // });
-      console.log(res)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
   return (
     <div>
       <h2 className="py-4">User KYC page</h2>
@@ -237,7 +221,8 @@ function UserKYC() {
             </Form.Item>
           </div>
         </div>
-        <Form.Item label="Add NFT" valuePropName="fileList">
+
+        {/* <Form.Item label="Add NFT" valuePropName="fileList">
           <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
             {imgUri && (
               <img
@@ -278,6 +263,98 @@ function UserKYC() {
             </label>
           </div>
         </Form.Item>
+        <Form.Item className="button-submit">
+          <Input
+            type="submit"
+            value="Upload NFT" */}
+        <div className="row">
+          <div className="col">
+            <Form.Item label="Add NFT" valuePropName="fileList">
+              <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
+                {imgUri && (
+                  <img
+                    className="previewImg"
+                    src={imgUri}
+                    alt="preview"
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      borderRadius: '5px',
+                      border: '1px solid green',
+                      marginLeft: '0px',
+                      marginRight: '15px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                )}
+                <input
+                  type="file"
+                  name="file"
+                  id="fileUpload"
+                  accept=".jpeg,.jpg,.png,.gif,image/*"
+                  onChange={e => getFile(e)}
+                  required
+                  style={{ display: 'none' }}
+                />
+                <label
+                  htmlFor="fileUpload"
+                  className="d-flex justify-content-center align-items-center"
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '5px',
+                    border: '1px dashed #ccc',
+                  }}
+                >
+                  <PlusOutlined />
+                </label>
+              </div>
+            </Form.Item>
+          </div>
+          <div className="col">
+            <Form.Item label="Add KYC Image" valuePropName="fileList">
+              <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
+                {imgUri && (
+                  <img
+                    className="previewImg"
+                    src={imgUri}
+                    alt="preview"
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      borderRadius: '5px',
+                      border: '1px solid green',
+                      marginLeft: '0px',
+                      marginRight: '15px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                )}
+                <input
+                  type="file"
+                  name="file"
+                  id="kycImage"
+                  accept=".jpeg,.jpg,.png,.gif,image/*"
+                  onChange={e => getFile(e)}
+                  required
+                  style={{ display: 'none' }}
+                />
+                <label
+                  htmlFor="kycImage"
+                  className="d-flex justify-content-center align-items-center"
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '5px',
+                    border: '1px dashed #ccc',
+                  }}
+                >
+                  <PlusOutlined />
+                </label>
+              </div>
+            </Form.Item>
+          </div>
+        </div>
         <Form.Item className="button-submit">
           <Input
             type="submit"

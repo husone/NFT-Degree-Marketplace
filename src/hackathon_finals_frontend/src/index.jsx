@@ -44,7 +44,7 @@ function App() {
                 )
               })}
             </Routes>
-            <ConnectDialog className="wallet_dialog" />
+            <ConnectDialog />
           </Container>
         </Provider>
       </Connect2ICProvider>

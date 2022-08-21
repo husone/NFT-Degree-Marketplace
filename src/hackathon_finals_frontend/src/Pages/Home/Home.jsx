@@ -1,27 +1,20 @@
 import React, { useState } from 'react'
 import './Home.scss'
-import { final_be } from '../../../../declarations/final_be';
-import { Input, Tabs } from "antd";
-import Item from "./Item"
-const { Search } = Input;
-const { TabPane } = Tabs;
+import { final_be } from '../../../../declarations/final_be'
+import { Input, Tabs } from 'antd'
+import Item from './Item'
+const { Search } = Input
+const { TabPane } = Tabs
 
 function Home() {
   const [size, setSize] = useState('large')
 
-  const hello = async () => {
-    const res = await final_be.hello()
-    console.log(res)
+  const onSearch = () => {}
+
+  const onChange = key => {
+    console.log(key)
   }
 
-  const onSearch = () => {
-  }
-
-  const onChange = (key) => {
-    console.log(key);
-  };
-
-  hello()
   return (
     <div>
       <Search
@@ -37,7 +30,7 @@ function Home() {
 
       <Tabs defaultActiveKey="1" onChange={onChange}>
         <TabPane tab="Search" key="1" className="my-5">
-          <Item/>
+          <Item />
         </TabPane>
         <TabPane tab="Trending" key="2">
           Content of Tab Pane 2

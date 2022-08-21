@@ -3,6 +3,7 @@ import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Table, Button, Tag, Modal, Form, Input } from 'antd';
 import styled from "styled-components";
 import './index.scss'
+
 function ListRequests() {
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -83,8 +84,99 @@ function ListRequests() {
             <h2 className="my-4">LIST OF USER'S REQUEST</h2>
             <Table columns={columns} dataSource={data} />
 
+            <Modal
+                title="Minted NFT"
+                visible={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                width={800}
+            >
+                <div className="d-flex justify-content-between">
+                    <Form
+                        encType="multipart/form-data"
+                        style={{ maxWidth: '60vw', margin: '0px auto' }}
+                        labelCol={{ span: 12 }}
+                        wrapperCol={{ span: 20 }}
+                        disabled
+                    >
+                        <Form.Item
+                            label="First name"
+                            name="firstName"
+                        >
+                            <Input
+                                type="text"
+                                id="firstName"
+                                value={"temp first name"}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Last name"
+                            name="lastName"
+                        >
+                            <Input
+                                value={"temp last name"}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Date of Birth"
+                            name="dob"
+                        >
+                            <Input value={"temp date of birth"} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Education center"
+                            name="educationCenter"
+                        >
+                            <Input value={"temp education center"} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Nation ID Number"
+                            name="nationIdNumber"
+                        >
+                            <Input value={"temp nation id number"} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Student ID"
+                            name="studentId"
+                        >
+                            <Input value={"temp student id"} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Name of Certificate"
+                            name="nameOfCertificate"
+                        >
+                            <Input value={"temp name of certificate"} />
+                        </Form.Item>
+                    </Form>
+                    <Container className="wrap_img">
+                        {
+                            false && // render image if exist, replace false by uri
+                            <img src="" alt="preview image" srcset="" />
+                        }
+                    </Container>
+                </div>
+            </Modal>
         </div>
     );
 }
 
 export default ListRequests;
+
+const Container = styled.div`
+    width: 350px;
+    height: 350px;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+    overflow: hidden;
+    img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+`;

@@ -42,9 +42,11 @@ export default function ({ university, rollNumber }) {
                         <h3>$ Price</h3>
                     </div>
                 </Space>
-                <Button type="primary">Buy NFT</Button>
-                <Button type="primary">Transfer</Button>
-                <Button type="primary">Set price</Button>
+                <Space size={15}>
+                    <Button type="primary">Buy NFT</Button>
+                    <Button type="primary">Transfer</Button>
+                    <Button type="primary">Set price</Button>
+                </Space>
             </Modal>
         </Container>
     )

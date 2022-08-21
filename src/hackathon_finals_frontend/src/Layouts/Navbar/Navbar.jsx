@@ -2,7 +2,6 @@ import { useState, useEffect, useContext, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../Assets/Images/logo.png'
-import { checkRole } from '../../Utils/CheckRole'
 import { ConnectButton, useConnect } from '@connect2ic/react'
 import { publicRoutes } from '../../Routes/index'
 import { withContext } from '../../hooks/index'
@@ -35,9 +34,6 @@ function NavBar(props) {
     logout()
     console.log('Disconnected from Plug')
   }
-
-  // Change TEST_ID for test role, 1 for admin role, 3 for user role, 2 for education role
-  // const TEST_ID = 4
 
   return (
     role && (
@@ -108,12 +104,6 @@ const Nav = styled.nav`
     border: 0px;
     font-size: 16px;
     font-weight: 500;
-    &:hover {
-      border: 0px;
-      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
   }
   .dropdown-menu {
     width: 120%;
@@ -125,7 +115,7 @@ const Nav = styled.nav`
     &:hover {
       background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
       background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-text-fill-color: #fff;
     }
   }
   .dropdown-toggle::after {
@@ -141,11 +131,15 @@ const Nav = styled.nav`
       -webkit-text-fill-color: transparent;
     }
   }
-  @keyframes anime 
-   0%
-     background-position 0% 50%
-   50%
-     background-position 100% 50%
-   100%
-     background-position 0% 50%;
+  @keyframes anime {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 `
