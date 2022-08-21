@@ -2,6 +2,7 @@ import Home from '../Pages/Home/Home'
 import AdminPage from '../Pages/Admin/AdminPage'
 import EducationKYC from '../Pages/User/EducationKYC'
 import MintRequest from '../Pages/EducationCenter/MintRequest'
+import MintedRequest from '../Pages/EducationCenter/MintedRequest'
 import AllNFTs from '../Pages/NFTs/AllNFTs'
 import MyNFT from '../Pages/User/MyNFT'
 import UserKYC from '../Pages/User/UserKYC'
@@ -19,7 +20,11 @@ const publicRoutes = [
   },
   {
     path: '/minted',
+<<<<<<< HEAD
     component: MintedNFT,
+=======
+    component: MintedRequest,
+>>>>>>> 46c18bba9d95f47146ad6fed33884b9df06b1a76
     role: 'education',
     desc: 'Minted NFT',
   },
