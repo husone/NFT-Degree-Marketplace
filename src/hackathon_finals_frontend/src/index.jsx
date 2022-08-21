@@ -23,8 +23,8 @@ const client = createClient({
 
 function App() {
   return (
-    <Connect2ICProvider client={client}>
-      <Router>
+    <Router>
+      <Connect2ICProvider client={client}>
         <Provider>
           <Container>
             <Routes>
@@ -47,8 +47,8 @@ function App() {
             <ConnectDialog className="wallet_dialog" />
           </Container>
         </Provider>
-      </Router>
-    </Connect2ICProvider>
+      </Connect2ICProvider>
+    </Router>
   )
 }
 

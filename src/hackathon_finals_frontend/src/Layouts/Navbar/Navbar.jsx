@@ -18,11 +18,8 @@ function NavBar(props) {
   const { principal, isConnected, disconnect } = useConnect()
 
   useEffect(() => {
-    // let role = checkRole(principal)
-    // setRole(role)
-    // const filterPath = publicRoutes.filter(route => route.role === role)
-    // setPathRoles(filterPath)
-  }, [])
+    console.log('role navbar: ' + role)
+  }, [role])
 
   const onConnectWallet = async () => {
     try {

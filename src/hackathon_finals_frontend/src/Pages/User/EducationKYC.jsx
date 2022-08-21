@@ -31,7 +31,6 @@ function EducationKYC() {
   }
 
   const handleSubmit = async e => {
-    e.preventDefault()
     if (!isConnected) {
       await connectWallet()
     } else {
@@ -40,8 +39,9 @@ function EducationKYC() {
         formData.append(key, education[key])
       }
 
+      console.log(education)
       const res = await axios.post(
-        'http://localhost:5000/api/v1/education-kyc',
+        'http://localhost:5000/api/v1/education',
         formData
       )
 
@@ -72,13 +72,23 @@ function EducationKYC() {
     }
   }
 
+  // const getTestList = async () => {
+  //   const res = await axios.get('http://localhost:5000/api/v1/education')
+  //   let buffer = res.data.educations[0].image.data
+  //   let base64 = Buffer.from(buffer).toString('base64')
+  //   const uri = `data:image/${res.data.educations[0].image.contentType};base64,${base64}`
+  //   setTestList(uri)
+  //   console.log(base64)
+  //   console.log(res.data.educations[0].image.data)
+  // }
+
   return (
     <div>
       <h2 className="py-4">Education KYC page</h2>
 
       {/* FORM */}
       <Form
-        onSubmit={handleSubmit}
+        onFinish={handleSubmit}
         encType="multipart/form-data"
         style={{ maxWidth: '60vw', margin: '0px auto' }}
         labelCol={{ span: 8 }}
@@ -86,7 +96,6 @@ function EducationKYC() {
       >
         <Form.Item
           label="Your center education name"
-          name="name"
           rules={[
             {
               required: true,
@@ -97,6 +106,7 @@ function EducationKYC() {
           <Input
             type="text"
             id="name"
+            name="name"
             value={education.name || ''}
             onChange={handleChange}
           />
@@ -104,23 +114,26 @@ function EducationKYC() {
 
         <Form.Item
           label="Legal representative"
-          name="legalRepresentative"
           rules={[
             { required: true, message: 'Please input legal representative!' },
           ]}
         >
           <Input
             value={education.legalRepresentative || ''}
+            name="legalRepresentative"
             onChange={handleChange}
           />
         </Form.Item>
 
         <Form.Item
           label="Address"
-          name="address"
           rules={[{ required: true, message: 'Please input address!' }]}
         >
-          <Input value={education.address || ''} onChange={handleChange} />
+          <Input
+            value={education.address || ''}
+            onChange={handleChange}
+            name="address"
+          />
         </Form.Item>
 
         <Form.Item label="Add NFT" valuePropName="fileList">
@@ -164,8 +177,13 @@ function EducationKYC() {
             </label>
           </div>
         </Form.Item>
-        <Form.Item  className="button-submit">
-          <Input type="submit" value="Upload NFT" className="btn-submit-custom" style={{width: "fit-content"}}/>
+        <Form.Item className="button-submit">
+          <Input
+            type="submit"
+            value="Upload Image"
+            className="btn-submit-custom"
+            style={{ width: 'fit-content' }}
+          />
         </Form.Item>
       </Form>
     </div>
