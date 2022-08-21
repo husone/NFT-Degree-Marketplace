@@ -721,6 +721,9 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
         if (token.isPublic) {
           return #Ok(0);
         } else {
+          if (token.owner == viewer) {
+            return #Ok(0);
+          };
           var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
           switch (viewers) {
             case (null) {
