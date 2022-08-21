@@ -11,11 +11,11 @@ import { axios } from 'axios'
 function UserKYC() {
   const { principal, connect, isConnected } = useConnect()
   const [user, setUser] = useState({})
-  const [imgUri, setImgUri] = useState('')
+  const [imgUriNFT, setImgUriNFT] = useState('')
+  const [imgUriKYC, setImgUriKYC] = useState('')
   const [fileImg, setFileImg] = useState(null)
   const [educationList, setEducationList] = useState([])
 
-  console.log(educationList)
   useEffect(() => {
     if (!isConnected) {
       connectWallet()
@@ -51,55 +51,21 @@ function UserKYC() {
   }
 
   const handleSubmit = async e => {
-    console.log(e)
-    // const { certificate, name } = user
-    // e.preventDefault()
-    // if (!isConnected) {
-    //   await connectWallet()
-    // } else {
-    //   console.log(1)
-    //   uploadImage(imgUri)
-    //
-    // name,console.log('Minting')
-    // console.log(process.env.IPFS_LINK)
-    // const cid = await storeFiles([fileImg])
-    // const fileNameImg = fileImg.name
-    // const fileName = new Date().getTime().toString()
-    // const nFile = new File(
-    //   [
-    //     JSON.stringify({
-    // certificate,
-    //       image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
-    //     }),
-    //   ],
-    //   `${fileName}.json`,
-    //   { type: 'text/plain' }
-    // )
-    // const metadataCID = await storeFiles([nFile])
-    // Call backend to mint the token
-    // const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
-    // console.log(tokenURI)
-    // const res = await superheroes.mint(Principal.fromText(principal), [
-    //   { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
-    // ]);
-    // const res = await axios.post(
-    //   'http://localhost:5000/api/v1/education-kyc',
-    //   formData
-    // )
-    // // Doing something to notification to user
-    // if (res.status === 201) {
-    //   console.log('success')
-    // } else {
-    //   console.log('error')
-    // }
-    // console.log('Minted')
-    // }
     const formData = new FormData()
+
     for (let key in user) {
-      formData.append(key, user[key])
+      if (key === 'imageKYC') {
+        formData.append('image', user.imageKYC)
+      } else if (key === 'imageNFT') {
+        formData.append('image', user.imageNFT)
+      } else {
+        formData.append(key, user[key])
+      }
     }
 
-    console.log(user)
+    for (const [key, value] of formData) {
+      console.log(`${key}: ${value}`)
+    }
     const res = await axios.post(
       'http://localhost:5000/api/v1/request',
       formData
@@ -115,17 +81,27 @@ function UserKYC() {
   }
 
   const getFile = e => {
+    const inputField = e.target.name
     let file = e.target.files[0]
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
         let result = reader.result
-        setImgUri(result)
-        setUser(values => ({
-          ...values,
-          image: file,
-          principal,
-        }))
+        if (inputField === 'imgNFT') {
+          setImgUriNFT(result)
+          setUser(values => ({
+            ...values,
+            imageNFT: file,
+            principal,
+          }))
+        } else if (inputField === 'imgKYC') {
+          setImgUriKYC(result)
+          setUser(values => ({
+            ...values,
+            imageKYC: file,
+            principal,
+          }))
+        }
       }
       setFileImg(file)
       reader.readAsDataURL(file)
@@ -197,6 +173,7 @@ function UserKYC() {
                 style={{
                   width: 120,
                 }}
+                onChange={handleChange}
               >
                 {educationList.map(education => {
                   const { _id, name } = education
@@ -222,59 +199,14 @@ function UserKYC() {
           </div>
         </div>
 
-        {/* <Form.Item label="Add NFT" valuePropName="fileList">
-          <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
-            {imgUri && (
-              <img
-                className="previewImg"
-                src={imgUri}
-                alt="preview"
-                style={{
-                  width: '100px',
-                  height: '100px',
-                  borderRadius: '5px',
-                  border: '1px solid green',
-                  marginLeft: '0px',
-                  marginRight: '15px',
-                  objectFit: 'cover',
-                }}
-              />
-            )}
-            <input
-              type="file"
-              name="file"
-              id="fileUpload"
-              accept=".jpeg,.jpg,.png,.gif,image/*"
-              onChange={e => getFile(e)}
-              required
-              style={{ display: 'none' }}
-            />
-            <label
-              htmlFor="fileUpload"
-              className="d-flex justify-content-center align-items-center"
-              style={{
-                width: '100px',
-                height: '100px',
-                borderRadius: '5px',
-                border: '1px dashed #ccc',
-              }}
-            >
-              <PlusOutlined />
-            </label>
-          </div>
-        </Form.Item>
-        <Form.Item className="button-submit">
-          <Input
-            type="submit"
-            value="Upload NFT" */}
         <div className="row">
           <div className="col">
             <Form.Item label="Add NFT" valuePropName="fileList">
               <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
-                {imgUri && (
+                {imgUriNFT && (
                   <img
                     className="previewImg"
-                    src={imgUri}
+                    src={imgUriNFT}
                     alt="preview"
                     style={{
                       width: '100px',
@@ -289,7 +221,7 @@ function UserKYC() {
                 )}
                 <input
                   type="file"
-                  name="file"
+                  name="imgNFT"
                   id="fileUpload"
                   accept=".jpeg,.jpg,.png,.gif,image/*"
                   onChange={e => getFile(e)}
@@ -314,10 +246,10 @@ function UserKYC() {
           <div className="col">
             <Form.Item label="Add KYC Image" valuePropName="fileList">
               <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
-                {imgUri && (
+                {imgUriKYC && (
                   <img
                     className="previewImg"
-                    src={imgUri}
+                    src={imgUriKYC}
                     alt="preview"
                     style={{
                       width: '100px',
@@ -332,7 +264,7 @@ function UserKYC() {
                 )}
                 <input
                   type="file"
-                  name="file"
+                  name="imgKYC"
                   id="kycImage"
                   accept=".jpeg,.jpg,.png,.gif,image/*"
                   onChange={e => getFile(e)}

@@ -34,6 +34,13 @@ function MintRequest() {
   }
 
   const mintNFT = async () => {
+    // const { certificate, name } = user
+    // e.preventDefault()
+    // if (!isConnected) {
+    //   await connectWallet()
+    // } else {
+    //   console.log(1)
+    //   uploadImage(imgUri)
     //
     // name,console.log('Minting')
     // console.log(process.env.IPFS_LINK)
