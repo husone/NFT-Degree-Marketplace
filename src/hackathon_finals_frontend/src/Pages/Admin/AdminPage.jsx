@@ -4,10 +4,13 @@ import Moment from 'moment'
 import { EyeOutlined } from '@ant-design/icons'
 import { Table, Button, Modal, Form, Input, Tag } from 'antd'
 import styled from 'styled-components'
+import { formatDate, bufferToURI } from '../.././Utils/format'
 
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [filteredRequestKYC, setFilteredRequestKYC] = useState([])
+  const [requestModal, setRequestModal] = useState({})
 
   useEffect(() => {
     fetchRequestKYC()
@@ -15,19 +18,17 @@ function AdminPage() {
 
   const fetchRequestKYC = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?isKYCVerified=false'
+      'http://localhost:5000/api/v1/education?status=pending'
     )
     const filteredRequest = res.data.education.map(education => {
       return {
         ...education,
-        createdAt: Moment(new Date(education.createdAt)).format(
-          'DD-MM-YYYY HH:mm:ss'
-        ),
+        createdAt: formatDate(new Date(education.createdAt)),
         key: education._id,
       }
     })
-    setRequestKYC(filteredRequest)
-    console.log(res.data)
+    setFilteredRequestKYC(filteredRequest)
+    setRequestKYC(res.data.education)
   }
   const columns = [
     {
@@ -73,9 +74,13 @@ function AdminPage() {
     },
   ]
 
-  const showModal = () => {
+  const showModal = e => {
+    const id = e.currentTarget.parentElement.parentElement.dataset.rowKey
+    const request = requestKYC.find(req => req._id === id)
+    setRequestModal(request)
     setIsModalVisible(true)
   }
+
   const handleOk = () => {
     setIsModalVisible(false)
   }
@@ -84,15 +89,30 @@ function AdminPage() {
     setIsModalVisible(false)
   }
 
-  const approveRequest = () => {}
+  const approveRequest = async id => {}
 
-  const rejectRequest = () => {}
+  const rejectRequest = async id => {
+    console.log(id)
+    const res = await axios.patch(
+      `http://localhost:5000/api/v1/education/${id}`,
+      {
+        status: 'rejected',
+      }
+    )
+    console.log(res)
+    fetchRequestKYC()
+    if (res.status === 200) {
+      console.log('success')
+    } else {
+      console.log('error')
+    }
+    setIsModalVisible(false)
+  }
 
   return (
     <div>
-      <ul>
-        <h1>Admin Page</h1>
-        {requestKYC.map(education => {
+      <h1>Admin Page</h1>
+      {/* {requestKYC.map(education => {
           const { address, image, legalRepresentative, name, _id, createdAt } =
             education
           const formatDate = Moment(new Date(createdAt)).format(
@@ -116,51 +136,80 @@ function AdminPage() {
               <button onClick={() => rejectRequest(education)}>Reject</button>
             </li>
           )
-        })}
-        <Table columns={columns} dataSource={requestKYC} />
+        })} */}
+      <Table columns={columns} dataSource={filteredRequestKYC} />
 
-        <Modal
-          title="Minted NFT"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          width={800}
-        >
-          <div className="d-flex justify-content-between">
-            <Form
-              encType="multipart/form-data"
-              style={{ maxWidth: '60vw', margin: '0px auto' }}
-              labelCol={{ span: 12 }}
-              wrapperCol={{ span: 20 }}
-              disabled
-            >
-              <Form.Item label="Center name" name="name">
-                <Input type="text" id="name" value={'center name here'} />
-              </Form.Item>
+      <Modal
+        title="Minted NFT"
+        visible={isModalVisible}
+        onOk={approveRequest}
+        onCancel={handleCancel}
+        width={800}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key="reject"
+            type="danger"
+            onClick={() => rejectRequest(requestModal._id)}
+          >
+            Reject education
+          </Button>,
+          <Button
+            key="approve"
+            type="primary"
+            onClick={() => approveRequest(requestModal._id)}
+          >
+            Approve education
+          </Button>,
+        ]}
+      >
+        <div className="d-flex justify-content-between">
+          <Form
+            encType="multipart/form-data"
+            style={{ maxWidth: '60vw', margin: '0px auto' }}
+            labelCol={{ span: 12 }}
+            wrapperCol={{ span: 20 }}
+            disabled
+          >
+            <Form.Item label="Center name" name="name">
+              <Input type="text" id="name" placeholder={requestModal?.name} />
+            </Form.Item>
 
-              <Form.Item label="Tax code" name="taxCode">
-                <Input value={'temp tax code'} />
-              </Form.Item>
+            <Form.Item label="Address" name="address">
+              <Input
+                type="text"
+                id="address"
+                placeholder={requestModal?.address}
+              />
+            </Form.Item>
 
-              <Form.Item
-                label="Legal Representative"
-                name="legalRepresentative"
-              >
-                <Input value={'temp legal representativve'} />
-              </Form.Item>
+            <Form.Item label="Legal Representative" name="taxCode">
+              <Input placeholder={requestModal?.legalRepresentative} />
+            </Form.Item>
 
-              <Form.Item label="Address" name="address">
-                <Input value={'temp address'} />
-              </Form.Item>
-            </Form>
-            <Container className="wrap_img">
-              {false && ( // render image if exist, replace false by uri
-                <img src="" alt="preview image" srcset="" />
-              )}
-            </Container>
-          </div>
-        </Modal>
-      </ul>
+            <Form.Item label="Principal" name="principal">
+              <Input placeholder={requestModal?.principal} />
+            </Form.Item>
+
+            <Form.Item label="Created At" name="createdAt">
+              <Input
+                placeholder={formatDate(new Date(requestModal?.createdAt))}
+              />
+            </Form.Item>
+          </Form>
+          <Container className="wrap_img">
+            {requestModal?.image && ( // render image if exist, replace false by uri
+              <img
+                src={bufferToURI(requestModal.image)}
+                alt="preview image"
+                srcSet=""
+              />
+            )}
+          </Container>
+        </div>
+      </Modal>
     </div>
   )
 }

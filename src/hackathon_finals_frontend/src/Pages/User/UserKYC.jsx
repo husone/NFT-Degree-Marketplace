@@ -100,6 +100,7 @@ function UserKYC() {
             ...values,
             imageKYC: file,
             principal,
+            status: 'pending',
           }))
         }
       }

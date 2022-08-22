@@ -56,7 +56,6 @@ function EducationKYC() {
 
   const getFile = e => {
     let file = e.target.files[0]
-    console.log(file)
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
@@ -66,6 +65,7 @@ function EducationKYC() {
           ...values,
           image: file,
           principal,
+          status: 'pending',
         }))
       }
       reader.readAsDataURL(file)
