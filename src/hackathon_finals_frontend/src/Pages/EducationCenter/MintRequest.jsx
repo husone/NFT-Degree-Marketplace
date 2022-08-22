@@ -89,13 +89,13 @@ function MintRequest() {
     },
   ]
 
+  // MODAL MODULE
   const showModal = e => {
     const id =
       e.currentTarget.parentElement.parentElement.parentElement.parentElement
         .dataset.rowKey
     const request = requestsFilter.find(req => req._id === id)
     setRequestModal(request)
-    console.log(requestModal)
     setIsModalVisible(true)
   }
 
@@ -116,7 +116,28 @@ function MintRequest() {
   }
 
   const handleOk = () => {
-    setIsModalVisible(false)
+    console.log(requestModal)
+    const { name, education, studentID, nationID, dob, certificate } =
+      requestModal
+
+    // Call mintNFT() to return cid
+    // mintNFT()
+
+    // After receive cid, post link image to data and post to db
+    const data = {
+      education,
+      studentID,
+      nationID,
+      dob,
+      name: certificate,
+      cer_owner: name,
+    }
+    // const res = await axios.post(
+    //   'http://localhost:5000/api/v1/nft',
+    //   formData
+    // )
+
+    // setIsModalVisible(false)
   }
 
   const handleCancel = () => {
@@ -137,6 +158,38 @@ function MintRequest() {
     } else {
       console.log('error')
     }
+  }
+
+  const mintNFT = async () => {
+    console.log('Minting')
+    const cid = await storeFiles([fileImg])
+    const fileNameImg = fileImg.name
+    const fileName = new Date().getTime().toString()
+    const nFile = new File(
+      [
+        JSON.stringify({
+          certificate,
+          image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
+        }),
+      ],
+      `${fileName}.json`,
+      { type: 'text/plain' }
+    )
+    const metadataCID = await storeFiles([nFile])
+    // Call backend to mint the token
+    const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
+    console.log(tokenURI)
+    const res = await superheroes.mint(Principal.fromText(principal), [
+      { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
+    ])
+
+    // Doing something to notification to user
+    if (res.status === 201) {
+      console.log('success')
+    } else {
+      console.log('error')
+    }
+    console.log('Minted')
   }
 
   return (
@@ -227,48 +280,3 @@ const Container = styled.div`
     object-fit: cover;
   }
 `
-
-// const mintNFT = async () => {
-// const { certificate, name } = user
-// e.preventDefault()
-// if (!isConnected) {
-//   await connectWallet()
-// } else {
-//   console.log(1)
-//   uploadImage(imgUri)
-//
-// name,console.log('Minting')
-// console.log(process.env.IPFS_LINK)
-// const cid = await storeFiles([fileImg])
-// const fileNameImg = fileImg.name
-// const fileName = new Date().getTime().toString()
-// const nFile = new File(
-//   [
-//     JSON.stringify({
-// certificate,
-//       image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
-//     }),
-//   ],
-//   `${fileName}.json`,
-//   { type: 'text/plain' }
-// )
-// const metadataCID = await storeFiles([nFile])
-// Call backend to mint the token
-// const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
-// console.log(tokenURI)
-// const res = await superheroes.mint(Principal.fromText(principal), [
-//   { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
-// ]);
-// const res = await axios.post(
-//   'http://localhost:5000/api/v1/education-kyc',
-//   formData
-// )
-// // Doing something to notification to user
-// if (res.status === 201) {
-//   console.log('success')
-// } else {
-//   console.log('error')
-// }
-// console.log('Minted')
-// }
-// }
