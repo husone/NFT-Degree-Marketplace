@@ -42,6 +42,7 @@ module {
     name : Text;
     id : Text;
     cid: Text;
+    cer_owner: Text;
   };
 
   //---------------------------
