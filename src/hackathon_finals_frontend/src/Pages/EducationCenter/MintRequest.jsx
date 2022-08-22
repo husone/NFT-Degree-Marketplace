@@ -9,8 +9,9 @@ function MintRequest() {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [requests, setRequests] = useState([])
   const [requestsFilter, setRequestsFilter] = useState([])
-  const [filteredRequestKYC, setFilteredRequestKYC] = useState([])
   const [requestModal, setRequestModal] = useState({})
+  const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false)
+  const [idRejected, setIdRejected] = useState('')
 
   useEffect(() => {
     getAllRequests()
@@ -74,31 +75,17 @@ function MintRequest() {
                   type="danger"
                   key={index}
                   icon={<DeleteOutlined />}
+                  onClick={e =>
+                    showModalConfirm(
+                      e.currentTarget.parentElement.parentElement.parentElement
+                        .parentElement.dataset.rowKey
+                    )
+                  }
                 ></Button>
               )
           })}
         </Space>
       ),
-    },
-  ]
-  const data = [
-    {
-      studentId: 'DE160000',
-      fullname: 'John Brown',
-      timestamp: '07302022',
-      actions: ['preview', 'delete'],
-    },
-    {
-      studentId: 'DE160002',
-      fullname: 'Jim Green',
-      timestamp: '07302022',
-      actions: ['preview', 'delete'],
-    },
-    {
-      studentId: 'DE160003',
-      fullname: 'Joe Black',
-      timestamp: '07302022',
-      actions: ['preview', 'delete'],
     },
   ]
 
@@ -112,12 +99,44 @@ function MintRequest() {
     setIsModalVisible(true)
   }
 
+  const showModalConfirm = async id => {
+    setIdRejected(id)
+    setIsModalConfirmVisible(true)
+  }
+
+  const handleConfirmOk = async () => {
+    rejectRequest(idRejected)
+    setIdRejected('')
+    setIsModalConfirmVisible(false)
+  }
+
+  const handleConfirmCancel = () => {
+    setIdRejected('')
+    setIsModalConfirmVisible(false)
+  }
+
   const handleOk = () => {
     setIsModalVisible(false)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
+  }
+
+  const rejectRequest = async id => {
+    const res = await axios.patch(
+      `http://localhost:5000/api/v1/request/${id}`,
+      {
+        status: 'rejected',
+      }
+    )
+    console.log(res)
+    getAllRequests()
+    if (res.status === 200) {
+      console.log('success')
+    } else {
+      console.log('error')
+    }
   }
 
   return (
@@ -179,6 +198,17 @@ function MintRequest() {
           </Container>
         </div>
       </Modal>
+      <>
+        <Modal
+          title="NOTIFICATION"
+          visible={isModalConfirmVisible}
+          onOk={handleConfirmOk}
+          onCancel={handleConfirmCancel}
+          okText="Reject"
+        >
+          <p>Do you reject this request?</p>
+        </Modal>
+      </>
     </div>
   )
 }

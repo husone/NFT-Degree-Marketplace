@@ -63,9 +63,6 @@ function UserKYC() {
       }
     }
 
-    for (const [key, value] of formData) {
-      console.log(`${key}: ${value}`)
-    }
     const res = await axios.post(
       'http://localhost:5000/api/v1/request',
       formData
