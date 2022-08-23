@@ -6,6 +6,9 @@ import axios from 'axios'
 import { formatDate, bufferToURI } from '../../Utils/format'
 import { useConnect } from '@connect2ic/react'
 import './MintRequest.scss'
+import { storeFiles } from '../../Utils/web3Storage'
+import { final_be } from '../../../../declarations/final_be'
+import { Principal } from '@dfinity/principal'
 
 function MintRequest() {
   const { principal } = useConnect()
@@ -25,8 +28,6 @@ function MintRequest() {
       `http://localhost:5000/api/v1/education?principal=${principal}`
     )
     const educationId = resFirst?.data?.education[0]?._id
-
-    console.log(educationId)
     const res = await axios.get(
       `http://localhost:5000/api/v1/request?status=pending&educationId=${educationId}`
     )
@@ -124,29 +125,97 @@ function MintRequest() {
     setIsModalConfirmVisible(false)
   }
 
-  const handleOk = () => {
+  const handleOk = async () => {
     console.log(requestModal)
-    const { name, education, studentID, nationID, dob, certificate } =
-      requestModal
 
-    // Call mintNFT() to return cid
-    // mintNFT()
+    const base64 = bufferToURI(requestModal?.imageNFT)
+    const fileName =
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    const ext = requestModal?.imageNFT?.contentType.split('/')[1]
+
+    const res = await fetch(base64)
+    const blob = await res.blob()
+    const imgFile = new File([blob], `${fileName}.${ext}`, {
+      type: requestModal?.imageNFT?.contentType,
+    })
+
+    console.log(imgFile)
+    mintNFT(imgFile)
 
     // After receive cid, post link image to data and post to db
-    const data = {
-      education,
-      studentID,
-      nationID,
-      dob,
+
+    // setIsModalVisible(false)
+  }
+  const mintNFT = async fileImg => {
+    console.log('Minting')
+    const cid = await storeFiles([fileImg])
+    const fileNameImg = fileImg.name
+    const tokenURI = `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`
+    const { name, education, studentID, nationID, dob, certificate, _id } =
+      requestModal
+    const metadata = {
+      id: nationID,
+      cid: tokenURI,
+      center: education?.name,
       name: certificate,
       cer_owner: name,
     }
-    // const res = await axios.post(
-    //   'http://localhost:5000/api/v1/nft',
-    //   formData
-    // )
+    const ownerPrincipal = requestModal.principal
+    const resCanister = await final_be.mintDip721(
+      Principal.fromText(ownerPrincipal),
+      metadata
+    )
+    console.log(resCanister)
+    if (Object.keys(resCanister)[0] !== 'Ok') {
+      console.log('error')
+    } else {
+      const tokenID = Number(resCanister?.Ok?.token_id)
+      const id = Number(resCanister?.Ok?.id)
+      const data = {
+        education,
+        studentID,
+        nationID,
+        dob,
+        tokenID,
+        name: certificate,
+        cer_owner: name,
+        imgURI: tokenURI,
+      }
+      const res = await axios.post('http://localhost:5000/api/v1/nft', data)
+      if (res.status === 201) {
+        await axios.patch(`http://localhost:5000/api/v1/request/${_id}`, {
+          status: 'approved',
+        })
+        getAllRequests()
+      } else {
+        console.log('error')
+      }
+      console.log('success')
+    }
+    setIsModalVisible(false)
+    console.log('Minted')
 
-    // setIsModalVisible(false)
+    // const fileName = new Date().getTime().toString()
+    // const nFile = new File(
+    //   [
+    //     JSON.stringify({
+    //       certificate,
+    //       image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
+    //     }),
+    //   ],
+    //   `${fileName}.json`,
+    //   { type: 'text/plain' }
+    // )
+    // const metadataCID = await storeFiles([nFile])
+    // // Call backend to mint the token
+    // const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
+    // console.log(tokenURI)
+    // const res = await superheroes.mint(Principal.fromText(principal), [
+    //   { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
+    // ])
+
+    // // Doing something to notification to user
   }
 
   const handleCancel = () => {
@@ -167,38 +236,6 @@ function MintRequest() {
     } else {
       console.log('error')
     }
-  }
-
-  const mintNFT = async () => {
-    console.log('Minting')
-    const cid = await storeFiles([fileImg])
-    const fileNameImg = fileImg.name
-    const fileName = new Date().getTime().toString()
-    const nFile = new File(
-      [
-        JSON.stringify({
-          certificate,
-          image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
-        }),
-      ],
-      `${fileName}.json`,
-      { type: 'text/plain' }
-    )
-    const metadataCID = await storeFiles([nFile])
-    // Call backend to mint the token
-    const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
-    console.log(tokenURI)
-    const res = await superheroes.mint(Principal.fromText(principal), [
-      { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
-    ])
-
-    // Doing something to notification to user
-    if (res.status === 201) {
-      console.log('success')
-    } else {
-      console.log('error')
-    }
-    console.log('Minted')
   }
 
   return (
@@ -246,36 +283,32 @@ function MintRequest() {
               <Input placeholder={requestModal.certificate} />
             </Form.Item>
           </Form>
-          {/* <Container className="wrap_img">
-            {requestModal?.image && ( // render image if exist, replace false by uri
-              <img
-                src={bufferToURI(requestModal.image)}
-                alt="preview image"
-                srcSet=""
-              />
-            )}
-          </Container> */}
+
           <Form
             labelCol={{ span: 12 }}
             wrapperCol={{ span: 20 }}
             disabled
             className="col-5 ml-4"
           >
-            <Form.Item
-              label="Legal representative"
-              name="legalRepresentative"
-              className="mx-4"
-            >
+            <Form.Item label="KYC Image" name="imageKYC" className="mx-4">
               <Container className="wrap_img mb-4">
-                {false && ( // render image if exist, replace false by uri
-                  <img src="" alt="preview image" srcset="" />
+                {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+                  <img
+                    src={bufferToURI(requestModal?.imageKYC)}
+                    alt="preview image"
+                    srcSet=""
+                  />
                 )}
               </Container>
             </Form.Item>
-            <Form.Item label="KYC Image" name="file" className="mx-4">
+            <Form.Item label="Certificate Image" name="file" className="mx-4">
               <Container className="wrap_img">
-                {false && ( // render image if exist, replace false by uri
-                  <img src="" alt="preview image" srcset="" />
+                {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+                  <img
+                    src={bufferToURI(requestModal?.imageNFT)}
+                    alt="preview image"
+                    srcSet=""
+                  />
                 )}
               </Container>
             </Form.Item>

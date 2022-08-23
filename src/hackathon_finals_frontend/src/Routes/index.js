@@ -8,6 +8,7 @@ import MyNFT from '../Pages/User/MyNFT'
 import UserKYC from '../Pages/User/UserKYC'
 import ListRequests from '../Pages/User/ListRequests'
 import DetailNFT from '../Pages/NFTs/DetailNFT'
+import MyNFTDetail from '../Pages/User/MyNFTDetail'
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -47,6 +48,7 @@ const publicRoutes = [
   { path: '/my-nfts', component: MyNFT, role: 'user', desc: 'My NFTS' },
   { path: '/all-nfts', component: AllNFTs, role: null, desc: 'All NFTS' },
   { path: '/nft/:id', component: DetailNFT, role: null, desc: null },
+  { path: '/me/nft/:id', component: MyNFTDetail, role: null, desc: null },
 ]
 
 const privateRoutes = []
