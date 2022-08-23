@@ -1,11 +1,10 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import { formatDate, bufferToURI } from '../../Utils/format'
 import { useConnect } from '@connect2ic/react'
-import { Context } from '../../hooks/index'
 import './MintRequest.scss'
 
 function MintRequest() {
@@ -16,13 +15,17 @@ function MintRequest() {
   const [requestModal, setRequestModal] = useState({})
   const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false)
   const [idRejected, setIdRejected] = useState('')
-  const { educationId } = useContext(Context)
 
   useEffect(() => {
     getAllRequests()
   }, [])
 
   const getAllRequests = async () => {
+    const resFirst = await axios.get(
+      `http://localhost:5000/api/v1/education?principal=${principal}`
+    )
+    const educationId = resFirst?.data?.education[0]?._id
+
     console.log(educationId)
     const res = await axios.get(
       `http://localhost:5000/api/v1/request?status=pending&educationId=${educationId}`

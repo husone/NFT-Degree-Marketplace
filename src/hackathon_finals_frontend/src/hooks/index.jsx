@@ -12,7 +12,6 @@ const Provider = ({ children }) => {
   const { principal, isConnected, connect } = useConnect()
   const [role, setRole] = useState('user')
   const [isLoading, setIsLoading] = useState(true)
-  const [educationId, setEducationId] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -20,12 +19,8 @@ const Provider = ({ children }) => {
       setIsLoading(true)
       getRoleUser()
     }
-    if (role === 'education') {
-      getEducationId()
-    }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
-    console.log('educationId' + educationId)
   }, [principal, role])
 
   useEffect(() => {
@@ -33,15 +28,6 @@ const Provider = ({ children }) => {
       connectWallet()
     }
   }, [])
-
-  const getEducationId = async () => {
-    const resFirst = await axios.get(
-      `http://localhost:5000/api/v1/education?principal=${principal}`
-    )
-    const educationId = resFirst?.data?.education[0]?._id
-    console.log(educationId)
-    setEducationId(educationId)
-  }
 
   const connectWallet = async () => {
     await connect('plug')
@@ -66,7 +52,6 @@ const Provider = ({ children }) => {
     logout,
     setRole,
     isLoading,
-    educationId,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>
