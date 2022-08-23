@@ -1,109 +1,92 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import Logo from '../../../assets/logo_colored.png'
-import { checkRole } from '../../Utils/CheckRole'
+import Logo from '../../Assets/Images/logo.png'
 import { ConnectButton, useConnect } from '@connect2ic/react'
-import { publicRoutes } from '../../Routes/index'
+import { withContext } from '../../hooks/index'
+import NavbarEducation from './components/NavbarEducation'
+import NavbarUser from './components/NavbarUser'
+import NavbarAdmin from './components/NavbarAdmin'
 
-export default function NavBar() {
-  const { principal } = useConnect({
-    onConnect: () => {
-      // Signed in
-      console.log('Signed in')
-    },
-    onDisconnect: () => {
-      console.log('Signed out')
-      // Signed out
-    },
-  })
-  const [role, setRole] = useState(null)
+function NavBar(props) {
+  // console.log(props)
+  const { role, logout, setRole } = props
   const [pathRoles, setPathRoles] = useState([])
-  // Change TEST_ID for test role, 1 for admin role, 3 for user role, 2 for education role
-  const TEST_ID = 4
+  const [Component, setComponent] = useState(null)
+  const { principal, isConnected, disconnect } = useConnect()
+
   useEffect(() => {
-    let role = checkRole(TEST_ID)
-    setRole(role)
-    const filterPath = publicRoutes.filter(route => route.role === role)
-    setPathRoles(filterPath)
-  }, [])
+    console.log('role navbar: ' + role)
+  }, [role])
+
+  const onConnectWallet = async () => {
+    try {
+      console.log(principal)
+      console.log('Connected to Plug')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onDisconnect = () => {
+    disconnect()
+    logout()
+    console.log('Disconnected from Plug')
+  }
 
   return (
-    <Nav className="navbar navbar-expand-lg bg-light">
-      <div className="container-fluid">
-        <div className="d-flex">
-          <Link className="navbar-brand" to="/">
-            Home
-          </Link>
-          {role === 'user' && (
-            <div className="dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Create Request
-              </button>
-              <ul className="dropdown-menu">
-                {publicRoutes.map((route, index) => {
-                  if (route.dropdown) {
-                    return (
-                      <Link
-                        className="dropdown-item"
-                        to={route.path}
-                        key={index}
-                      >
-                        {route.desc}
-                      </Link>
-                    )
-                  }
-                })}
-              </ul>
-            </div>
-          )}
-          {pathRoles.map((route, index) => {
-            const role = route.role
-            if (role === 'user') {
-              if (!route.dropdown) {
-                return (
-                  <Link key={index} className="navbar-brand" to={route.path}>
-                    {route.desc}
-                  </Link>
-                )
-              }
-            } else {
-              return (
-                <Link key={index} className="navbar-brand" to={route.path}>
-                  {route.desc}
-                </Link>
-              )
-            }
-          })}
+    role && (
+      <Nav className="navbar navbar-expand-lg">
+        <div className="container-fluid px-5">
+          <div className="d-flex gap-4">
+            <Link className="navbar-brand" to="/">
+              <img src={Logo} alt="Home" />
+            </Link>
+            {role === 'user' && <NavbarUser />}
+            {role === 'education' && <NavbarEducation />}
+            {role === 'admin' && <NavbarAdmin />}
+          </div>
+          <div className="d-flex align-items-center h100">
+            {principal && <div className="wallet_id">{principal}</div>}
+            <ConnectButton
+              onConnect={onConnectWallet}
+              onDisconnect={onDisconnect}
+            />
+          </div>
         </div>
-        <div className="d-flex align-items-center h100">
-          {principal && <div className="wallet_id">{principal}</div>}
-          <ConnectButton />
-        </div>
-      </div>
-    </Nav>
+      </Nav>
+    )
   )
 }
 
+export default withContext(NavBar)
+
 const Nav = styled.nav`
   height: 60px;
-  border-bottom: 1px solid #ccc;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  background: #fff;
+  position: sticky;
+  top: 0px;
+  z-index: 100;
   img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+    height: 30px;
   }
   .connect-button {
-    background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
     color: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
     border: 0px;
-    padding: 5px 15px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff00aa, #3f35ff);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    transition: background-position 0.5s;
+    box-shadow: 0 4px 14px 0 var(--nextui-colors-successShadow);
+    &:hover {
+      background-position: right center;
+      background-position: 0 0;
+    }
   }
   .wallet_id {
     width: 100px;
@@ -115,5 +98,47 @@ const Nav = styled.nav`
     border-radius: 30px;
     padding: 0px 10px;
     margin-right: 15px;
+  }
+  .custom_dropdown {
+    border: 0px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .dropdown-menu {
+    width: 120%;
+  }
+  .dropdown-item {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    min-width: 5rem;
+    &:hover {
+      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+      background-clip: text;
+      -webkit-text-fill-color: #fff;
+    }
+  }
+  .dropdown-toggle::after {
+    border: none;
+    margin-left: 1rem;
+  }
+  .navbar-brand {
+    font-weight: 500;
+    font-size: 16px;
+    &:hover {
+      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  @keyframes anime {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 `
