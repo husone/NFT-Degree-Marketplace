@@ -31,14 +31,17 @@ function MintedRequest() {
       render: (_, { actions }) => (
         <Space size={8}>
           {actions.map(action => {
-            return (
-              <Button
-                type="primary"
-                onClick={showModal}
-                icon={<EyeOutlined />}
-                className="mr-3"
-              ></Button>
-            )
+            if (action === 'preview')
+              return (
+                <Button
+                  type="primary"
+                  onClick={showModal}
+                  icon={<EyeOutlined />}
+                  className="mr-3"
+                ></Button>
+              )
+            else
+              return <Button type="danger" icon={<DeleteOutlined />}></Button>
           })}
         </Space>
       ),
@@ -125,12 +128,14 @@ function MintedRequest() {
               <Input value={'temp name of certificate'} />
             </Form.Item>
           </Form>
+
           {/* <Container className="wrap_img">
             {
               false && // render image if exist, replace false by uri
               <img src="" alt="preview image" srcset="" />
             }
           </Container> */}
+
           <Form
             labelCol={{ span: 12 }}
             wrapperCol={{ span: 20 }}
