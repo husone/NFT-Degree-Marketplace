@@ -27,6 +27,7 @@ const Provider = ({ children }) => {
     if (!isConnected) {
       connectWallet()
     }
+    setIsLoading(false)
   }, [])
 
   const connectWallet = async () => {
