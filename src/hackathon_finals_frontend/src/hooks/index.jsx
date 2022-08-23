@@ -20,6 +20,9 @@ const Provider = ({ children }) => {
       setIsLoading(true)
       getRoleUser()
     }
+    if (role) {
+      setIsLoading(false)
+    }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
   }, [principal])
