@@ -1,25 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import { formatDate, bufferToURI } from '../../Utils/format'
+import { useConnect } from '@connect2ic/react'
+import { Context } from '../../hooks/index'
+import './MintRequest.scss'
 
 function MintRequest() {
+  const { principal } = useConnect()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [requests, setRequests] = useState([])
   const [requestsFilter, setRequestsFilter] = useState([])
   const [requestModal, setRequestModal] = useState({})
   const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false)
   const [idRejected, setIdRejected] = useState('')
+  const { educationId } = useContext(Context)
 
   useEffect(() => {
     getAllRequests()
   }, [])
 
   const getAllRequests = async () => {
+    console.log(educationId)
     const res = await axios.get(
-      'http://localhost:5000/api/v1/request?status=pending'
+      `http://localhost:5000/api/v1/request?status=pending&educationId=${educationId}`
     )
     const request = res.data.request
     console.log(request)
@@ -202,22 +208,19 @@ function MintRequest() {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={800}
+        width={900}
       >
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between row">
           <Form
             encType="multipart/form-data"
             style={{ maxWidth: '60vw', margin: '0px auto' }}
-            labelCol={{ span: 12 }}
+            labelCol={{ span: 9 }}
             wrapperCol={{ span: 20 }}
             disabled
+            className="col-7"
           >
             <Form.Item label="Full name" name="name">
               <Input type="text" id="name" placeholder={requestModal.name} />
-            </Form.Item>
-
-            <Form.Item label="Last name" name="lastName">
-              <Input placeholder={'temp last name'} />
             </Form.Item>
 
             <Form.Item label="Date of Birth" name="dob">
@@ -240,7 +243,7 @@ function MintRequest() {
               <Input placeholder={requestModal.certificate} />
             </Form.Item>
           </Form>
-          <Container className="wrap_img">
+          {/* <Container className="wrap_img">
             {requestModal?.image && ( // render image if exist, replace false by uri
               <img
                 src={bufferToURI(requestModal.image)}
@@ -248,7 +251,32 @@ function MintRequest() {
                 srcSet=""
               />
             )}
-          </Container>
+          </Container> */}
+          <Form
+            labelCol={{ span: 12 }}
+            wrapperCol={{ span: 20 }}
+            disabled
+            className="col-5 ml-4"
+          >
+            <Form.Item
+              label="Legal representative"
+              name="legalRepresentative"
+              className="mx-4"
+            >
+              <Container className="wrap_img mb-4">
+                {false && ( // render image if exist, replace false by uri
+                  <img src="" alt="preview image" srcset="" />
+                )}
+              </Container>
+            </Form.Item>
+            <Form.Item label="KYC Image" name="file" className="mx-4">
+              <Container className="wrap_img">
+                {false && ( // render image if exist, replace false by uri
+                  <img src="" alt="preview image" srcset="" />
+                )}
+              </Container>
+            </Form.Item>
+          </Form>
         </div>
       </Modal>
       <>
@@ -269,8 +297,8 @@ function MintRequest() {
 export default MintRequest
 
 const Container = styled.div`
-  width: 350px;
-  height: 350px;
+  width: 120px;
+  height: 120px;
   border-radius: 8px;
   border: 1px dashed #ccc;
   overflow: hidden;

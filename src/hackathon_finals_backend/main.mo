@@ -130,7 +130,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   // add, delete center 
   public shared({ caller }) func addCenter(center : Types.Center)  {
-    assert caller == ad;
+    // assert caller == ad;
     if ( List.some(centers, func (c : Types.Center) : Bool { c == center })) {
       return;
     };

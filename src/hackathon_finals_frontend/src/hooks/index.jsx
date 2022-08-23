@@ -4,6 +4,7 @@ import { useConnect } from '@connect2ic/react'
 import { useNavigate } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
+import axios from 'axios'
 
 export const Context = createContext()
 
@@ -11,27 +12,36 @@ const Provider = ({ children }) => {
   const { principal, isConnected, connect } = useConnect()
   const [role, setRole] = useState('user')
   const [isLoading, setIsLoading] = useState(true)
+  const [educationId, setEducationId] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    // const TEST_ID = 2
-    // let role = checkRole(TEST_ID)
     if (principal) {
       setIsLoading(true)
       getRoleUser()
     }
-    if (role) {
-      setIsLoading(false)
+    if (role === 'education') {
+      getEducationId()
     }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
-  }, [principal])
+    console.log('educationId' + educationId)
+  }, [principal, role])
 
   useEffect(() => {
     if (!isConnected) {
       connectWallet()
     }
   }, [])
+
+  const getEducationId = async () => {
+    const resFirst = await axios.get(
+      `http://localhost:5000/api/v1/education?principal=${principal}`
+    )
+    const educationId = resFirst?.data?.education[0]?._id
+    console.log(educationId)
+    setEducationId(educationId)
+  }
 
   const connectWallet = async () => {
     await connect('plug')
@@ -56,6 +66,7 @@ const Provider = ({ children }) => {
     logout,
     setRole,
     isLoading,
+    educationId,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

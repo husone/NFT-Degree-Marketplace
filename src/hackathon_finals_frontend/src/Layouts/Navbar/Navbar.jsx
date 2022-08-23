@@ -7,12 +7,11 @@ import { withContext } from '../../hooks/index'
 import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
+import { useNavigate } from 'react-router-dom'
 
 function NavBar(props) {
-  // console.log(props)
+  const navigate = useNavigate()
   const { role, logout, setRole } = props
-  const [pathRoles, setPathRoles] = useState([])
-  const [Component, setComponent] = useState(null)
   const { principal, isConnected, disconnect } = useConnect()
 
   useEffect(() => {
@@ -21,7 +20,9 @@ function NavBar(props) {
 
   const onConnectWallet = async () => {
     try {
-      console.log(principal)
+      navigate('/', {
+        replace: true,
+      })
       console.log('Connected to Plug')
     } catch (e) {
       console.log(e)

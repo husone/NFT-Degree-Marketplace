@@ -25,7 +25,7 @@ function UserKYC() {
 
   const getEducations = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?isKYCVerified=false'
+      'http://localhost:5000/api/v1/education?status=approved'
     )
     setEducationList(res.data.education)
   }
