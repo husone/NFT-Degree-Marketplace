@@ -526,6 +526,18 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id })
   };
 
+  public func getOwner(token_id : Types.TokenId) : async ?Principal {
+    let t = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
+    switch (t) {
+      case (null) {
+        return null;
+      };
+      case (?token) {
+        return token.owner;
+        };
+      };
+   };
+
   public func getNFTPublic() : async [Types.Nft] {
     let items =  List.filter(nfts, func(token: Types.Nft) : Bool { token.isPublic});
     // let a = List.nil<Types.Nft>();
