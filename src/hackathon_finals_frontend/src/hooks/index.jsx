@@ -27,6 +27,7 @@ const Provider = ({ children }) => {
   }, [principal, role])
 
   useEffect(() => {
+    localStorage.clear()
     if (!isConnected) {
       connectWallet()
     }
