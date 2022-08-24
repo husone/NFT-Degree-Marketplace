@@ -143,7 +143,7 @@ function UserKYC() {
           <div className="col">
             <Form.Item label="Date of Birth">
               <Input
-                type="text"
+                type="date"
                 name="dob"
                 id="dob"
                 value={user.dob || ''}
