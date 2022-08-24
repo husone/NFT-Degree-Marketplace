@@ -29,7 +29,7 @@ export default function (props) {
         cover={<img alt="example" src={metadata.cid} />}
         onClick={showModal}
       >
-        <Meta title={metadata.name} description={metadata.center} />
+        <Meta title={`NFT #${id}`} />
       </Card>
       {/* <Modal
         title="NFT IN DETAIL"

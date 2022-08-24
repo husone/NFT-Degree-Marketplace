@@ -133,6 +133,7 @@ function MintRequest() {
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15)
     const ext = requestModal?.imageNFT?.contentType.split('/')[1]
+    console.log(fileName)
 
     const res = await fetch(base64)
     const blob = await res.blob()
@@ -141,7 +142,7 @@ function MintRequest() {
     })
 
     console.log(imgFile)
-    mintNFT(imgFile)
+    // mintNFT(imgFile)
 
     // After receive cid, post link image to data and post to db
 
@@ -149,17 +150,18 @@ function MintRequest() {
   }
   const mintNFT = async fileImg => {
     console.log('Minting')
-    const cid = await storeFiles([fileImg])
+    // const cid = await storeFiles([fileImg])
+    const cid = 'bafybeidleheqry3sz2cv4thik5hqzn7g7eiympe252mom5hocfi2revjem'
     const fileNameImg = fileImg.name
     const tokenURI = `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`
     const { name, education, studentID, nationID, dob, certificate, _id } =
       requestModal
     const metadata = {
-      id: nationID,
+      id: '',
       cid: tokenURI,
-      center: education?.name,
-      name: certificate,
-      cer_owner: name,
+      center: '',
+      name: '',
+      cer_owner: '',
     }
     const ownerPrincipal = requestModal.principal
     const resCanister = await final_be.mintDip721(
