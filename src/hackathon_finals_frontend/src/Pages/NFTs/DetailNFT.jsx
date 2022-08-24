@@ -135,10 +135,10 @@ function DetailNFT() {
                   </Form.Item>
                 </div>
                 <div className="col">
-                  <Button type="primary" onClick={showModal}>Transfer</Button>
+                  <Button type="primary" onClick={showModal}>Buy</Button>
                 </div>
               </div>
-              <Form.Item
+              {/* <Form.Item
                 label="List of viewer"
               >
                 <div className="row">
@@ -167,7 +167,7 @@ function DetailNFT() {
                     </div>
                   </>
                 }
-              </Form.Item>
+              </Form.Item> */}
             </Form>
           </div>
         </div>

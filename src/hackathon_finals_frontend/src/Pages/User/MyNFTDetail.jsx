@@ -6,6 +6,8 @@ import { final_be } from '../../../../declarations/final_be'
 import { useConnect } from '@connect2ic/react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import styled from "styled-components"
+import "../NFTs/DetailNFT.scss"
 
 function MyNFTDetail() {
   const navigate = useNavigate()
@@ -117,6 +119,7 @@ function MyNFTDetail() {
 
   return (
     <div>
+      <h1>My NFT Detail</h1>
       {isLoaded && (
         <div>
           <div>MyNFTDetail</div>
@@ -130,8 +133,146 @@ function MyNFTDetail() {
           <button>Set public</button>
         </div>
       )}
+      {
+        isLoaded &&
+        <Container className="mt-5">
+          <div className="row">
+            <div className="col">
+              <div className="img_wrapper">
+                {
+                  nft?.metadata?.cid &&// replace false by uri
+                  <img src={nft?.metadata?.cid} alt="item" />
+                }
+              </div>
+            </div>
+            <div className="col">
+              <Form>
+                <Form.Item
+                  label="Education center"
+                >
+                  <h1>{nft?.metadata?.center}</h1>
+                </Form.Item>
+                <Form.Item
+                  label="NFT id"
+                >
+                  <p>#{Number(nft?.id)}</p>
+                </Form.Item>
+                <Form.Item
+                  label="Certificate"
+                >
+                  <p>{nft?.metadata?.name}</p>
+                </Form.Item>
+                <div className="row">
+                  <div className="col">
+                    <Form.Item
+                      label="Status"
+                    >
+                      {
+                        !isPublic && // replace true by is private
+                        <Tag color="gold">Private</Tag>
+                      }
+                      {
+                        isPublic && // replace false by is public
+                        <Tag color="cyan">Public</Tag>
+                      }
+                    </Form.Item>
+                  </div>
+                  {
+                    true && // replace true by is private
+                    <div className="col">
+                      <Button type="primary" onClick={showConfirm}>Set public</Button>
+                    </div>
+                  }
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <Form.Item label="$Price">
+                      <Input type="text" defaultValue={nft?.price}/>
+                    </Form.Item>
+                  </div>
+                  <div className="col">
+                    <Button type="primary" onClick={showModal}>Transfer</Button>
+                  </div>
+                </div>
+                <Form.Item
+                  label="List of viewer"
+                >
+                  <div className="row">
+                    <div className="col">
+                      <Space size={15}>
+                        <Button type="primary" onClick={() => setAction("Add")}>Add</Button>
+                        <Button type="primary" onClick={() => setAction("Remove")}>Remove</Button>
+                        <Button type="primary">Remove at</Button>
+                      </Space>
+                    </div>
+                    <div className="col"></div>
+                  </div>
+                  {
+                    action !== "" &&
+                    <>
+                      <Divider orientation="left">
+                        {action} viewer:
+                      </Divider>
+                      <div className="row">
+                        <div className="col">
+                          <Input type="text" placeholder="#Id of viewer" />
+                        </div>
+                        <div className="col">
+                          <Button type="primary" onClick={() => setAction("")}>Done</Button>
+                        </div>
+                      </div>
+                    </>
+                  }
+                </Form.Item>
+              </Form>
+            </div>
+          </div>
+
+          <Modal title="Transfer NFT" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <ImageWrapper>
+              {
+                false &&// replace false by uri
+                <img src="" alt="item" />
+              }
+            </ImageWrapper>
+            <Form.Item
+              className="mt-5"
+              label="Recipient wallet id"
+            >
+              <Input type="text" />
+            </Form.Item>
+          </Modal>
+        </Container >
+      }
     </div>
   )
 }
 
 export default MyNFTDetail
+
+const Container = styled.div`
+  .img_wrapper{
+    width: 350px;
+    height: 350px;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+    overflow: hidden;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+  }
+`;
+
+const ImageWrapper = styled.div`
+  width: 350px;
+  height: 350px;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  margin: 0 auto;
+  overflow: hidden;
+  img{
+    width: 100%;
+    height: 100%;
+  }
+`;
