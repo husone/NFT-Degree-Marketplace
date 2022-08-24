@@ -6,6 +6,7 @@ import { final_be } from '../../../../declarations/final_be'
 import { useConnect } from '@connect2ic/react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+
 function MyNFTDetail() {
   const navigate = useNavigate()
   const { principal } = useConnect()
@@ -27,7 +28,6 @@ function MyNFTDetail() {
         getNft()
       } else {
         if (!isViewed) {
-          console.log(isViewer)
           navigate('/', {
             replace: true,
           })
