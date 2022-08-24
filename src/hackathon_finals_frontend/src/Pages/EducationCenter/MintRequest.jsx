@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
@@ -9,8 +9,10 @@ import './MintRequest.scss'
 import { storeFiles } from '../../Utils/web3Storage'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
+import { toast } from 'react-toastify'
 
 function MintRequest() {
+  const toastId = useRef(null)
   const { principal } = useConnect()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [requests, setRequests] = useState([])
@@ -128,6 +130,10 @@ function MintRequest() {
   const handleOk = async () => {
     console.log(requestModal)
 
+    toastId.current = toast('Minting...', {
+      icon: '🚀',
+      autoClose: false,
+    })
     const base64 = bufferToURI(requestModal?.imageNFT)
     const fileName =
       Math.random().toString(36).substring(2, 15) +
@@ -142,7 +148,7 @@ function MintRequest() {
     })
 
     console.log(imgFile)
-    // mintNFT(imgFile)
+    mintNFT(imgFile)
 
     // After receive cid, post link image to data and post to db
 
@@ -193,6 +199,8 @@ function MintRequest() {
       } else {
         console.log('error')
       }
+      toast.dismiss(toastId.current)
+      toast.success('Mint successfully')
       console.log('success')
     }
     setIsModalVisible(false)
@@ -235,8 +243,10 @@ function MintRequest() {
     getAllRequests()
     if (res.status === 200) {
       console.log('success')
+      toast.success('Reject successfully')
     } else {
       console.log('error')
+      toast.error('Reject fail')
     }
   }
 
