@@ -19,7 +19,7 @@ import Type "Types";
 import Types "./Types";
 import token "token";
 import types "types";
-
+import Random "mo:base/Random";
 
 shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var transactionId: Types.TransactionId = 0;
@@ -522,9 +522,14 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id })
   };
 
-  public func getNFT(token_id : nat) : ?Types.Nft {
+  public func getNFT(token_id : Types.TokenId) : ?Types.Nft {
     List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id })
   };
+
+  // public func getNFTPublic(token_id : nat) : ?Types.Nft {
+  //   let items =  List.filter(nfts, func(token: Types.Nft) : Bool { token.isPublic});
+  //   let t = Random.Finite();
+  // };
 
   public query func getCenter(token_id : Types.TokenId) : async ?Text {
     let item = findNFT(token_id);
