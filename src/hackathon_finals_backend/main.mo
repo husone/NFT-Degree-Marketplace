@@ -137,6 +137,27 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     centers := List.push(center,centers);
   };
 
+public func getNFT(token_id : Types.TokenId) : async ?Types.Nft {
+    List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id })
+  };
+
+  public func getNFTPublic() : async [Types.Nft] {
+    let items =  List.filter(nfts, func(token: Types.Nft) : Bool { token.isPublic});
+    // let a = List.nil<Types.Nft>();
+    // let r = Random.Finite();
+    // let c = 0;
+    // while (c<10){
+    //   for (nft in nfts){
+    //     if (r.coin()== true) {
+    //       a := List.add(a, nft);
+    //       c := c+1;
+    //     };
+    //   };
+    // };
+
+    // return List.toArray(a);
+    return List.toArray(items);
+  };
   public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
     assert caller == ad;
     var center  = List.find(centers, func (c : Types.Center) : Bool { c.address == centerPrincipal});
@@ -144,6 +165,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       return (?c != center);
     });
   };
+
 
   public shared({ caller }) func getCenters() : async [Types.Center]  {
     // assert caller == ad;

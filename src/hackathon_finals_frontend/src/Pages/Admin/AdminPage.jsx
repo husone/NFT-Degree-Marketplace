@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { formatDate, bufferToURI } from '../.././Utils/format'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
+import { toast } from 'react-toastify'
 
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
@@ -109,11 +110,14 @@ function AdminPage() {
       fetchRequestKYC()
       if (res.status === 200) {
         console.log('success')
+        toast.success('Approve successfully')
       } else {
+        toast.error('Approve fail')
         console.log('error')
       }
       setIsModalVisible(false)
     } catch (error) {
+      toast.error('Approve fail')
       console.log(error)
     }
   }
@@ -129,8 +133,10 @@ function AdminPage() {
     fetchRequestKYC()
     if (res.status === 200) {
       console.log('success')
+      toast.success('Reject successfully')
     } else {
       console.log('error')
+      toast.error('Reject fail')
     }
     setIsModalVisible(false)
   }

@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 function NavBar(props) {
   const navigate = useNavigate()
-  const { role, logout, setRole } = props
+  const { role, logout, setRole, login } = props
   const { principal, isConnected, disconnect } = useConnect()
 
   useEffect(() => {
@@ -19,14 +19,7 @@ function NavBar(props) {
   }, [role])
 
   const onConnectWallet = async () => {
-    try {
-      navigate('/', {
-        replace: true,
-      })
-      console.log('Connected to Plug')
-    } catch (e) {
-      console.log(e)
-    }
+    login()
   }
 
   const onDisconnect = () => {

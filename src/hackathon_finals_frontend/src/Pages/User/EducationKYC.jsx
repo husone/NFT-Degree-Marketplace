@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Context } from '../../hooks/index'
 import { PlusOutlined } from '@ant-design/icons'
 import { Form, Input, Button } from 'antd'
+import { toast } from 'react-toastify'
 
 function EducationKYC() {
   const { role, setRole } = useContext(Context)
@@ -39,16 +40,18 @@ function EducationKYC() {
         formData.append(key, education[key])
       }
 
-      console.log(education)
-      const res = await axios.post(
-        'http://localhost:5000/api/v1/education',
-        formData
-      )
+      const res = await axios
+        .post('http://localhost:5000/api/v1/education', formData)
+        .catch(() => {
+          toast.error('Submit request failed', { autoClose: 1500 })
+        })
 
       // Doing something to notification to user
       if (res.status === 201) {
         console.log('success')
+        toast.success('Submit request successfully', { autoClose: 1500 })
       } else {
+        toast.error('Submit request failed', { autoClose: 1500 })
         console.log('error')
       }
     }

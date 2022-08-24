@@ -9,15 +9,18 @@ import axios from 'axios'
 export const Context = createContext()
 
 const Provider = ({ children }) => {
-  const { principal, isConnected, connect } = useConnect()
+  const { principal, isConnected, connect, isConnecting } = useConnect()
+  const [principalStorage, setPrincipalStorage] = useState(
+    localStorage.getItem('prinp')
+  )
   const [role, setRole] = useState('user')
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     if (principal) {
-      setIsLoading(true)
       getRoleUser()
+      setIsLoaded(true)
     }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
@@ -27,7 +30,9 @@ const Provider = ({ children }) => {
     if (!isConnected) {
       connectWallet()
     }
-    setIsLoading(false)
+    if (!principalStorage) {
+      setIsLoaded(true)
+    }
   }, [])
 
   const connectWallet = async () => {
@@ -37,10 +42,23 @@ const Provider = ({ children }) => {
   const getRoleUser = async () => {
     const res = await final_be.getRole(Principal.fromText(principal))
     setRole(Object.keys(res)[0].toLowerCase())
-    setIsLoading(false)
   }
 
+  const login = () => {
+    try {
+      localStorage.setItem('prinp', principal)
+      setPrincipalStorage(principal)
+      navigate('/', {
+        replace: true,
+      })
+      console.log('Connected to Plug')
+    } catch (e) {
+      console.log(e)
+    }
+  }
   const logout = () => {
+    localStorage.clear()
+    setPrincipalStorage(null)
     setRole('user')
     navigate('/', {
       replace: true,
@@ -52,7 +70,8 @@ const Provider = ({ children }) => {
     role,
     logout,
     setRole,
-    isLoading,
+    isLoaded,
+    login,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

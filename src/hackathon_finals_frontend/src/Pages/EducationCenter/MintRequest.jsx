@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
@@ -9,8 +9,10 @@ import './MintRequest.scss'
 import { storeFiles } from '../../Utils/web3Storage'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
+import { toast } from 'react-toastify'
 
 function MintRequest() {
+  const toastId = useRef(null)
   const { principal } = useConnect()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [requests, setRequests] = useState([])
@@ -128,11 +130,16 @@ function MintRequest() {
   const handleOk = async () => {
     console.log(requestModal)
 
+    toastId.current = toast('Minting...', {
+      icon: '🚀',
+      autoClose: false,
+    })
     const base64 = bufferToURI(requestModal?.imageNFT)
     const fileName =
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15)
     const ext = requestModal?.imageNFT?.contentType.split('/')[1]
+    console.log(fileName)
 
     const res = await fetch(base64)
     const blob = await res.blob()
@@ -149,17 +156,18 @@ function MintRequest() {
   }
   const mintNFT = async fileImg => {
     console.log('Minting')
-    const cid = await storeFiles([fileImg])
+    // const cid = await storeFiles([fileImg])
+    const cid = 'bafybeidleheqry3sz2cv4thik5hqzn7g7eiympe252mom5hocfi2revjem'
     const fileNameImg = fileImg.name
     const tokenURI = `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`
     const { name, education, studentID, nationID, dob, certificate, _id } =
       requestModal
     const metadata = {
-      id: nationID,
+      id: '',
       cid: tokenURI,
-      center: education?.name,
-      name: certificate,
-      cer_owner: name,
+      center: '',
+      name: '',
+      cer_owner: '',
     }
     const ownerPrincipal = requestModal.principal
     const resCanister = await final_be.mintDip721(
@@ -191,6 +199,8 @@ function MintRequest() {
       } else {
         console.log('error')
       }
+      toast.dismiss(toastId.current)
+      toast.success('Mint successfully')
       console.log('success')
     }
     setIsModalVisible(false)
@@ -233,8 +243,10 @@ function MintRequest() {
     getAllRequests()
     if (res.status === 200) {
       console.log('success')
+      toast.success('Reject successfully')
     } else {
       console.log('error')
+      toast.error('Reject fail')
     }
   }
 

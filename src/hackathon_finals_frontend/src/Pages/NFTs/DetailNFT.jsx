@@ -1,21 +1,66 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Button, Input, Form, Tag, Space, Divider, Modal, Alert } from "antd";
 import styled from "styled-components";
 import { ExclamationCircleOutlined } from "@ant-design/icons"
 import "./DetailNFT.scss"
 
+
+import { final_be } from '../../../../declarations/final_be'
+import { Principal } from '@dfinity/principal'
+import { final_be } from '../../../../declarations/final_be'
+import { useConnect } from '@connect2ic/react'
+import axios from 'axios'
+
 const { confirm } = Modal;
 
 function DetailNFT() {
-  const [action, setAction] = useState("");
-  const [isPublic, setPublic] = useState(false)
+  const [action, setAction] = useState(""); // action for viewer : add - remove
+  const [isPublic, setPublic] = useState(false) // public-private
+  const navigate = useNavigate()
+  const { principal } = useConnect()
   const { id } = useParams()
+  const [nft, setNft] = useState(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [status, setStatus] = useState(null)
 
   useEffect(() => {
-    console.log(id)
-  }, [])
+    if (status) {
+      const { isPublic, isViewed } = status
+      if (isPublic || isViewed) {
+        getNft()
+        setIsLoaded(true)
+      } else {
+        navigate('/', {
+          replace: true,
+        })
+      }
+    }
+  }, [status])
 
+  const loadStatusNFT = async () => {
+    const res = await final_be.isPublic(BigInt(id))
+    const isPublic = res.Ok
+    const resu = await final_be.isViewer(
+      BigInt(id),
+      Principal.fromText(principal)
+    )
+    const isViewed = Object.keys(resu)[0].toLowerCase() === 'ok' ? true : false
+    setStatus({ isPublic, isViewed })
+  }
+
+  const getNft = async () => {
+    const res = await final_be.getNFT(BigInt(id))
+    const price = await final_be.getPrice(BigInt(id))
+    setNft({ ...res[0], price: Number(price) })
+  }
+
+  const buyNFT = async () => {
+    const res = await final_be.buyNFT(BigInt(id))
+    console.log(res)
+  }
+
+  // belong modal transfer
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
