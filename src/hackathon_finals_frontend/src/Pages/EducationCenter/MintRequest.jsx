@@ -190,9 +190,13 @@ function MintRequest() {
         name: certificate,
         cer_owner: name,
         imgURI: tokenURI,
+        image: fileImg,
       }
-      console.log(JSON.stringify(data))
-      const res = await axios.post('http://localhost:5000/api/v1/nft', data)
+      const formData = new FormData()
+      for (let key in education) {
+        formData.append(key, education[key])
+      }
+      const res = await axios.post('http://localhost:5000/api/v1/nft', formData)
       console.log('store db')
       if (res.status === 201) {
         await axios.patch(`http://localhost:5000/api/v1/request/${_id}`, {

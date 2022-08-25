@@ -40,7 +40,13 @@ function EducationKYC() {
     } else {
       const formData = new FormData()
       for (let key in education) {
-        formData.append(key, education[key])
+        if (key === 'imageKYC') {
+          formData.append('image', education.imageKYC)
+        } else if (key === 'imageLogo') {
+          formData.append('image', education.imageLogo)
+        } else {
+          formData.append(key, education[key])
+        }
       }
 
       const res = await axios
@@ -145,7 +151,7 @@ function EducationKYC() {
           </Form.Item>
         </div>
         <div className="col-lg-4">
-          <Form.Item label="Add NFT" valuePropName="fileList">
+          <Form.Item label="KYC Image" valuePropName="fileList">
             <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
               {imgUriKYC && (
                 <img
@@ -190,7 +196,7 @@ function EducationKYC() {
               )}
             </div>
           </Form.Item>
-          <Form.Item label="Add NFT" valuePropName="fileList">
+          <Form.Item label="Logo Image" valuePropName="fileList">
             <div className="wrap-upload input-group mb-3 d-flex justify-content-start">
               {imgUriLogo && (
                 <img
