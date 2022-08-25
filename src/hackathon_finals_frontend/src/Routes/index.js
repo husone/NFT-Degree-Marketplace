@@ -45,8 +45,8 @@ const publicRoutes = [
     role: 'user',
     desc: 'Requests',
   },
-  { path: '/my-nfts', component: MyNFT, role: 'user', desc: 'My NFTS' },
-  { path: '/all-nfts', component: AllNFTs, role: null, desc: 'All NFTS' },
+  { path: '/my-nfts', component: MyNFT, role: 'user', desc: 'My NFTs' },
+  { path: '/all-nfts', component: AllNFTs, role: null, desc: 'All NFTs' },
   { path: '/nft/:id', component: DetailNFT, role: null, desc: null },
   { path: '/me/nft/:id', component: MyNFTDetail, role: null, desc: null },
 ]

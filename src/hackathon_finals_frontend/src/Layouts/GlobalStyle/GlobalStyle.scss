@@ -1,16 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans&family=Urbanist:ital,wght@0,600;0,900;1,600;1,900&display=swap');
 @import 'normalize.css';
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  color: #fff !important;
-}
 html {
 }
 
 body {
+  color: #fff;
   font-family: 'Urbanist', sans-serif;
 }
 
@@ -61,6 +56,11 @@ section {
   position: relative;
   background: #fff;
   background-size: cover;
+  background: linear-gradient(
+    130.35deg,
+    rgba(99, 69, 237, 0.85) 17.35%,
+    rgba(220, 57, 252, 0.85) 78.23%
+  );
 }
 
 .fl-page-title .overlay {
@@ -69,11 +69,6 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    130.35deg,
-    rgba(99, 69, 237, 0.85) 17.35%,
-    rgba(220, 57, 252, 0.85) 78.23%
-  );
 }
 
 .page-title-inner {
@@ -84,4 +79,22 @@ section {
 .page-title-heading .heading {
   color: #fff;
   letter-spacing: -2px;
+}
+
+// ANTD
+.ant-modal-confirm-body,
+.ant-modal-confirm-content,
+.ant-modal-confirm-title,
+.ant-btn span,
+.ant-form-item-label label,
+.ant-form-item-control-input-content input {
+  color: #fff !important;
+}
+
+.ant-btn {
+  background: #212529 !important;
+}
+
+.ant-tabs-tab-btn {
+  font-size: 20px;
 }

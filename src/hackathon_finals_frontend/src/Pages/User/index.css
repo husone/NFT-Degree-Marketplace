@@ -29,7 +29,7 @@
 
 .list-group-item {
   border: none;
-  border: 2px solid rgba(99, 69, 237, 0.1);
+  border-bottom: 2px solid rgba(99, 69, 237, 0.1);
 }
 
 .accordion-button::after {
@@ -39,4 +39,12 @@
 .accordion-button:focus {
   box-shadow: none;
   border-color: rgba(99, 69, 237, 0.1);
+}
+
+/* ANTD */
+/* MODAL NOTIFICATION*/
+
+.ant-modal-content {
+  background-color: #212529 !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
 }

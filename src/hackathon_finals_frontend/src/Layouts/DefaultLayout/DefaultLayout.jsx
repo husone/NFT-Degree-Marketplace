@@ -12,7 +12,7 @@ function DefaultLayout({ children }) {
       {isLoaded && (
         <div>
           <Navbar />
-          <Body className="container-fluid">{children}</Body>
+          <Body className="container-fluid pe-0 ps-0">{children}</Body>
           <Footer />
         </div>
       )}

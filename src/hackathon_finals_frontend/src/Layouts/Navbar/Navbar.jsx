@@ -9,7 +9,7 @@ import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import { useNavigate } from 'react-router-dom'
 
-import "./Navbar.scss"
+import './Navbar.scss'
 
 function NavBar(props) {
   const navigate = useNavigate()
@@ -32,7 +32,7 @@ function NavBar(props) {
 
   return (
     role && (
-      <Nav className="navbar navbar-expand-lg">
+      <Nav className="navbar navbar-expand-lg ">
         <div className="container-fluid px-5">
           <div className="d-flex gap-4">
             <Link className="navbar-brand" to="/">

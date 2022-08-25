@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Principal } from '@dfinity/principal'
 import { useConnect } from '@connect2ic/react'
@@ -7,24 +7,19 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import '../NFTs/DetailNFT.scss'
+import { Input, Form, Tag, Modal } from 'antd'
 import {
-  Button,
-  Input,
-  Form,
-  Tag,
-  Space,
-  Divider,
-  Modal,
-  Alert,
-  Select,
-} from 'antd'
-import { ExclamationCircleOutlined } from '@ant-design/icons'
+  ExclamationCircleOutlined,
+  UnlockOutlined,
+  LockOutlined,
+} from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import './index.css'
 
 const { confirm } = Modal
 
 function MyNFTDetail() {
+  const textInput = useRef()
   const navigate = useNavigate()
   const { principal } = useConnect()
   const { id } = useParams()
@@ -35,6 +30,7 @@ function MyNFTDetail() {
   const [action, setAction] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [infoUpdate, setInfoUpdate] = useState({})
+  const [isShowSetPrice, setIsShowSetPrice] = useState(false)
 
   console.log(nft)
   useEffect(() => {
@@ -113,6 +109,7 @@ function MyNFTDetail() {
 
   const handleOk = async () => {
     if (infoUpdate.prinpTransfer) {
+      toast('Transferring...', { autoClose: 1500 })
       const res = await final_be.transferDIP721(
         BigInt(id),
         Principal.fromText(infoUpdate.prinpTransfer)
@@ -125,17 +122,39 @@ function MyNFTDetail() {
     setIsModalVisible(false)
   }
 
-  const handleCancel = () => {
-    setIsModalVisible(false)
-  }
-
-  const showConfirm = () => {
+  const showConfirmPublic = () => {
     confirm({
       title: 'Do you want to set public this NFT?',
       icon: <ExclamationCircleOutlined />,
       content: "You can't change item to private after set public",
       onOk() {
         setNFTPublic()
+      },
+      onCancel() {
+        console.log('Cancel')
+      },
+    })
+  }
+
+  const showConfirmCancelListing = () => {
+    confirm({
+      title: 'Do you want to cancel listing this NFT?',
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        cancelListing()
+      },
+      onCancel() {
+        console.log('Cancel')
+      },
+    })
+  }
+
+  const showConfirmRemoveViewer = prinp => {
+    confirm({
+      title: `Do you want to remove viewer ${prinp}`,
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        removeView(prinp)
       },
       onCancel() {
         console.log('Cancel')
@@ -164,18 +183,21 @@ function MyNFTDetail() {
     const res = await final_be.getViewers(BigInt(id))
     setViewers(res[0])
   }
+
   const setPrice = async () => {
     // a is price from input
     if (!status.isPublic) {
       info()
     } else {
       if (infoUpdate.price) {
+        toast('Setting price...', { autoClose: 1500 })
         const res = await final_be.listing(BigInt(id), BigInt(infoUpdate.price))
         console.log(res)
       } else {
-        toast.warn('Please input wallet address of receiver')
+        toast.warn('Please enter price')
       }
     }
+    setIsModalVisible(false)
   }
 
   const transfer = async () => {
@@ -183,36 +205,40 @@ function MyNFTDetail() {
       info()
     } else {
       showModal()
-      // a is principal receive from input
     }
   }
 
   const approveView = async () => {
-    // a is principal receive from input
     if (infoUpdate.prinpViewer) {
+      toast('Approving...', { autoClose: 1500 })
       const res = await final_be.approveView(
         BigInt(id),
         Principal.fromText(infoUpdate.prinpViewer)
       )
       console.log(res)
       toast.success('Approve viewer NFT successfully')
+    } else {
+      toast.warn('Enter wallet address!')
+      textInput.current.focus()
     }
   }
 
   const removeAllView = async () => {
+    toast('Removing...', { autoClose: 1500 })
     const res = await final_be.removeAllView(BigInt(id))
-    toast.success('Remove all viewer NFT successfully')
+    toast.success('Remove all viewer successfully')
     console.log(res)
   }
 
-  const removeView = async () => {
-    if (infoUpdate.prinpRemove) {
+  const removeView = async principal => {
+    toast('Removing...', { autoClose: 1500 })
+    if (principal) {
       const res = await final_be.removeView(
         BigInt(id),
-        Principal.fromText(infoUpdate.prinpRemove)
+        Principal.fromText(principal)
       )
       console.log(res)
-      toast.success('Remove viewer NFT successfully')
+      toast.success('Remove viewer successfully')
     }
   }
 
@@ -230,24 +256,11 @@ function MyNFTDetail() {
   }
 
   const cancelListing = async () => {
+    toast('Canceling...', { autoClose: 1500 })
     const res = await final_be.cancelListing(BigInt(id))
     if (res.Ok) {
       toast.success('Cancel listing successfully')
     }
-  }
-  const doAction = () => {
-    switch (action) {
-      case 'Add':
-        approveView()
-        break
-      case 'Remove':
-        removeView()
-        break
-      default:
-        console.log('Invalid action')
-    }
-    getNFTViewer()
-    setAction('')
   }
 
   return (
@@ -257,46 +270,35 @@ function MyNFTDetail() {
           <div className="row">
             <div className="col-lg-5">
               <div className="img_wrapper">
-                {true && ( // replace false by uri
-                  <img
-                    src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
-                    alt="item"
-                    height={508}
-                  />
-                  // <img src={nft?.metadata?.cid} alt="item" />
+                {nft?.metadata?.cid && (
+                  <img src={nft?.metadata?.cid} alt="item" />
                 )}
-                {/* {nft?.metadata?.cid && ( // replace false by uri
-                  <img
-                    src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
-                    alt="item"
-                    height={350}
-                  />
-                  // <img src={nft?.metadata?.cid} alt="item" />
-                )} */}
               </div>
               <div>
-                <div class="card card-style">
-                  <div class="card-header">
-                    <h5 class="card-title fs-5">Description</h5>
+                <div className="card card-style mt-3">
+                  <div className="card-header">
+                    <h5 className="card-title fs-5 text-white">Description</h5>
                   </div>
-                  <div class="card-body text-capitalize fs-6">
-                    <p class="card-text">Certificate: {nft?.metadata?.name}</p>
-                    <p class="card-text">
+                  <div className="card-body text-capitalize fs-6">
+                    <p className="card-text">
+                      Certificate: {nft?.metadata?.name}
+                    </p>
+                    <p className="card-text">
                       Certificate's Owner: {nft?.metadata?.cer_owner}
                     </p>
-                    <p class="card-text">Student ID: {nft?.metadata?.id}</p>
+                    <p className="card-text">Student ID: {nft?.metadata?.id}</p>
                     <div
-                      class="card-text d-flex justify-content-between align-items-center"
-                      style={{ width: '300px' }}
+                      className="card-text d-flex justify-content-between align-items-center"
+                      style={{ width: '250px' }}
                     >
                       <div className="d-flex justify-content-between align-items-center">
                         <div>Status: </div>
                         {status.isPublic ? (
                           <Tag
-                            color="cyan"
-                            className="text-dark ms-2"
+                            color="success"
+                            icon={<UnlockOutlined />}
+                            className="d-flex align-items-center justify-content-between ms-2"
                             style={{
-                              padding: '6px 16px',
                               letterSpacing: '2px',
                             }}
                           >
@@ -304,10 +306,10 @@ function MyNFTDetail() {
                           </Tag>
                         ) : (
                           <Tag
-                            color="gold"
-                            className="text-dark ms-2"
+                            color="default"
+                            icon={<LockOutlined />}
+                            className="d-flex align-items-center justify-content-between ms-2"
                             style={{
-                              padding: '6px 16px',
                               letterSpacing: '2px',
                             }}
                           >
@@ -315,7 +317,12 @@ function MyNFTDetail() {
                           </Tag>
                         )}
                       </div>
-                      <button className="btn btn-primary">Set Public</button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={showConfirmPublic}
+                      >
+                        Set Public
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -323,42 +330,106 @@ function MyNFTDetail() {
             </div>
             <div className="col-lg-7 h-50">
               <div className="mt-2">
-                <h3 className="text-capitalize">{`${
+                <h3 className="text-capitalize text-white">{`${
                   nft?.metadata?.center
                 } #${Number(nft?.id)}`}</h3>
               </div>
-              <div class="card card-style">
-                <div class="card-body d-flex justify-content-between">
-                  <button class="btn btn-primary">Set price</button>
-                  <h2>price</h2>
-                  <button class="btn btn-danger">Cancel listing</button>
+              <div className="card card-style">
+                <div className="card-body d-flex justify-content-between flex-column">
+                  <h6 className="text-secondary">Current Price</h6>
+                  {nft?.price === 0 ? (
+                    <div className="d-flex">
+                      <h2
+                        className="text-white fw-bold"
+                        style={{ margin: 'auto 0' }}
+                      >
+                        {nft?.price}
+                      </h2>
+                      <button
+                        className="btn btn-primary ms-3 text-white d-flex align-items-center"
+                        onClick={() => setIsShowSetPrice(true)}
+                      >
+                        <span className="material-symbols-outlined me-2">
+                          account_balance_wallet
+                        </span>
+                        Set price
+                      </button>
+                      <button
+                        className="btn btn-info ms-3 text-white d-flex align-items-center"
+                        onClick={transfer}
+                      >
+                        <span className="material-symbols-outlined me-2">
+                          published_with_changes
+                        </span>
+                        Transfer
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="d-flex">
+                      <h2
+                        className="text-white fw-bold"
+                        style={{ margin: 'auto 0' }}
+                      >
+                        {nft?.price}
+                      </h2>
+                      <button
+                        className="btn btn-danger ms-3 text-white d-flex align-items-center"
+                        onClick={showConfirmCancelListing}
+                      >
+                        <span className="material-symbols-outlined me-2">
+                          cancel
+                        </span>
+                        Cancel listing
+                      </button>
+                      <button
+                        className="btn btn-info ms-3 text-white d-flex align-items-center"
+                        onClick={transfer}
+                      >
+                        <span className="material-symbols-outlined me-2">
+                          published_with_changes
+                        </span>
+                        Transfer
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="d-flex flex-column">
-                <div
-                  class="input-group mt-3"
-                  style={{
-                    borderRadiusBottomRight: 'none',
-                    borderRadiusBottomLeft: 'none',
-                  }}
-                >
+                <div className="input-group mt-3">
                   <input
+                    ref={textInput}
                     type="text"
-                    class="form-control"
-                    placeholder="Recipient's username"
-                    aria-label="Recipient's username"
+                    className="form-control"
+                    placeholder="Recipient's wallet address"
+                    aria-label="Recipient's wallet address"
                     aria-describedby="basic-addon2"
+                    style={{
+                      borderBottomLeftRadius: 0,
+                      padding: '8px 0 8px 16px',
+                    }}
+                    name="prinpViewer"
+                    onChange={handleChange}
                   />
-                  <button className="btn btn-success">Add viewer</button>
-                  <button className="btn btn-danger">Remove All</button>
+                  <button className="btn btn-success" onClick={approveView}>
+                    Add viewer
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    style={{
+                      borderBottomRightRadius: 0,
+                    }}
+                    onClick={removeAllView}
+                  >
+                    Remove All
+                  </button>
                 </div>
 
                 <div className="">
-                  <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                      <div class="accordion-header " id="headingOne">
+                  <div className="accordion" id="accordionExample">
+                    <div className="accordion-item">
+                      <div className="accordion-header " id="headingOne">
                         <button
-                          class="accordion-button"
+                          className="accordion-button"
                           type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseOne"
@@ -370,18 +441,34 @@ function MyNFTDetail() {
                       </div>
                       <div
                         id="collapseOne"
-                        class="accordion-collapse collapse show"
+                        className="accordion-collapse collapse"
                         aria-labelledby="headingOne"
                         data-bs-parent="#accordionExample"
                       >
-                        <div class="accordion-body">
+                        <div className="accordion-body">
                           <ul className="list-group">
                             {viewers.map((viewer, index) => {
                               const prinp = viewer.toString()
                               return (
-                                <li className="list-group-item" key={index}>
-                                  <p>{prinp}</p>
-                                  <button className="btn-btn-secondary">
+                                <li
+                                  className="list-group-item d-flex justify-content-between align-items-center"
+                                  key={index}
+                                >
+                                  <h6
+                                    style={{ fontSize: '14px' }}
+                                    className=" text-white"
+                                  >
+                                    {prinp}
+                                  </h6>
+                                  <button
+                                    className="btn btn-danger"
+                                    data-principal={prinp}
+                                    onClick={e =>
+                                      showConfirmRemoveViewer(
+                                        e.currentTarget.dataset.principal
+                                      )
+                                    }
+                                  >
                                     Remove
                                   </button>
                                 </li>
@@ -395,27 +482,30 @@ function MyNFTDetail() {
                 </div>
               </div>
             </div>
-            {/* </div> */}
-            {/* <div className="row"> */}
           </div>
           <Modal
             title="Transfer NFT"
             visible={isModalVisible}
             onOk={handleOk}
-            onCancel={handleCancel}
+            onCancel={() => setIsModalVisible(false)}
           >
             <ImageWrapper>
-              {/* {nft?.metadata?.cid && ( // replace false by uri */}
-              {true && ( // replace false by uri
-                <img
-                  src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
-                  alt="item"
-                />
-                // <img src={nft?.metadata?.cid} alt="item" />
+              {nft?.metadata?.cid && (
+                <img src={nft?.metadata?.cid} alt="item" />
               )}
             </ImageWrapper>
             <Form.Item className="mt-5" label="Recipient wallet id">
               <Input type="text" onChange={handleChange} name="prinpTransfer" />
+            </Form.Item>
+          </Modal>
+          <Modal
+            title="Transfer NFT"
+            visible={isShowSetPrice}
+            onOk={() => setPrice()}
+            onCancel={() => setIsShowSetPrice(false)}
+          >
+            <Form.Item className="mt-5" label="Enter price">
+              <Input type="text" onChange={handleChange} name="price" />
             </Form.Item>
           </Modal>
         </Container>
@@ -429,21 +519,20 @@ export default MyNFTDetail
 const Container = styled.div`
   .img_wrapper {
     width: 100%;
-    height: 508px;
+    height: 500px;
     border-radius: 8px;
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      border-radius: 8px;
     }
   }
 `
 
 const ImageWrapper = styled.div`
-  width: 508px;
-  height: 508px;
+  width: 100%;
+  height: 300px;
   border-radius: 8px;
-  border: 1px dashed #ccc;
   margin: 0 auto;
   overflow: hidden;
   img {
@@ -451,141 +540,3 @@ const ImageWrapper = styled.div`
     height: 100%;
   }
 `
-
-{
-  /* <Form>
-                <Form.Item label="Education center">
-                  <h1>{nft?.metadata?.center}</h1>
-                </Form.Item>
-                <Form.Item label="NFT id">
-                  <p>#{Number(nft?.id)}</p>
-                </Form.Item>
-                <Form.Item label="Certificate">
-                  <p>{nft?.metadata?.name}</p>
-                </Form.Item>
-                <div className="row">
-                  <div className="col">
-                    <Form.Item label="Status">
-                      {!status.isPublic && ( 
-                        <Tag color="gold">Private</Tag>
-                      )}
-                      {status.isPublic && ( 
-                        <Tag color="cyan">Public</Tag>
-                      )}
-                      {true && ( 
-                        <Tag color="gold">Private</Tag>
-                      )}
-                      {false && ( 
-                        <Tag color="cyan">Public</Tag>
-                      )}
-                    </Form.Item>
-                  </div>
-                  {true && ( 
-                    <div className="col">
-                      <Button type="primary" onClick={showConfirm}>
-                        Set public
-                      </Button>
-                    </div>
-                  )}
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <Form.Item label={`$${nft?.price}`}>
-                      <Input type="text" onChange={handleChange} name="price" />
-                    </Form.Item>
-                  </div>
-                  <div className="col">
-                    <Button type="primary" onClick={setPrice}>
-                      Set price
-                    </Button>
-                  </div>
-                  <div className="col">
-                    <Button type="primary" onClick={transfer}>
-                      Transfer
-                    </Button>
-                  </div>
-                  <div className="col">
-                    <Button type="primary" onClick={cancelListing}>
-                      Cancel listing
-                    </Button>
-                  </div>
-                </div>
-                <Form.Item label="">
-                  <Select
-                    size="large"
-                    defaultValue="List of viewer"
-                    onChange={handleChange}
-                    style={{
-                      width: 200,
-                    }}
-                  >
-                    {viewers.map((viewer, index) => {
-                      const prinp = viewer.toString()
-                      return (
-                        <Select.Option
-                          value={prinp}
-                          key={index}
-                          onClick={() => setAction('Remove')}
-                        >
-                          {prinp}
-                        </Select.Option>
-                      )
-                    })}
-                  </Select>
-                  <div className="row">
-                    <div className="col">
-                      <Space size={15}>
-                        <Button type="primary" onClick={() => setAction('Add')}>
-                          Add
-                        </Button>
-                        <Button
-                          type="primary"
-                          onClick={() => setAction('Remove')}
-                        >
-                          Remove
-                        </Button>
-                        <Button type="primary" onClick={removeAllView}>
-                          Remove all
-                        </Button>
-                      </Space>
-                    </div>
-                    <div className="col"></div>
-                  </div>
-                  {action !== '' && (
-                    <>
-                      <Divider orientation="left">{action} viewer:</Divider>
-                      <div className="row">
-                        <div className="col">
-                          {action === 'Remove' ? (
-                            <Input
-                              type="text"
-                              placeholder={`${infoUpdate.prinpRemove}`}
-                              onChange={handleChange}
-                              name="prinpViewer"
-                            />
-                          ) : (
-                            <Input
-                              type="text"
-                              placeholder="Principal of viewer"
-                              onChange={handleChange}
-                              name="prinpViewer"
-                            />
-                          )}
-                          <Input
-                            type="text"
-                            placeholder="Principal of viewer"
-                            onChange={handleChange}
-                            name="prinpViewer"
-                          />
-                        </div>
-                        <div className="col">
-                          <Button type="primary" onClick={doAction}>
-                            Done
-                          </Button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </Form.Item>
-              </Form> */
-}

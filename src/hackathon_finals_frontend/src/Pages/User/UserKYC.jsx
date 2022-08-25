@@ -14,7 +14,6 @@ function UserKYC() {
   const [user, setUser] = useState({})
   const [imgUriNFT, setImgUriNFT] = useState('')
   const [imgUriKYC, setImgUriKYC] = useState('')
-  const [fileImg, setFileImg] = useState(null)
   const [educationList, setEducationList] = useState([])
 
   useEffect(() => {
@@ -106,14 +105,15 @@ function UserKYC() {
           }))
         }
       }
-      setFileImg(file)
       reader.readAsDataURL(file)
     }
   }
 
   return (
     <div>
-      <h2 className="py-4 mx-4 heading1">User KYC page</h2>
+      <h4 className="py-4 mx-4 heading1 text-white text-center">
+        Mint Request
+      </h4>
       <Form
         onFinish={handleSubmit}
         encType="multipart/form-data"
@@ -181,7 +181,11 @@ function UserKYC() {
                 {educationList.map(education => {
                   const { _id, name } = education
                   return (
-                    <Select.Option value={_id} key={_id}>
+                    <Select.Option
+                      value={_id}
+                      key={_id}
+                      className="text-white text-capitalize"
+                    >
                       {name}
                     </Select.Option>
                   )
