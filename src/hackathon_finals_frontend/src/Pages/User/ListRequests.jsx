@@ -111,11 +111,12 @@ function ListRequests() {
 
   return (
     <div>
-      <h2 className="">LIST OF USER'S REQUEST</h2>
+      <h2 className="py-4 px-4">LIST OF USER'S REQUEST</h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}
         style={{ color: '#333' }}
+        className="px-4"
       />
 
       <Modal

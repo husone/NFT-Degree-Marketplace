@@ -1,9 +1,9 @@
 .ant-table-thead .ant-table-cell {
   font-weight: bolder !important;
-  background: #e3e1e1;
+  background: #14161B;
 }
 colgroup {
-  background: rgba(230, 227, 227, 0.42);
+  background: #343444;
 }
 .ant-table-tbody > tr.ant-table-row:hover > td {
   background: rgba(240, 82, 164, 0.1) !important ;
@@ -77,4 +77,18 @@ colgroup {
   .ant-form-item-label > label {
     color: rgb(111, 110, 110);
 }
+}
+
+.ant-table-tbody > tr.ant-table-placeholder:hover > td {
+  background-color: #3c3939 !important;
+}
+
+.ant-spin-nested-loading{
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td{
+  border-bottom: 0px !important;
 }

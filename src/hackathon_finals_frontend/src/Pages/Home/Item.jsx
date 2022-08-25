@@ -4,12 +4,16 @@ import {
   SettingOutlined,
 } from '@ant-design/icons'
 import { Avatar, Card } from 'antd'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
 const { Meta } = Card
 
-export default function Item() {
+export default function Item({nft}) {
+  useEffect(() => {
+    console.log(nft)
+  }, [])
+  
   return (
     <Link to={`nft/${12323}`}>
       <Card
