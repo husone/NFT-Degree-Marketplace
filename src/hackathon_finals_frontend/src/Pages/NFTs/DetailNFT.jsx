@@ -21,32 +21,11 @@ function DetailNFT() {
   const { id } = useParams()
   const [nft, setNft] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
-  const [status, setStatus] = useState(null)
 
-  // useEffect(() => {
-  //   if (status) {
-  //     const { isPublic, isViewed } = status
-  //     if (isPublic || isViewed) {
-  //       getNft()
-  //       setIsLoaded(true)
-  //     } else {
-  //       navigate('/', {
-  //         replace: true,
-  //       })
-  //     }
-  //   }
-  // }, [status])
-
-  const loadStatusNFT = async () => {
-    const res = await final_be.isPublic(BigInt(id))
-    const isPublic = res.Ok
-    const resu = await final_be.isViewer(
-      BigInt(id),
-      Principal.fromText(principal)
-    )
-    const isViewed = Object.keys(resu)[0].toLowerCase() === 'ok' ? true : false
-    setStatus({ isPublic, isViewed })
-  }
+  useEffect(() => {
+    getNft()
+    setIsLoaded(true)
+  }, [])
 
   const getNft = async () => {
     const res = await final_be.getNFT(BigInt(id))
@@ -59,26 +38,16 @@ function DetailNFT() {
     console.log(res)
   }
 
-  // belong modal transfer
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
-  const handleOk = () => {
-    setIsModalVisible(false)
-  }
-  const handleCancel = () => {
-    setIsModalVisible(false)
-  }
-
   const showConfirm = () => {
     confirm({
-      title: 'Do you Want to set public this item?',
+      title: `Buy this NFT with price ${nft?.price}`,
       icon: <ExclamationCircleOutlined />,
-      content: "You can't change item to private after set public",
+      content: 'Some descriptions',
+
       onOk() {
-        setPublic(true)
+        console.log('OK')
       },
+
       onCancel() {
         console.log('Cancel')
       },
@@ -87,101 +56,40 @@ function DetailNFT() {
 
   return (
     <>
-      <Container className="mt-5">
-        <div className="row">
-          <div className="col">
-            <div className="img_wrapper">
-              {false && ( // replace false by uri
-                <img src="" alt="item" />
-              )}
-            </div>
-          </div>
-          <div className="col">
-            <Form>
-              <Form.Item label="Education">
-                <h1>{'#NFT id'}</h1>
-              </Form.Item>
-              <div className="row">
-                <div className="col">
-                  <Form.Item label="Status">
-                    {!isPublic && ( // replace true by is private
-                      <Tag color="gold">Private</Tag>
-                    )}
-                    {isPublic && ( // replace false by is public
-                      <Tag color="cyan">Public</Tag>
-                    )}
-                  </Form.Item>
-                </div>
-                {true && ( // replace true by is private
-                  <div className="col">
-                    <Button type="primary" onClick={showConfirm}>
-                      Set public
-                    </Button>
-                  </div>
+      {isLoaded && (
+        <Container className="mt-5">
+          <div className="row">
+            <div className="col">
+              <div className="img_wrapper">
+                {false && ( // replace false by uri
+                  <img src="" alt="item" />
                 )}
               </div>
-              <div className="row">
-                <div className="col">
-                  <Form.Item label="$Price">
-                    <Input type="text" />
-                  </Form.Item>
-                </div>
-                <div className="col">
-                  <Button type="primary" onClick={showModal}>
-                    Buy
-                  </Button>
-                </div>
-              </div>
-              {/* <Form.Item
-                label="List of viewer"
-              >
+            </div>
+            <div className="col">
+              <Form>
+                <Form.Item label="Education">
+                  <h1>{nft?.id}</h1>
+                </Form.Item>
                 <div className="row">
                   <div className="col">
-                    <Space size={15}>
-                      <Button type="primary" onClick={() => setAction("Add")}>Add</Button>
-                      <Button type="primary" onClick={() => setAction("Remove")}>Remove</Button>
-                      <Button type="primary">Remove at</Button>
-                    </Space>
+                    <Form.Item label={`$${nft?.price}`}>
+                      <Input type="text" />
+                    </Form.Item>
                   </div>
-                  <div className="col"></div>
+                  <div className="col">
+                    {nft.price !== 0 && (
+                      <Button type="primary" onClick={showConfirm}>
+                        Buy
+                      </Button>
+                    )}
+                  </div>
                 </div>
-                {
-                  action !== "" &&
-                  <>
-                    <Divider orientation="left">
-                      {action} viewer:
-                    </Divider>
-                    <div className="row">
-                      <div className="col">
-                        <Input type="text" placeholder="#Id of viewer" />
-                      </div>
-                      <div className="col">
-                        <Button type="primary" onClick={() => setAction("")}>Done</Button>
-                      </div>
-                    </div>
-                  </>
-                }
-              </Form.Item> */}
-            </Form>
+              </Form>
+            </div>
           </div>
-        </div>
-
-        <Modal
-          title="Transfer NFT"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <ImageWrapper>
-            {false && ( // replace false by uri
-              <img src="" alt="item" />
-            )}
-          </ImageWrapper>
-          <Form.Item className="mt-5" label="Recipient wallet id">
-            <Input type="text" />
-          </Form.Item>
-        </Modal>
-      </Container>
+        </Container>
+      )}
     </>
   )
 }

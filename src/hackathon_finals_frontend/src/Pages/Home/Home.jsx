@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Home.scss'
 import { final_be } from '../../../../declarations/final_be'
 import { Input, Tabs } from 'antd'
 import Item from './Item'
+import { Link } from 'react-router-dom'
+import MyNFTItem from '../User/MyNFTItem'
 const { Search } = Input
 const { TabPane } = Tabs
 
 function Home() {
   const [size, setSize] = useState('large')
+  const [listNFT, setListNFT] = useState([])
+
+  console.log(listNFT)
+  useEffect(() => {
+    getAllNFT()
+  }, [])
+
+  const getAllNFT = async () => {
+    const res = await final_be.getNFTPublic()
+    setListNFT(res)
+  }
 
   const onSearch = () => {}
 
@@ -30,7 +43,14 @@ function Home() {
 
       <Tabs defaultActiveKey="1" onChange={onChange}>
         <TabPane tab="Search" key="1" className="my-5">
-          <Item />
+          {listNFT.map(nft => {
+            const id = Number(nft?.id)
+            return (
+              <Link to={`/nft/${id}`} key={id}>
+                <MyNFTItem nft={nft} />
+              </Link>
+            )
+          })}
         </TabPane>
         <TabPane tab="Trending" key="2">
           Content of Tab Pane 2
