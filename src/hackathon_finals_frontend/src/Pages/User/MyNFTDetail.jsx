@@ -20,6 +20,7 @@ import {
 } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { toast } from 'react-toastify'
+import './index.css'
 
 const { confirm } = Modal
 
@@ -35,30 +36,25 @@ function MyNFTDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [infoUpdate, setInfoUpdate] = useState({})
 
-  // useEffect(() => {
-  //   loadStatusNFT()
-  // }, [])
+  console.log(nft)
+  useEffect(() => {
+    loadStatusNFT()
+  }, [])
 
-  // useEffect(() => {
-  //   if (status) {
-  //     const { isPublic, isViewed } = status
-  //     if (isPublic) {
-  //       console.log('get in canister')
-  //       getNft()
-  //     } else {
-  //       if (!isViewed) {
-  //         navigate('/', {
-  //           replace: true,
-  //         })
-  //       } else {
-  //         console.log('get in db')
-  //         getNftFromDB()
-  //       }
-  //     }
-  //     getNFTViewer()
-  //     setIsLoaded(true)
-  //   }
-  // }, [status])
+  useEffect(() => {
+    if (status) {
+      const { isPublic, isViewed } = status
+      if (!isViewed) {
+        navigate('/', {
+          replace: true,
+        })
+      } else {
+        getNftFromDB()
+        getNFTViewer()
+      }
+      setIsLoaded(true)
+    }
+  }, [status])
 
   const handleChange = event => {
     if (typeof event === 'string') {
@@ -83,7 +79,7 @@ function MyNFTDetail() {
       BigInt(id),
       Principal.fromText(principal)
     )
-    const isViewed = Object.keys(resu)[0].toLowerCase() === 'ok' ? true : false
+    const isViewed = Object.keys(resu)[0] === 'Ok' ? true : false
     setStatus({ isPublic, isViewed })
   }
 
@@ -255,18 +251,17 @@ function MyNFTDetail() {
   }
 
   return (
-    <div className="container d-flex justify-content-center align-items-center h-100 pt-5">
-      {true && (
+    <div className="container h-100 pt-5">
+      {isLoaded && (
         <Container className="">
           <div className="row">
-            <div className="col">
+            <div className="col-lg-5">
               <div className="img_wrapper">
                 {true && ( // replace false by uri
                   <img
                     src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
                     alt="item"
                     height={508}
-                    width={508}
                   />
                   // <img src={nft?.metadata?.cid} alt="item" />
                 )}
@@ -279,9 +274,186 @@ function MyNFTDetail() {
                   // <img src={nft?.metadata?.cid} alt="item" />
                 )} */}
               </div>
+              <div>
+                <div class="card card-style">
+                  <div class="card-header">
+                    <h5 class="card-title fs-5">Description</h5>
+                  </div>
+                  <div class="card-body text-capitalize fs-6">
+                    <p class="card-text">Certificate: {nft?.metadata?.name}</p>
+                    <p class="card-text">
+                      Certificate's Owner: {nft?.metadata?.cer_owner}
+                    </p>
+                    <p class="card-text">Student ID: {nft?.metadata?.id}</p>
+                    <div
+                      class="card-text d-flex justify-content-between align-items-center"
+                      style={{ width: '300px' }}
+                    >
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div>Status: </div>
+                        {status.isPublic ? (
+                          <Tag
+                            color="cyan"
+                            className="text-dark ms-2"
+                            style={{
+                              padding: '6px 16px',
+                              letterSpacing: '2px',
+                            }}
+                          >
+                            Public
+                          </Tag>
+                        ) : (
+                          <Tag
+                            color="gold"
+                            className="text-dark ms-2"
+                            style={{
+                              padding: '6px 16px',
+                              letterSpacing: '2px',
+                            }}
+                          >
+                            Private
+                          </Tag>
+                        )}
+                      </div>
+                      <button className="btn btn-primary">Set Public</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="col">
-              <Form>
+            <div className="col-lg-7 h-50">
+              <div className="mt-2">
+                <h3 className="text-capitalize">{`${
+                  nft?.metadata?.center
+                } #${Number(nft?.id)}`}</h3>
+              </div>
+              <div class="card card-style">
+                <div class="card-body d-flex justify-content-between">
+                  <button class="btn btn-primary">Set price</button>
+                  <h2>price</h2>
+                  <button class="btn btn-danger">Cancel listing</button>
+                </div>
+              </div>
+              <div className="d-flex flex-column">
+                <div
+                  class="input-group mt-3"
+                  style={{
+                    borderRadiusBottomRight: 'none',
+                    borderRadiusBottomLeft: 'none',
+                  }}
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Recipient's username"
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                  />
+                  <button className="btn btn-success">Add viewer</button>
+                  <button className="btn btn-danger">Remove All</button>
+                </div>
+
+                <div className="">
+                  <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <div class="accordion-header " id="headingOne">
+                        <button
+                          class="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseOne"
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                        >
+                          Approved Viewers
+                        </button>
+                      </div>
+                      <div
+                        id="collapseOne"
+                        class="accordion-collapse collapse show"
+                        aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div class="accordion-body">
+                          <ul className="list-group">
+                            {viewers.map((viewer, index) => {
+                              const prinp = viewer.toString()
+                              return (
+                                <li className="list-group-item" key={index}>
+                                  <p>{prinp}</p>
+                                  <button className="btn-btn-secondary">
+                                    Remove
+                                  </button>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* </div> */}
+            {/* <div className="row"> */}
+          </div>
+          <Modal
+            title="Transfer NFT"
+            visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <ImageWrapper>
+              {/* {nft?.metadata?.cid && ( // replace false by uri */}
+              {true && ( // replace false by uri
+                <img
+                  src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
+                  alt="item"
+                />
+                // <img src={nft?.metadata?.cid} alt="item" />
+              )}
+            </ImageWrapper>
+            <Form.Item className="mt-5" label="Recipient wallet id">
+              <Input type="text" onChange={handleChange} name="prinpTransfer" />
+            </Form.Item>
+          </Modal>
+        </Container>
+      )}
+    </div>
+  )
+}
+
+export default MyNFTDetail
+
+const Container = styled.div`
+  .img_wrapper {
+    width: 100%;
+    height: 508px;
+    border-radius: 8px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+`
+
+const ImageWrapper = styled.div`
+  width: 508px;
+  height: 508px;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  margin: 0 auto;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`
+
+{
+  /* <Form>
                 <Form.Item label="Education center">
                   <h1>{nft?.metadata?.center}</h1>
                 </Form.Item>
@@ -294,21 +466,21 @@ function MyNFTDetail() {
                 <div className="row">
                   <div className="col">
                     <Form.Item label="Status">
-                      {/* {!status.isPublic && ( // replace true by is private
+                      {!status.isPublic && ( 
                         <Tag color="gold">Private</Tag>
                       )}
-                      {status.isPublic && ( // replace false by is public
+                      {status.isPublic && ( 
                         <Tag color="cyan">Public</Tag>
-                      )} */}
-                      {true && ( // replace true by is private
+                      )}
+                      {true && ( 
                         <Tag color="gold">Private</Tag>
                       )}
-                      {false && ( // replace false by is public
+                      {false && ( 
                         <Tag color="cyan">Public</Tag>
                       )}
                     </Form.Item>
                   </div>
-                  {true && ( // replace true by is private
+                  {true && ( 
                     <div className="col">
                       <Button type="primary" onClick={showConfirm}>
                         Set public
@@ -387,9 +559,9 @@ function MyNFTDetail() {
                           {action === 'Remove' ? (
                             <Input
                               type="text"
-                              // placeholder={`${infoUpdate.prinpRemove}`}
-                              // onChange={handleChange}
-                              // name="prinpViewer"
+                              placeholder={`${infoUpdate.prinpRemove}`}
+                              onChange={handleChange}
+                              name="prinpViewer"
                             />
                           ) : (
                             <Input
@@ -399,12 +571,12 @@ function MyNFTDetail() {
                               name="prinpViewer"
                             />
                           )}
-                          {/* <Input
+                          <Input
                             type="text"
                             placeholder="Principal of viewer"
                             onChange={handleChange}
                             name="prinpViewer"
-                          /> */}
+                          />
                         </div>
                         <div className="col">
                           <Button type="primary" onClick={doAction}>
@@ -415,72 +587,5 @@ function MyNFTDetail() {
                     </>
                   )}
                 </Form.Item>
-              </Form>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <CardWrapper>aa</CardWrapper>
-            </div>
-            <div className="col"></div>
-          </div>
-          <Modal
-            title="Transfer NFT"
-            visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
-          >
-            <ImageWrapper>
-              {/* {nft?.metadata?.cid && ( // replace false by uri */}
-              {true && ( // replace false by uri
-                <img
-                  src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
-                  alt="item"
-                />
-                // <img src={nft?.metadata?.cid} alt="item" />
-              )}
-            </ImageWrapper>
-            <Form.Item className="mt-5" label="Recipient wallet id">
-              <Input type="text" onChange={handleChange} name="prinpTransfer" />
-            </Form.Item>
-          </Modal>
-        </Container>
-      )}
-    </div>
-  )
+              </Form> */
 }
-
-export default MyNFTDetail
-
-const Container = styled.div`
-  .img_wrapper {
-    width: 100%;
-    height: 350px;
-    border-radius: 8px;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-`
-
-const ImageWrapper = styled.div`
-  width: 508px;
-  height: 508px;
-  border-radius: 8px;
-  border: 1px dashed #ccc;
-  margin: 0 auto;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-`
-const CardWrapper = styled.div`
-  padding: 28px 28px;
-  border: 2px solid rgba(99, 69, 237, 0.1);
-  border-radius: 12px;
-  background-color: #343444;
-  transition: all 0.3s ease;
-`
