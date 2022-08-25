@@ -7,12 +7,11 @@ import { withContext } from '../../hooks/index'
 import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
+import { useNavigate } from 'react-router-dom'
 
 function NavBar(props) {
-  // console.log(props)
-  const { role, logout, setRole } = props
-  const [pathRoles, setPathRoles] = useState([])
-  const [Component, setComponent] = useState(null)
+  const navigate = useNavigate()
+  const { role, logout, setRole, login, balanceDIP20 } = props
   const { principal, isConnected, disconnect } = useConnect()
 
   useEffect(() => {
@@ -20,12 +19,7 @@ function NavBar(props) {
   }, [role])
 
   const onConnectWallet = async () => {
-    try {
-      console.log(principal)
-      console.log('Connected to Plug')
-    } catch (e) {
-      console.log(e)
-    }
+    login()
   }
 
   const onDisconnect = () => {
@@ -47,6 +41,7 @@ function NavBar(props) {
             {role === 'admin' && <NavbarAdmin />}
           </div>
           <div className="d-flex align-items-center h100">
+            {balanceDIP20 && <div>{balanceDIP20}</div>}
             {principal && <div className="wallet_id">{principal}</div>}
             <ConnectButton
               onConnect={onConnectWallet}

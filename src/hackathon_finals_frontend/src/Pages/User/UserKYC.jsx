@@ -7,6 +7,7 @@ import { storeFiles } from '../../Utils/web3Storage'
 import { PlusOutlined } from '@ant-design/icons'
 import { Form, Input, Button, Select } from 'antd'
 import { axios } from 'axios'
+import { toast } from 'react-toastify'
 
 function UserKYC() {
   const { principal, connect, isConnected } = useConnect()
@@ -25,7 +26,7 @@ function UserKYC() {
 
   const getEducations = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?isKYCVerified=false'
+      'http://localhost:5000/api/v1/education?status=approved'
     )
     setEducationList(res.data.education)
   }
@@ -63,16 +64,19 @@ function UserKYC() {
       }
     }
 
-    const res = await axios.post(
-      'http://localhost:5000/api/v1/request',
-      formData
-    )
+    const res = await axios
+      .post('http://localhost:5000/api/v1/request', formData)
+      .catch(() => {
+        toast.error('Submit request failed', { autoClose: 1500 })
+      })
 
     console.log(res)
     // Doing something to notification to user
     if (res.status === 201) {
       console.log('success')
+      toast.success('Submit request successfully', { autoClose: 1500 })
     } else {
+      toast.error('Submit request failed', { autoClose: 1500 })
       console.log('error')
     }
   }
@@ -90,6 +94,7 @@ function UserKYC() {
             ...values,
             imageNFT: file,
             principal,
+            status: 'pending',
           }))
         } else if (inputField === 'imgKYC') {
           setImgUriKYC(result)
@@ -143,7 +148,7 @@ function UserKYC() {
           <div className="col">
             <Form.Item label="Date of Birth">
               <Input
-                type="text"
+                type="date"
                 name="dob"
                 id="dob"
                 value={user.dob || ''}

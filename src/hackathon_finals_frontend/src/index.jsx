@@ -12,6 +12,8 @@ import { PlugWallet } from '@connect2ic/core/providers/plug-wallet'
 import { canisterId } from '../../declarations/final_be/index.js'
 import { idlFactory } from '../../declarations/final_be/final_be.did.js'
 import Provider from './hooks/index'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const canisterDefinitions = {
   superheroes: { idlFactory, canisterId },
@@ -45,6 +47,17 @@ function App() {
               })}
             </Routes>
             <ConnectDialog />
+            <ToastContainer
+              position="top-right"
+              autoClose={2500}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
           </Container>
         </Provider>
       </Connect2ICProvider>

@@ -1,0 +1,9 @@
+.ant-modal-confirm-btns{
+    button{
+        margin: 10px 0px;
+    }
+}
+
+.ant-modal-confirm .ant-modal-confirm-btns .ant-btn + .ant-btn {
+    margin-left: 0px !important;
+}

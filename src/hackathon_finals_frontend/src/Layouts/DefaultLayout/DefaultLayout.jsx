@@ -5,11 +5,11 @@ import { useContext } from 'react'
 import { Context } from '../../hooks/index'
 
 function DefaultLayout({ children }) {
-  const { isLoading } = useContext(Context)
+  const { isLoaded } = useContext(Context)
 
   return (
     <>
-      {!isLoading && (
+      {isLoaded && (
         <div>
           <Navbar />
           <Body className="container">{children}</Body>

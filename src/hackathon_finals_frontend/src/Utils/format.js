@@ -9,7 +9,6 @@ const formatDay = date => {
 }
 
 const bufferToURI = image => {
-  console.log('image', image)
   const uri = `data:image/${image.contentType};base64,${Buffer.from(
     image.data
   ).toString('base64')}`

@@ -5,6 +5,9 @@ import { EyeOutlined } from '@ant-design/icons'
 import { Table, Button, Modal, Form, Input, Tag } from 'antd'
 import styled from 'styled-components'
 import { formatDate, bufferToURI } from '../.././Utils/format'
+import { final_be } from '../../../../declarations/final_be'
+import { Principal } from '@dfinity/principal'
+import { toast } from 'react-toastify'
 
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
@@ -89,10 +92,37 @@ function AdminPage() {
     setIsModalVisible(false)
   }
 
-  const approveRequest = async id => {}
+  const approveRequest = async id => {
+    const principal = requestModal.principal
+    try {
+      console.log(await final_be.callerToText())
+      await final_be.addCenter({
+        address: Principal.fromText(principal),
+        volume: 0,
+      })
+      const res = await axios.patch(
+        `http://localhost:5000/api/v1/education/${id}`,
+        {
+          status: 'approved',
+        }
+      )
+      console.log(res)
+      fetchRequestKYC()
+      if (res.status === 200) {
+        console.log('success')
+        toast.success('Approve successfully')
+      } else {
+        toast.error('Approve fail')
+        console.log('error')
+      }
+      setIsModalVisible(false)
+    } catch (error) {
+      toast.error('Approve fail')
+      console.log(error)
+    }
+  }
 
   const rejectRequest = async id => {
-    console.log(id)
     const res = await axios.patch(
       `http://localhost:5000/api/v1/education/${id}`,
       {
@@ -103,8 +133,10 @@ function AdminPage() {
     fetchRequestKYC()
     if (res.status === 200) {
       console.log('success')
+      toast.success('Reject successfully')
     } else {
       console.log('error')
+      toast.error('Reject fail')
     }
     setIsModalVisible(false)
   }
@@ -112,31 +144,6 @@ function AdminPage() {
   return (
     <div>
       <h1>Admin Page</h1>
-      {/* {requestKYC.map(education => {
-          const { address, image, legalRepresentative, name, _id, createdAt } =
-            education
-          const formatDate = Moment(new Date(createdAt)).format(
-            'DD-MM-YYYY HH:mm:ss'
-          )
-          return (
-            <li key={_id}>
-              <h3>{name}</h3>
-              <img
-                src={`data:image/${image.contentType};base64,${Buffer.from(
-                  image.data
-                ).toString('base64')}`}
-                alt=""
-                width="200"
-                height="300"
-              />
-              <p>{address}</p>
-              <p>{legalRepresentative}</p>
-              <p>{formatDate}</p>
-              <button onClick={() => approveRequest(education)}>Approve</button>
-              <button onClick={() => rejectRequest(education)}>Reject</button>
-            </li>
-          )
-        })} */}
       <Table columns={columns} dataSource={filteredRequestKYC} />
 
       <Modal
