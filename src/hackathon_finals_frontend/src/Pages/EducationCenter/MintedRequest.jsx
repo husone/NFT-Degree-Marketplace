@@ -3,9 +3,27 @@ import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import './MintRequest.scss'
+import { final_be } from '../../../../declarations/final_be'
+import { Principal } from '@dfinity/principal'
+import { useConnect } from '@connect2ic/react'
+import MyNFTItem from '../User/MyNFTItem'
 
 function MintedRequest() {
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const { principal } = useConnect()
+  const [listNFTMinted, setListNFTMinted] = useState([])
+
+  useEffect(() => {
+    getNFTMinted()
+  }, [])
+
+  const getNFTMinted = async () => {
+    const res = await final_be.getNFTsFromCenter(
+      Principal.fromText('2vxsx-fae')
+    )
+    console.log(res)
+    setListNFTMinted(res)
+  }
 
   const columns = [
     {
@@ -82,7 +100,7 @@ function MintedRequest() {
   return (
     <div>
       <h2 className="my-4">MINTED REQUESTS</h2>
-      <Table columns={columns} dataSource={data} />
+      {/* <Table columns={columns} dataSource={data} />
 
       <Modal
         title="Minted NFT"
@@ -127,15 +145,15 @@ function MintedRequest() {
             <Form.Item label="Name of Certificate" name="nameOfCertificate">
               <Input value={'temp name of certificate'} />
             </Form.Item>
-          </Form>
+          </Form> */}
 
-          {/* <Container className="wrap_img">
+      {/* <Container className="wrap_img">
             {
               false && // render image if exist, replace false by uri
               <img src="" alt="preview image" srcset="" />
             }
           </Container> */}
-
+      {/* 
           <Form
             labelCol={{ span: 12 }}
             wrapperCol={{ span: 20 }}
@@ -162,7 +180,10 @@ function MintedRequest() {
             </Form.Item>
           </Form>
         </div>
-      </Modal>
+      </Modal> */}
+      {listNFTMinted.map(nft => {
+        return <MyNFTItem nft={nft} key={Number(nft?.id)} />
+      })}
     </div>
   )
 }
