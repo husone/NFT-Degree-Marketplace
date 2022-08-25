@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <FooterWrapper className="d-flex justify-content-around py-3">
+    <FooterWrapper className="d-flex justify-content-around py-4">
       <div className="footer_about">
         <div className="footer_contact d-flex align-items-center justify-content-between my-3">
         <div className="footer_logo d-flex flex-column align-items-start">
@@ -74,7 +74,7 @@ const FooterWrapper = styled.div`
   width: 100%;
   height: 150px;
   border-top: 1px solid rgba(19, 21, 21, 0.7);
-background-color: rgba(0, 0, 0, 0.91);
+  background-color: rgba(0, 0, 0, 0.91);
   column-gap: 25px;
   .footer_logo {
     column-gap: 10px;
@@ -109,7 +109,9 @@ background-color: rgba(0, 0, 0, 0.91);
       font-size: 16px;
       line-height: 35px;
       &:hover{
-        color: #f052a4;
+        background-image: linear-gradient(45deg, #ff00aa, #3f35ff) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
       }
     }
   }

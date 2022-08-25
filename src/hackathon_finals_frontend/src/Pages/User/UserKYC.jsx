@@ -113,7 +113,7 @@ function UserKYC() {
 
   return (
     <div>
-      <h2 className="py-4">User KYC page</h2>
+      <h2 className="py-4 mx-4 heading1">User KYC page</h2>
       <Form
         onFinish={handleSubmit}
         encType="multipart/form-data"

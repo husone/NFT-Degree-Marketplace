@@ -87,7 +87,7 @@ function EducationKYC() {
 
   return (
     <div>
-      <h2 className="py-4">Education KYC page</h2>
+      <h2 className="py-4 mx-4 heading1">Education KYC page</h2>
 
       {/* FORM */}
       <Form

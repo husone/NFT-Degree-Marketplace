@@ -1,9 +1,9 @@
 .ant-table-thead .ant-table-cell {
-  font-weight: bolder !important;
-  background: #e3e1e1;
+  font-size: 16px;
+  background: #14161B;
 }
 colgroup {
-  background: rgba(230, 227, 227, 0.42);
+  background: #343444;
 }
 .ant-table-tbody > tr.ant-table-row:hover > td {
   background: rgba(240, 82, 164, 0.1) !important ;
@@ -19,7 +19,8 @@ colgroup {
   border-radius: 5px !important;
 }
 .ant-input {
-  border-radius: 5px !important;
+  border-radius: 8px !important;
+  height: 40px;
   &:focus {
     border-color: #f052a4 !important;
     box-shadow: 0 0 0 2px #f052a4 !important;
@@ -34,6 +35,9 @@ colgroup {
 .btn-submit-custom {
   font-weight: bold !important;
   height: 2.5rem;
+  background-color: #343444 !important;
+  color: #fff;
+  border: none !important;
 }
 .btn-submit-custom:hover {
   background: #41ec8b !important;
@@ -77,4 +81,60 @@ colgroup {
   .ant-form-item-label > label {
     color: rgb(111, 110, 110);
 }
+}
+
+.ant-table-tbody > tr.ant-table-placeholder:hover > td {
+  background-color: #3c3939 !important;
+}
+
+.ant-spin-nested-loading{
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td{
+  border-bottom: 0px !important;
+}
+
+.ant-input{
+  background-color: #343444 !important;
+  border: none !important;
+}
+
+.ant-select-selector{
+  background-color: #343444 !important;
+  border: none !important;
+  width: 100%;
+  height: 100% !important;
+  display: flex;
+  align-items: center;
+  .ant-select-selection-search{
+    line-height: 40px;
+  }
+}
+
+.ant-select.ant-select-in-form-item{
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100% !important;
+}
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: #3c3939 !important;
+  box-shadow: 0px 0px 5px 2px #ffffff15;
+}
+.rc-virtual-list-holder-inner{
+  background-color: #3c3939 !important;
+}
+
+.ant-select-dropdown{
+  background-color: #3c3939 !important;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.heading1{
+  font-size: 43px;
+  font-weight: 700;
 }
