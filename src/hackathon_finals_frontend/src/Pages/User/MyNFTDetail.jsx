@@ -10,6 +10,9 @@ import styled from 'styled-components'
 import '../NFTs/DetailNFT.scss'
 import { Button, Input, Form, Tag, Space, Divider, Modal, Alert } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { toast } from 'react-toastify'
+
+const { confirm } = Modal
 
 function MyNFTDetail() {
   const navigate = useNavigate()
@@ -20,8 +23,8 @@ function MyNFTDetail() {
   const [status, setStatus] = useState(null)
   const [viewers, setViewers] = useState([])
   const [action, setAction] = useState('')
-  const [isPublic, setPublic] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [infoUpdate, setInfoUpdate] = useState({})
 
   useEffect(() => {
     loadStatusNFT()
@@ -43,9 +46,19 @@ function MyNFTDetail() {
           getNftFromDB()
         }
       }
+      getNFTViewer()
       setIsLoaded(true)
     }
   }, [status])
+
+  const handleChange = event => {
+    const name = event.target.name
+    const value = event.target.value
+    setInfoUpdate(values => ({
+      ...values,
+      [name]: value,
+    }))
+  }
 
   const loadStatusNFT = async () => {
     const res = await final_be.isPublic(BigInt(id))
@@ -67,11 +80,13 @@ function MyNFTDetail() {
   const getNftFromDB = async () => {
     const res = await axios.get(`http://localhost:5000/api/v1/nft?id=${id}`)
     console.log(res?.data?.nft[0])
-    const { education, name, cer_owner, tokenID, imgURI } = res?.data?.nft[0]
+    const { education, name, cer_owner, tokenID, imgURI, studentID } =
+      res?.data?.nft[0]
     setNft({
       id: tokenID,
       price: 0,
       metadata: {
+        id: studentID,
         center: education.name,
         name: name,
         cid: imgURI,
@@ -84,84 +99,141 @@ function MyNFTDetail() {
     setIsModalVisible(true)
   }
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    if (infoUpdate.prinpTransfer) {
+      const res = await final_be.transferDIP721(
+        BigInt(id),
+        Principal.fromText(infoUpdate.prinpTransfer)
+      )
+      console.log(res)
+      toast.success('Transfer NFT successfully')
+      setIsModalVisible(false)
+      navigate('/my-nfts', { replace: true })
+    }
     setIsModalVisible(false)
   }
+
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
   const showConfirm = () => {
     confirm({
-      title: 'Do you Want to set public this item?',
+      title: 'Do you want to set public this NFT?',
       icon: <ExclamationCircleOutlined />,
       content: "You can't change item to private after set public",
       onOk() {
-        setPublic(true)
+        setNFTPublic()
       },
       onCancel() {
         console.log('Cancel')
       },
     })
   }
+
+  const info = () => {
+    Modal.info({
+      title: 'Notification message',
+      content: (
+        <div>
+          <p>You have to set public to use this function</p>
+          <p>
+            Click set public button to set public NFT. You can't change item to
+            private after set public
+          </p>
+        </div>
+      ),
+
+      onOk() {},
+    })
+  }
+
   const getNFTViewer = async () => {
-    const res = await final_be.getViewers()
-    console.log(res)
+    const res = await final_be.getViewers(BigInt(id))
+    setViewers(res)
   }
   const setPrice = async () => {
     // a is price from input
-    let a
-    const res = await final_be.listing(BigInt(id), a)
+    if (!status.isPublic) {
+      info()
+    } else {
+      if (infoUpdate.price) {
+        const res = await final_be.listing(BigInt(id), BigInt(infoUpdate.price))
+        console.log(res)
+      } else {
+        toast.warn('Please input wallet address of receiver')
+      }
+    }
   }
 
   const transfer = async () => {
-    // a is principal receive from input
-    let a
-    const res = await final_be.transferDIP721(BigInt(id), Principal.fromText(a))
+    if (!status.isPublic) {
+      info()
+    } else {
+      showModal()
+      // a is principal receive from input
+    }
   }
 
   const approveView = async () => {
     // a is principal receive from input
-    let a
-    const res = await final_be.approveView(BigInt(id), Principal.fromText(a))
-    getNft()
+    if (infoUpdate.prinpViewer) {
+      const res = await final_be.approveView(
+        BigInt(id),
+        Principal.fromText(infoUpdate.prinpViewer)
+      )
+      console.log(res)
+      toast.success('Approve viewer NFT successfully')
+    }
   }
 
   const removeAllView = async () => {
     const res = await final_be.removeAllView(BigInt(id))
+    toast.success('Remove all viewer NFT successfully')
+    console.log(res)
   }
 
   const removeView = async () => {
-    const res = await final_be.removeView(BigInt(id))
+    if (infoUpdate.prinpViewer) {
+      const res = await final_be.removeView(
+        BigInt(id),
+        Principal.fromText(infoUpdate.prinpViewer)
+      )
+      console.log(res)
+      toast.success('Remove viewer NFT successfully')
+    }
   }
 
   const setNFTPublic = async () => {
     const metadata = {
-      id: nft?.id,
+      id: nft?.metadata?.id,
       cid: nft?.metadata?.cid,
       center: nft?.metadata?.center,
       name: nft?.metadata?.name,
       cer_owner: nft?.metadata?.cer_owner,
     }
     const res = await final_be.setPublic(BigInt(id), metadata)
+    console.log(res)
+    setStatus({ ...status, isPublic: true })
+  }
+
+  const doAction = () => {
+    switch (action) {
+      case 'Add':
+        approveView()
+        break
+      case 'Remove':
+        removeView()
+        break
+      default:
+        console.log('Invalid action')
+    }
+    getNFTViewer()
+    setAction('')
   }
 
   return (
     <div>
-      <h1>My NFT Detail</h1>
-      {/* {isLoaded && (
-        <div>
-          <div>MyNFTDetail</div>
-          <img src={nft?.metadata?.cid} alt="" width="500" height="500" />
-          <h2>Education center : {nft?.metadata?.center}</h2>
-          <p>#{Number(nft?.id)}</p>
-          <p>Certificate: {nft?.metadata?.name}</p>
-          <p>${nft?.price}</p>
-          <button>Set Price</button>
-          <button>Transfer</button>
-          <button>Set public</button>
-        </div>
-      )} */}
       {isLoaded && (
         <Container className="mt-5">
           <div className="row">
@@ -186,10 +258,10 @@ function MyNFTDetail() {
                 <div className="row">
                   <div className="col">
                     <Form.Item label="Status">
-                      {!isPublic && ( // replace true by is private
+                      {!status.isPublic && ( // replace true by is private
                         <Tag color="gold">Private</Tag>
                       )}
-                      {isPublic && ( // replace false by is public
+                      {status.isPublic && ( // replace false by is public
                         <Tag color="cyan">Public</Tag>
                       )}
                     </Form.Item>
@@ -204,12 +276,17 @@ function MyNFTDetail() {
                 </div>
                 <div className="row">
                   <div className="col">
-                    <Form.Item label="$Price">
-                      <Input type="text" defaultValue={nft?.price} />
+                    <Form.Item label={`$${nft?.price}`}>
+                      <Input type="text" onChange={handleChange} name="price" />
                     </Form.Item>
                   </div>
                   <div className="col">
-                    <Button type="primary" onClick={showModal}>
+                    <Button type="primary" onClick={setPrice}>
+                      Set price
+                    </Button>
+                  </div>
+                  <div className="col">
+                    <Button type="primary" onClick={transfer}>
                       Transfer
                     </Button>
                   </div>
@@ -227,7 +304,9 @@ function MyNFTDetail() {
                         >
                           Remove
                         </Button>
-                        <Button type="primary">Remove at</Button>
+                        <Button type="primary" onClick={removeAllView}>
+                          Remove all
+                        </Button>
                       </Space>
                     </div>
                     <div className="col"></div>
@@ -237,10 +316,15 @@ function MyNFTDetail() {
                       <Divider orientation="left">{action} viewer:</Divider>
                       <div className="row">
                         <div className="col">
-                          <Input type="text" placeholder="#Id of viewer" />
+                          <Input
+                            type="text"
+                            placeholder="Principal of viewer"
+                            onChange={handleChange}
+                            name="prinpViewer"
+                          />
                         </div>
                         <div className="col">
-                          <Button type="primary" onClick={() => setAction('')}>
+                          <Button type="primary" onClick={doAction}>
                             Done
                           </Button>
                         </div>
@@ -259,12 +343,12 @@ function MyNFTDetail() {
             onCancel={handleCancel}
           >
             <ImageWrapper>
-              {false && ( // replace false by uri
-                <img src="" alt="item" />
+              {nft?.metadata?.cid && ( // replace false by uri
+                <img src={nft?.metadata?.cid} alt="item" />
               )}
             </ImageWrapper>
             <Form.Item className="mt-5" label="Recipient wallet id">
-              <Input type="text" />
+              <Input type="text" onChange={handleChange} name="prinpTransfer" />
             </Form.Item>
           </Modal>
         </Container>

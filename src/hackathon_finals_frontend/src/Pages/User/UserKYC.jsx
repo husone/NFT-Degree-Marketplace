@@ -94,6 +94,7 @@ function UserKYC() {
             ...values,
             imageNFT: file,
             principal,
+            status: 'pending',
           }))
         } else if (inputField === 'imgKYC') {
           setImgUriKYC(result)

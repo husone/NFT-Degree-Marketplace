@@ -3,7 +3,7 @@ import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
-import { formatDate, bufferToURI } from '../../Utils/format'
+import { formatDate, bufferToURI, formatDay } from '../../Utils/format'
 import { useConnect } from '@connect2ic/react'
 import './MintRequest.scss'
 import { storeFiles } from '../../Utils/web3Storage'
@@ -156,8 +156,8 @@ function MintRequest() {
   }
   const mintNFT = async fileImg => {
     console.log('Minting')
-    // const cid = await storeFiles([fileImg])
-    const cid = 'bafybeidleheqry3sz2cv4thik5hqzn7g7eiympe252mom5hocfi2revjem'
+    const cid = await storeFiles([fileImg])
+    // const cid = 'bafybeicrg2mwwdfub5j57bxqef2axuygktuhae4n4ttw2yeat337u2wyj4'
     const fileNameImg = fileImg.name
     const tokenURI = `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`
     const { name, education, studentID, nationID, dob, certificate, _id } =
@@ -175,6 +175,7 @@ function MintRequest() {
       metadata
     )
     console.log(resCanister)
+    console.log('store canister')
     if (Object.keys(resCanister)[0] !== 'Ok') {
       console.log('error')
     } else {
@@ -190,11 +191,14 @@ function MintRequest() {
         cer_owner: name,
         imgURI: tokenURI,
       }
+      console.log(JSON.stringify(data))
       const res = await axios.post('http://localhost:5000/api/v1/nft', data)
+      console.log('store db')
       if (res.status === 201) {
         await axios.patch(`http://localhost:5000/api/v1/request/${_id}`, {
           status: 'approved',
         })
+        console.log('change request db')
         getAllRequests()
       } else {
         console.log('error')
@@ -276,7 +280,7 @@ function MintRequest() {
             </Form.Item>
 
             <Form.Item label="Date of Birth" name="dob">
-              <Input placeholder={requestModal.dob} />
+              <Input placeholder={formatDay(requestModal.dob)} />
             </Form.Item>
 
             <Form.Item label="Education center" name="educationCenter">

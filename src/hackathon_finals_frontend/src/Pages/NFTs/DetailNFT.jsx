@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Button, Input, Form, Tag, Space, Divider, Modal, Alert } from "antd";
-import styled from "styled-components";
-import { ExclamationCircleOutlined } from "@ant-design/icons"
-import "./DetailNFT.scss"
-
+import { Button, Input, Form, Tag, Space, Divider, Modal, Alert } from 'antd'
+import styled from 'styled-components'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+import './DetailNFT.scss'
 
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
@@ -12,10 +11,10 @@ import { final_be } from '../../../../declarations/final_be'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 
-const { confirm } = Modal;
+const { confirm } = Modal
 
 function DetailNFT() {
-  const [action, setAction] = useState(""); // action for viewer : add - remove
+  const [action, setAction] = useState('') // action for viewer : add - remove
   const [isPublic, setPublic] = useState(false) // public-private
   const navigate = useNavigate()
   const { principal } = useConnect()
@@ -24,19 +23,19 @@ function DetailNFT() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [status, setStatus] = useState(null)
 
-  useEffect(() => {
-    if (status) {
-      const { isPublic, isViewed } = status
-      if (isPublic || isViewed) {
-        getNft()
-        setIsLoaded(true)
-      } else {
-        navigate('/', {
-          replace: true,
-        })
-      }
-    }
-  }, [status])
+  // useEffect(() => {
+  //   if (status) {
+  //     const { isPublic, isViewed } = status
+  //     if (isPublic || isViewed) {
+  //       getNft()
+  //       setIsLoaded(true)
+  //     } else {
+  //       navigate('/', {
+  //         replace: true,
+  //       })
+  //     }
+  //   }
+  // }, [status])
 
   const loadStatusNFT = async () => {
     const res = await final_be.isPublic(BigInt(id))
@@ -61,17 +60,16 @@ function DetailNFT() {
   }
 
   // belong modal transfer
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const showModal = () => {
-    setIsModalVisible(true);
-  };
+    setIsModalVisible(true)
+  }
   const handleOk = () => {
-    setIsModalVisible(false);
-  };
+    setIsModalVisible(false)
+  }
   const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
+    setIsModalVisible(false)
+  }
 
   const showConfirm = () => {
     confirm({
@@ -82,10 +80,10 @@ function DetailNFT() {
         setPublic(true)
       },
       onCancel() {
-        console.log('Cancel');
+        console.log('Cancel')
       },
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -93,40 +91,34 @@ function DetailNFT() {
         <div className="row">
           <div className="col">
             <div className="img_wrapper">
-              {
-                false &&// replace false by uri
+              {false && ( // replace false by uri
                 <img src="" alt="item" />
-              }
+              )}
             </div>
           </div>
           <div className="col">
             <Form>
-              <Form.Item
-                label="Education"
-              >
-                <h1>{"#NFT id"}</h1>
+              <Form.Item label="Education">
+                <h1>{'#NFT id'}</h1>
               </Form.Item>
               <div className="row">
                 <div className="col">
-                  <Form.Item
-                    label="Status"
-                  >
-                    {
-                      !isPublic && // replace true by is private
+                  <Form.Item label="Status">
+                    {!isPublic && ( // replace true by is private
                       <Tag color="gold">Private</Tag>
-                    }
-                    {
-                      isPublic && // replace false by is public
+                    )}
+                    {isPublic && ( // replace false by is public
                       <Tag color="cyan">Public</Tag>
-                    }
+                    )}
                   </Form.Item>
                 </div>
-                {
-                  true && // replace true by is private
+                {true && ( // replace true by is private
                   <div className="col">
-                    <Button type="primary" onClick={showConfirm}>Set public</Button>
+                    <Button type="primary" onClick={showConfirm}>
+                      Set public
+                    </Button>
                   </div>
-                }
+                )}
               </div>
               <div className="row">
                 <div className="col">
@@ -135,7 +127,9 @@ function DetailNFT() {
                   </Form.Item>
                 </div>
                 <div className="col">
-                  <Button type="primary" onClick={showModal}>Buy</Button>
+                  <Button type="primary" onClick={showModal}>
+                    Buy
+                  </Button>
                 </div>
               </div>
               {/* <Form.Item
@@ -172,39 +166,40 @@ function DetailNFT() {
           </div>
         </div>
 
-        <Modal title="Transfer NFT" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal
+          title="Transfer NFT"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
           <ImageWrapper>
-            {
-              false &&// replace false by uri
+            {false && ( // replace false by uri
               <img src="" alt="item" />
-            }
+            )}
           </ImageWrapper>
-          <Form.Item
-            className="mt-5"
-            label="Recipient wallet id"
-          >
+          <Form.Item className="mt-5" label="Recipient wallet id">
             <Input type="text" />
           </Form.Item>
         </Modal>
-      </Container >
+      </Container>
     </>
   )
 }
 
 export default DetailNFT
 const Container = styled.div`
-  .img_wrapper{
+  .img_wrapper {
     width: 350px;
     height: 350px;
     border-radius: 8px;
     border: 1px dashed #ccc;
     overflow: hidden;
-    img{
+    img {
       width: 100%;
       height: 100%;
     }
   }
-`;
+`
 
 const ImageWrapper = styled.div`
   width: 350px;
@@ -213,8 +208,8 @@ const ImageWrapper = styled.div`
   border: 1px dashed #ccc;
   margin: 0 auto;
   overflow: hidden;
-  img{
+  img {
     width: 100%;
     height: 100%;
   }
-`;
+`
