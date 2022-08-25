@@ -20,7 +20,6 @@ import Types "./Types";
 import token "token";
 import types "types";
 import Random "mo:base/Random";
-// buy, getfromCenter, isOwner, 
 
 shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   stable var transactionId: Types.TransactionId = 0;
@@ -152,8 +151,9 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   // trade NFT 
-  var nftPrices = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
   stable var prices : [(Text, Nat)] = [];
+  let nftPrices = HashMap.fromIter<Text, Nat>(prices.vals(), 0, Text.equal, Text.hash);
+  
    public shared({ caller }) func listing(tokenID: Nat64, price: Nat) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     switch (item) {
@@ -345,11 +345,11 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
 
-  public shared({caller}) func approveView(token_id: Nat64, user: Principal) {
+  public shared({caller}) func approveView(token_id: Nat64, user: Principal) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case (null) {
-        return;
+        return #Err(#InvalidTokenId);
       };
       case (?token) {
         assert token.owner == caller;
@@ -358,17 +358,21 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
           case (null) {
             var new_viewers : List.List<Principal> = List.fromArray([user]);
             allowances.put(Nat64.toText(token_id), new_viewers);
+            return #Ok(0);
           };
           case (?(viewer)) {
             var test : [var Principal] = List.toVarArray(viewer);
             let buf : Buffer.Buffer<Principal> = Buffer.Buffer(test.size());
             for (value in test.vals()) {
+                if (value == user) {
+                  return #Err(#Other);
+                };
                 buf.add(value);
             };
             buf.add(user);
             var new_viewer : List.List<Principal> = List.fromArray(buf.toArray());
             allowances.put(Nat64.toText(token_id), new_viewer);
-
+            return #Ok(0);
           }; 
         };
 
@@ -377,18 +381,18 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
 
-  public shared({caller}) func removeView(token_id: Nat64, user: Principal) {
+  public shared({caller}) func removeView(token_id: Nat64, user: Principal) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case (null) {
-        return;
+        return #Err(#InvalidTokenId);
       };
       case (?token) {
         assert token.owner == caller;
         var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
         switch (viewers) {
           case (null) {
-            return;
+            return #Err(#Other);
           };
           case (?(viewer)) {
             var test : [var Principal] = List.toVarArray(viewer);
@@ -400,21 +404,23 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
             };
             var new_viewer : List.List<Principal> = List.fromArray(buf.toArray());
             allowances.put(Nat64.toText(token_id), new_viewer);
+            #Ok(0);
           }; 
         };
       };
     };
   };
 
-  public shared({caller}) func removeAllView(token_id: Nat64) {
+  public shared({caller}) func removeAllView(token_id: Nat64) : async Types.TxReceipt {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
       case (null) {
-        return;
+        return #Err(#InvalidTokenId);
       };
       case (?token) {
         assert token.owner == caller;
         allowances.delete(Nat64.toText(token_id));
+        #Ok(0);
       };
     };
   };
@@ -774,8 +780,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       };
     };
 
-    
-  public func buyNFTABCD(caller : Prinicpal, tokenID: Nat64) : async (Types.TxReceipt, ) {
+      public func buyNFTABCD(caller : Principal, tokenID: Nat64) : async (Types.TxReceipt, ) {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
     let price = nftPrices.get(Nat64.toText(tokenID));
     switch (item) {
@@ -867,5 +872,4 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       id = transactionId;
     });
   };
- 
 }
