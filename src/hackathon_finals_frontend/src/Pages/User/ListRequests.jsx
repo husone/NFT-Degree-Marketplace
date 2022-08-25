@@ -111,7 +111,7 @@ function ListRequests() {
 
   return (
     <div>
-      <h2 className="py-4 px-4">LIST OF USER'S REQUEST</h2>
+      <h2 className="py-4 px-4 heading1">LIST OF USER'S REQUEST</h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}
