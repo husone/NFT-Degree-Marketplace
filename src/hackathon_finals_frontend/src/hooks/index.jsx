@@ -4,6 +4,8 @@ import { useConnect } from '@connect2ic/react'
 import { useNavigate } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
+import { final_be } from '../../../declarations/final_be'
+import { Principal } from '@dfinity/principal'
 import axios from 'axios'
 
 export const Context = createContext()
@@ -15,11 +17,13 @@ const Provider = ({ children }) => {
   )
   const [role, setRole] = useState('user')
   const [isLoaded, setIsLoaded] = useState(false)
+  const [balanceDIP20, setBalanceDIP20] = useState('0 DBZ')
   const navigate = useNavigate()
 
   useEffect(() => {
     if (principal) {
       getRoleUser()
+      getBalanceDIP20(principal)
       setIsLoaded(true)
     }
     console.log('principal: ' + principal)
@@ -36,6 +40,10 @@ const Provider = ({ children }) => {
     }
   }, [])
 
+  const getBalanceDIP20 = async principal => {
+    const res = await final_be.balanceOfDIP20(Principal.fromText(principal))
+    setBalanceDIP20(`${Number(res).toString()} DBZ`)
+  }
   const connectWallet = async () => {
     await connect('plug')
   }
@@ -73,6 +81,7 @@ const Provider = ({ children }) => {
     setRole,
     isLoaded,
     login,
+    balanceDIP20,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

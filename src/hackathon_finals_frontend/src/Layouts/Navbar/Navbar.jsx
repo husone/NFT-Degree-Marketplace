@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 function NavBar(props) {
   const navigate = useNavigate()
-  const { role, logout, setRole, login } = props
+  const { role, logout, setRole, login, balanceDIP20 } = props
   const { principal, isConnected, disconnect } = useConnect()
 
   useEffect(() => {
@@ -41,6 +41,7 @@ function NavBar(props) {
             {role === 'admin' && <NavbarAdmin />}
           </div>
           <div className="d-flex align-items-center h100">
+            {balanceDIP20 && <div>{balanceDIP20}</div>}
             {principal && <div className="wallet_id">{principal}</div>}
             <ConnectButton
               onConnect={onConnectWallet}

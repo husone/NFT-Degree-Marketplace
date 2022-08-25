@@ -156,8 +156,8 @@ function MintRequest() {
   }
   const mintNFT = async fileImg => {
     console.log('Minting')
-    const cid = await storeFiles([fileImg])
-    // const cid = 'bafybeicrg2mwwdfub5j57bxqef2axuygktuhae4n4ttw2yeat337u2wyj4'
+    // const cid = await storeFiles([fileImg])
+    const cid = 'bafybeiagkizddtmt4cubpjsatybhs3dhkmf2g3n527h7u6foawb3fhzro4'
     const fileNameImg = fileImg.name
     const tokenURI = `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`
     const { name, education, studentID, nationID, dob, certificate, _id } =

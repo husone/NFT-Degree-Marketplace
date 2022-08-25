@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button, Input, Form, Tag, Space, Divider, Modal, Alert } from 'antd'
 import styled from 'styled-components'
-import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { ExclamationCircleOutlined, DollarTwoTone } from '@ant-design/icons'
 import './DetailNFT.scss'
-
+import { toast } from 'react-toastify'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { final_be } from '../../../../declarations/final_be'
@@ -22,30 +22,32 @@ function DetailNFT() {
   const [nft, setNft] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
+  console.log(nft)
   useEffect(() => {
     getNft()
-    setIsLoaded(true)
   }, [])
 
   const getNft = async () => {
     const res = await final_be.getNFT(BigInt(id))
     const price = await final_be.getPrice(BigInt(id))
     setNft({ ...res[0], price: Number(price) })
+    setIsLoaded(true)
   }
 
   const buyNFT = async () => {
     const res = await final_be.buyNFT(BigInt(id))
     console.log(res)
+    toast.success('Buy NFT successfully')
+    navigate('/my-nfts', { replace: true })
   }
 
   const showConfirm = () => {
     confirm({
       title: `Buy this NFT with price ${nft?.price}`,
-      icon: <ExclamationCircleOutlined />,
-      content: 'Some descriptions',
+      icon: <DollarTwoTone />,
 
       onOk() {
-        console.log('OK')
+        buyNFT()
       },
 
       onCancel() {
@@ -69,13 +71,12 @@ function DetailNFT() {
             <div className="col">
               <Form>
                 <Form.Item label="Education">
-                  <h1>{nft?.id}</h1>
+                  <h1>{nft?.metadata?.center}</h1>
+                  <h1>{`NFT #${BigInt(nft?.id)}`}</h1>
                 </Form.Item>
                 <div className="row">
                   <div className="col">
-                    <Form.Item label={`$${nft?.price}`}>
-                      <Input type="text" />
-                    </Form.Item>
+                    <Form.Item label={`$${nft?.price}`}></Form.Item>
                   </div>
                   <div className="col">
                     {nft.price !== 0 && (

@@ -98,10 +98,6 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     return receipt;
   };
 
-  
-
-  
-
   public func balanceOfDIP20(owner: Principal) : async Nat{
     let balance = await DBZ.balanceOf(owner);
     return balance;
@@ -227,7 +223,8 @@ public func getNFT(token_id : Types.TokenId) : async ?Types.Nft {
       };
       case (?token) {
         if (
-          caller == token.owner or price == ?0 
+          // caller == token.owner or price == ?0 
+          1 == 2
         ) {
           return #Err(#Unauthorized);
         } else {
