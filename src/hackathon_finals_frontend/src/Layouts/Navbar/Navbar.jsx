@@ -9,6 +9,8 @@ import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import { useNavigate } from 'react-router-dom'
 
+import "./Navbar.scss"
+
 function NavBar(props) {
   const navigate = useNavigate()
   const { role, logout, setRole, login, balanceDIP20 } = props
@@ -41,8 +43,8 @@ function NavBar(props) {
             {role === 'admin' && <NavbarAdmin />}
           </div>
           <div className="d-flex align-items-center h100">
-            {balanceDIP20 && <div>{balanceDIP20}</div>}
-            {principal && <div className="wallet_id">{principal}</div>}
+            {balanceDIP20 && <div className="mx-3">{balanceDIP20}</div>}
+            {principal && <div className="wallet_id mx-3">{principal}</div>}
             <ConnectButton
               onConnect={onConnectWallet}
               onDisconnect={onDisconnect}
@@ -69,7 +71,7 @@ const Nav = styled.nav`
   }
   .connect-button {
     color: #fff;
-    border-radius: 5px;
+    border-radius: 100px;
     border: 0px;
     padding: 0.5rem 1rem 0.5rem 1rem;
     font-weight: bold;
