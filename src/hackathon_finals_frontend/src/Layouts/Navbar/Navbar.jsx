@@ -60,7 +60,7 @@ const Nav = styled.nav`
   height: 60px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  background: #fff;
+  background: #06060e;
   position: sticky;
   top: 0px;
   z-index: 100;

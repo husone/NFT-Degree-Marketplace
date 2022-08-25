@@ -130,7 +130,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
 
   // add, delete center 
   public shared({ caller }) func addCenter(center : Types.Center)  {
-    assert caller == ad;
+    // assert caller == ad;
     if ( List.some(centers, func (c : Types.Center) : Bool { c == center })) {
       return;
     };
@@ -138,7 +138,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
-    assert caller == ad;
+    // assert caller == ad;
     var center  = List.find(centers, func (c : Types.Center) : Bool { c.address == centerPrincipal});
     centers := List.filter(centers, func (c : Types.Center) : Bool {
       return (?c != center);
@@ -146,7 +146,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared({ caller }) func getCenters() : async [Types.Center]  {
-    assert caller == ad;
+    // assert caller == ad;
     return List.toArray(centers);
   };
 
@@ -352,7 +352,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        assert token.owner == caller;
+        // assert token.owner == caller;
         var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
         switch (viewers) {
           case (null) {
@@ -388,7 +388,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        assert token.owner == caller;
+        // assert token.owner == caller;
         var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
         switch (viewers) {
           case (null) {
@@ -418,7 +418,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        assert token.owner == caller;
+        // assert token.owner == caller;
         allowances.delete(Nat64.toText(token_id));
         #Ok(0);
       };

@@ -35,38 +35,45 @@ function MyNFTDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [infoUpdate, setInfoUpdate] = useState({})
 
-  useEffect(() => {
-    loadStatusNFT()
-  }, [])
+  // useEffect(() => {
+  //   loadStatusNFT()
+  // }, [])
 
-  useEffect(() => {
-    if (status) {
-      const { isPublic, isViewed } = status
-      if (isPublic) {
-        console.log('get in canister')
-        getNft()
-      } else {
-        if (!isViewed) {
-          navigate('/', {
-            replace: true,
-          })
-        } else {
-          console.log('get in db')
-          getNftFromDB()
-        }
-      }
-      getNFTViewer()
-      setIsLoaded(true)
-    }
-  }, [status])
+  // useEffect(() => {
+  //   if (status) {
+  //     const { isPublic, isViewed } = status
+  //     if (isPublic) {
+  //       console.log('get in canister')
+  //       getNft()
+  //     } else {
+  //       if (!isViewed) {
+  //         navigate('/', {
+  //           replace: true,
+  //         })
+  //       } else {
+  //         console.log('get in db')
+  //         getNftFromDB()
+  //       }
+  //     }
+  //     getNFTViewer()
+  //     setIsLoaded(true)
+  //   }
+  // }, [status])
 
   const handleChange = event => {
-    const name = event.target.name
-    const value = event.target.value
-    setInfoUpdate(values => ({
-      ...values,
-      [name]: value,
-    }))
+    if (typeof event === 'string') {
+      setInfoUpdate(values => ({
+        ...values,
+        prinpRemove: event,
+      }))
+    } else {
+      const name = event.target.name
+      const value = event.target.value
+      setInfoUpdate(values => ({
+        ...values,
+        [name]: value,
+      }))
+    }
   }
 
   const loadStatusNFT = async () => {
@@ -203,10 +210,10 @@ function MyNFTDetail() {
   }
 
   const removeView = async () => {
-    if (infoUpdate.prinpViewer) {
+    if (infoUpdate.prinpRemove) {
       const res = await final_be.removeView(
         BigInt(id),
-        Principal.fromText(infoUpdate.prinpViewer)
+        Principal.fromText(infoUpdate.prinpRemove)
       )
       console.log(res)
       toast.success('Remove viewer NFT successfully')
@@ -248,15 +255,29 @@ function MyNFTDetail() {
   }
 
   return (
-    <div>
-      {isLoaded && (
-        <Container className="mt-5">
+    <div className="container d-flex justify-content-center align-items-center h-100 pt-5">
+      {true && (
+        <Container className="">
           <div className="row">
             <div className="col">
               <div className="img_wrapper">
-                {nft?.metadata?.cid && ( // replace false by uri
-                  <img src={nft?.metadata?.cid} alt="item" />
+                {true && ( // replace false by uri
+                  <img
+                    src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
+                    alt="item"
+                    height={508}
+                    width={508}
+                  />
+                  // <img src={nft?.metadata?.cid} alt="item" />
                 )}
+                {/* {nft?.metadata?.cid && ( // replace false by uri
+                  <img
+                    src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
+                    alt="item"
+                    height={350}
+                  />
+                  // <img src={nft?.metadata?.cid} alt="item" />
+                )} */}
               </div>
             </div>
             <div className="col">
@@ -273,10 +294,16 @@ function MyNFTDetail() {
                 <div className="row">
                   <div className="col">
                     <Form.Item label="Status">
-                      {!status.isPublic && ( // replace true by is private
+                      {/* {!status.isPublic && ( // replace true by is private
                         <Tag color="gold">Private</Tag>
                       )}
                       {status.isPublic && ( // replace false by is public
+                        <Tag color="cyan">Public</Tag>
+                      )} */}
+                      {true && ( // replace true by is private
+                        <Tag color="gold">Private</Tag>
+                      )}
+                      {false && ( // replace false by is public
                         <Tag color="cyan">Public</Tag>
                       )}
                     </Form.Item>
@@ -321,10 +348,14 @@ function MyNFTDetail() {
                     }}
                   >
                     {viewers.map((viewer, index) => {
-                      console.log(viewer[0])
+                      const prinp = viewer.toString()
                       return (
-                        <Select.Option value={viewer} key={index}>
-                          {viewer}
+                        <Select.Option
+                          value={prinp}
+                          key={index}
+                          onClick={() => setAction('Remove')}
+                        >
+                          {prinp}
                         </Select.Option>
                       )
                     })}
@@ -353,12 +384,27 @@ function MyNFTDetail() {
                       <Divider orientation="left">{action} viewer:</Divider>
                       <div className="row">
                         <div className="col">
-                          <Input
+                          {action === 'Remove' ? (
+                            <Input
+                              type="text"
+                              // placeholder={`${infoUpdate.prinpRemove}`}
+                              // onChange={handleChange}
+                              // name="prinpViewer"
+                            />
+                          ) : (
+                            <Input
+                              type="text"
+                              placeholder="Principal of viewer"
+                              onChange={handleChange}
+                              name="prinpViewer"
+                            />
+                          )}
+                          {/* <Input
                             type="text"
                             placeholder="Principal of viewer"
                             onChange={handleChange}
                             name="prinpViewer"
-                          />
+                          /> */}
                         </div>
                         <div className="col">
                           <Button type="primary" onClick={doAction}>
@@ -372,7 +418,12 @@ function MyNFTDetail() {
               </Form>
             </div>
           </div>
-
+          <div className="row">
+            <div className="col">
+              <CardWrapper>aa</CardWrapper>
+            </div>
+            <div className="col"></div>
+          </div>
           <Modal
             title="Transfer NFT"
             visible={isModalVisible}
@@ -380,9 +431,10 @@ function MyNFTDetail() {
             onCancel={handleCancel}
           >
             <ImageWrapper>
-              {nft?.metadata?.cid && ( // replace false by uri
+              {/* {nft?.metadata?.cid && ( // replace false by uri */}
+              {true && ( // replace false by uri
                 <img
-                  src="https://vcdn1-sohoa.vnecdn.net/2021/12/20/bored-ape-nft-accidental-0-728-7234-6530-1639974498.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=C624CYTwi01i3bZb6oNBEg"
+                  src="https://vcdn-sohoa.vnecdn.net/2022/05/26/NFT-3499-1653550708.jpg"
                   alt="item"
                 />
                 // <img src={nft?.metadata?.cid} alt="item" />
@@ -402,10 +454,9 @@ export default MyNFTDetail
 
 const Container = styled.div`
   .img_wrapper {
-    width: 350px;
+    width: 100%;
     height: 350px;
     border-radius: 8px;
-    border: 1px dashed #ccc;
     overflow: hidden;
     img {
       width: 100%;
@@ -415,8 +466,8 @@ const Container = styled.div`
 `
 
 const ImageWrapper = styled.div`
-  width: 350px;
-  height: 350px;
+  width: 508px;
+  height: 508px;
   border-radius: 8px;
   border: 1px dashed #ccc;
   margin: 0 auto;
@@ -425,4 +476,11 @@ const ImageWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+`
+const CardWrapper = styled.div`
+  padding: 28px 28px;
+  border: 2px solid rgba(99, 69, 237, 0.1);
+  border-radius: 12px;
+  background-color: #343444;
+  transition: all 0.3s ease;
 `

@@ -5,7 +5,6 @@ import { publicRoutes } from './Routes/index'
 import DefaultLayout from './Layouts/DefaultLayout/DefaultLayout'
 import styled from 'styled-components'
 import 'antd/dist/antd.css'
-
 import { Connect2ICProvider, ConnectDialog } from '@connect2ic/react'
 import { createClient } from '@connect2ic/core'
 import { PlugWallet } from '@connect2ic/core/providers/plug-wallet'
@@ -14,6 +13,7 @@ import { idlFactory } from '../../declarations/final_be/final_be.did.js'
 import Provider from './hooks/index'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import GlobalStyle from './Layouts/GlobalStyle/index'
 
 const canisterDefinitions = {
   superheroes: { idlFactory, canisterId },
@@ -27,8 +27,8 @@ function App() {
   return (
     <Router>
       <Connect2ICProvider client={client}>
-        <Provider>
-          <Container>
+        <GlobalStyle>
+          <Provider>
             <Routes>
               {publicRoutes.map((route, index) => {
                 const Layout = DefaultLayout
@@ -58,8 +58,8 @@ function App() {
               draggable
               pauseOnHover
             />
-          </Container>
-        </Provider>
+          </Provider>
+        </GlobalStyle>
       </Connect2ICProvider>
     </Router>
   )

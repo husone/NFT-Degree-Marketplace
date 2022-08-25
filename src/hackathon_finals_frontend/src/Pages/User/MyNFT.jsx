@@ -73,33 +73,43 @@ function MyNFT() {
 
   return (
     <div>
-      <h1 className="my-4">ACCOUNT'S NFT</h1>
-      <div className="wrap_account">
-        <img src="" alt="" />
+      <section class="fl-page-title">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="page-title-inner flex">
+                <div class="page-title-heading">
+                  <h2 class="heading">Account</h2>
+                </div>
+                <div class="breadcrumbs">
+                  <ul>
+                    <li>
+                      <a href="index.html">{principal}</a>
+                    </li>
+                    <li>Log In</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="container">
+        <Tabs className="mt-4 " defaultActiveKey="1" onChange={onChange}>
+          <TabPane tab="Collected" key="1" className="my-5">
+            {/* map here for items */}
+            {nftsList.map(nft => {
+              const id = Number(nft.id)
+              return (
+                <Link to={`/me/nft/${id}`} key={id}>
+                  <MyNFTItem nft={nft} />
+                </Link>
+              )
+            })}
+          </TabPane>
+        </Tabs>
       </div>
-      <Tag color="green">Verified</Tag>
-      <Divider orientation="left">Account</Divider>
-      <p>Principal: {principal}</p>
-
-      <Tabs className="mt-4" defaultActiveKey="1" onChange={onChange}>
-        <TabPane tab="Collected" key="1" className="my-5">
-          {/* map here for items */}
-          {nftsList.map(nft => {
-            const id = Number(nft.id)
-            return (
-              <Link to={`/me/nft/${id}`} key={id}>
-                <MyNFTItem nft={nft} />
-              </Link>
-            )
-          })}
-        </TabPane>
-        <TabPane tab="Created" key="2">
-          Content of Tab Pane 2
-        </TabPane>
-        <TabPane tab="Favorite" key="3">
-          Content of Tab Pane 3
-        </TabPane>
-      </Tabs>
     </div>
   )
 }

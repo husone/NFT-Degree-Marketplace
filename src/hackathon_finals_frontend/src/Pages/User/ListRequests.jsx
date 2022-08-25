@@ -111,8 +111,12 @@ function ListRequests() {
 
   return (
     <div>
-      <h2 className="my-4">LIST OF USER'S REQUEST</h2>
-      <Table columns={columns} dataSource={requestsFilter} />
+      <h2 className="">LIST OF USER'S REQUEST</h2>
+      <Table
+        columns={columns}
+        dataSource={requestsFilter}
+        style={{ color: '#333' }}
+      />
 
       <Modal
         title="Minted NFT"
@@ -122,41 +126,6 @@ function ListRequests() {
         width={800}
       >
         <div className="d-flex justify-content-between">
-          {/* <Form
-            encType="multipart/form-data"
-            style={{ maxWidth: '60vw', margin: '0px auto' }}
-            labelCol={{ span: 12 }}
-            wrapperCol={{ span: 20 }}
-            disabled
-          >
-            <Form.Item label="First name" name="firstName">
-              <Input type="text" id="firstName" value={'temp first name'} />
-            </Form.Item>
-
-            <Form.Item label="Last name" name="lastName">
-              <Input value={'temp last name'} />
-            </Form.Item>
-
-            <Form.Item label="Date of Birth" name="dob">
-              <Input value={'temp date of birth'} />
-            </Form.Item>
-
-            <Form.Item label="Education center" name="educationCenter">
-              <Input value={'temp education center'} />
-            </Form.Item>
-
-            <Form.Item label="Nation ID Number" name="nationIdNumber">
-              <Input value={'temp nation id number'} />
-            </Form.Item>
-
-            <Form.Item label="Student ID" name="studentId">
-              <Input value={'temp student id'} />
-            </Form.Item>
-
-            <Form.Item label="Name of Certificate" name="nameOfCertificate">
-              <Input value={'temp name of certificate'} />
-            </Form.Item>
-          </Form> */}
           <Form
             labelCol={{ span: 12 }}
             wrapperCol={{ span: 20 }}

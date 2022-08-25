@@ -17,7 +17,7 @@ function NavbarEducation() {
         return (
           <Link
             key={index}
-            className="navbar-brand custom_dropdown"
+            className="navbar-brand custom_dropdown "
             to={route.path}
           >
             {route.desc}
