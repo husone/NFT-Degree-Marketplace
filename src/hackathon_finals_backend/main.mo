@@ -872,4 +872,16 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       id = transactionId;
     });
   };
+
+  public isOwner(token_id: Types.TokenId, owner: Principal) : async Bool {
+    let item = findNFT(token_id);
+    switch (item) {
+      case null {
+        return false;
+      };
+      case (?token) {
+        return token.owner == owner;
+      };
+    };
+  };
 }
