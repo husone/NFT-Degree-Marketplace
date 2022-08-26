@@ -89,9 +89,9 @@ const FooterWrapper = styled.div`
     height: 35px;
     border-radius: 50%;
     background-color: #ffffff15;
-  }
-  .contact_wrapper_active {
-    background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+    &:hover{
+      background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+    }
   }
   svg {
     width: 18px;
