@@ -18,7 +18,7 @@ function EducationKYC() {
 
   useEffect(() => {
     if (!isConnected) {
-      window.ic.plug.requestConnect()
+      connectWallet()
     }
   }, [])
 
@@ -36,7 +36,7 @@ function EducationKYC() {
 
   const handleSubmit = async e => {
     if (!isConnected) {
-      await connectWallet()
+      connectWallet()
     } else {
       const formData = new FormData()
       for (let key in education) {
