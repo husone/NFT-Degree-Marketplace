@@ -216,8 +216,8 @@ function UserKYC() {
                     src={imgUriNFT}
                     alt="preview"
                     style={{
-                      width: '100px',
-                      height: '100px',
+                      width: '200px',
+                      height: '200px',
                       borderRadius: '5px',
                       border: '1px solid green',
                       marginLeft: '0px',
@@ -239,8 +239,8 @@ function UserKYC() {
                   htmlFor="fileUpload"
                   className="d-flex justify-content-center align-items-center"
                   style={{
-                    width: '100px',
-                    height: '100px',
+                    width: '200px',
+                    height: '200px',
                     borderRadius: '5px',
                     border: '1px dashed #ccc',
                   }}
@@ -259,8 +259,8 @@ function UserKYC() {
                     src={imgUriKYC}
                     alt="preview"
                     style={{
-                      width: '100px',
-                      height: '100px',
+                      width: '200px',
+                      height: '200px',
                       borderRadius: '5px',
                       border: '1px solid green',
                       marginLeft: '0px',
@@ -282,8 +282,8 @@ function UserKYC() {
                   htmlFor="kycImage"
                   className="d-flex justify-content-center align-items-center"
                   style={{
-                    width: '100px',
-                    height: '100px',
+                    width: '200px',
+                    height: '200px',
                     borderRadius: '5px',
                     border: '1px dashed #ccc',
                   }}
@@ -294,14 +294,14 @@ function UserKYC() {
             </Form.Item>
           </div>
         </div>
-        <Form.Item className="button-submit">
+        <div className='d-flex justify-content-center'>
           <Input
             type="submit"
             value="Upload NFT"
             className="btn-submit-custom"
-            style={{ width: 'fit-content' }}
+            style={{ width: 'fit-content', color: "#fff" }}
           />
-        </Form.Item>
+        </div>
       </Form>
     </div>
   )

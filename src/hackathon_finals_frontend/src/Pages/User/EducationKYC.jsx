@@ -154,7 +154,7 @@ function EducationKYC() {
               type="submit"
               value="Upload Image"
               className="btn-submit-custom"
-              style={{ width: 'fit-content' }}
+              style={{ width: 'fit-content', color: "#fff" }}
             />
           </Form.Item>
         </div>
