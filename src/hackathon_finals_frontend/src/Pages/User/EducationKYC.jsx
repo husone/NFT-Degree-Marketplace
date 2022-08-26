@@ -135,7 +135,7 @@ function EducationKYC() {
               value={education.legalRepresentative || ''}
               name="legalRepresentative"
               onChange={handleChange}
-              // required
+            // required
             />
           </Form.Item>
 
@@ -147,6 +147,14 @@ function EducationKYC() {
               value={education.address || ''}
               onChange={handleChange}
               name="address"
+            />
+          </Form.Item>
+          <Form.Item className="button-submit" label="Click to upload Item">
+            <Input
+              type="submit"
+              value="Upload Image"
+              className="btn-submit-custom"
+              style={{ width: 'fit-content' }}
             />
           </Form.Item>
         </div>
@@ -242,15 +250,6 @@ function EducationKYC() {
             </div>
           </Form.Item>
         </div>
-
-        <Form.Item className="button-submit">
-          <Input
-            type="submit"
-            value="Upload Image"
-            className="btn-submit-custom"
-            style={{ width: 'fit-content' }}
-          />
-        </Form.Item>
       </Form>
     </div>
   )

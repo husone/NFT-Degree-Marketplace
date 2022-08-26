@@ -144,3 +144,10 @@ colgroup {
 .ant-table-wrapper{
   width: 80%;
 }
+.ant-form-item-control-input{
+  .ant-form-item-control-input-content{
+    margin: 0px !important;
+    display: flex;
+    justify-content: center !important;
+  }
+}

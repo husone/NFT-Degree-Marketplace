@@ -8,7 +8,9 @@ function Footer() {
       <div className="footer_about">
         <div className="footer_contact d-flex align-items-center justify-content-between my-3">
         <div className="footer_logo d-flex flex-column align-items-start">
-          <img src={Logo} alt="footer" className="footer_logo" />
+          <Link to="/">
+            <img src={Logo} alt="footer" className="footer_logo" />
+          </Link>
         </div>
           <div className="contact_wrapper d-flex justify-content-center align-items-center">
             <svg
