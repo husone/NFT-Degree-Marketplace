@@ -95,6 +95,7 @@ colgroup {
 .ant-table-thead > tr > th,
 .ant-table-tbody > tr > td{
   border-bottom: 0px !important;
+  color: #fff !important;
 }
 
 .ant-input{
@@ -137,4 +138,9 @@ colgroup {
 .heading1{
   font-size: 43px;
   font-weight: 700;
+  color: #fff;
+}
+
+.ant-table-wrapper{
+  width: 80%;
 }

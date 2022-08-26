@@ -110,8 +110,8 @@ function ListRequests() {
   }
 
   return (
-    <div>
-      <h2 className="py-4 px-4 heading1">LIST OF USER'S REQUEST</h2>
+    <div className='d-flex flex-column align-items-center'>
+      <h2 className="py-4 px-4 heading1 text-center">List of user's requests</h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}
