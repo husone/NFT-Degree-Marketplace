@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useLayoutEffect } from 'react'
 import { checkRole } from '../Utils/CheckRole'
 import { useConnect } from '@connect2ic/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { final_be } from '../../../declarations/final_be'
@@ -11,6 +11,7 @@ import axios from 'axios'
 export const Context = createContext()
 
 const Provider = ({ children }) => {
+  let location = useLocation()
   const { principal, isConnected, connect, isConnecting } = useConnect()
   const [principalStorage, setPrincipalStorage] = useState(
     localStorage.getItem('prinp')
@@ -59,10 +60,10 @@ const Provider = ({ children }) => {
     try {
       localStorage.setItem('prinp', principal)
       setPrincipalStorage(principal)
-      navigate('/', {
+      console.log('Connected to Plug')
+      navigate(`${location.pathname}`, {
         replace: true,
       })
-      console.log('Connected to Plug')
     } catch (e) {
       console.log(e)
     }

@@ -135,10 +135,11 @@ function ListRequests() {
                     src={bufferToURI(requestModal?.imageKYC)}
                     alt="preview image"
                     srcSet=""
+                    style={{ width: '250px', height: '250px' }}
                   />
                 </Container>
 
-                <h3 className="text-center text-light">KYC Image</h3>
+                <h4 className="text-center text-light">KYC Image</h4>
               </>
             )}
           </div>
@@ -150,10 +151,11 @@ function ListRequests() {
                     src={bufferToURI(requestModal?.imageNFT)}
                     alt="preview image"
                     srcSet=""
+                    style={{ width: '250px', height: '250px' }}
                   />
                 </Container>
 
-                <h3 className="text-center text-light">NFT Image</h3>
+                <h4 className="text-center text-light">NFT Image</h4>
               </>
             )}
           </div>

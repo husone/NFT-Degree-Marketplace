@@ -210,23 +210,31 @@ function AdminPage() {
             </Form.Item>
           </Form>
           <div>
-            <Container className="wrap_img">
-              {requestModal?.imageKYC && ( // render image if exist, replace false by uri
-                <img
-                  src={bufferToURI(requestModal.imageKYC)}
-                  alt="preview image"
-                  srcSet=""
-                  style={{ width: '100px', height: '100px' }}
-                />
-              )}
-              {requestModal?.imageLogo && ( // render image if exist, replace false by uri
-                <img
-                  src={bufferToURI(requestModal.imageLogo)}
-                  alt="preview image"
-                  srcSet=""
-                />
-              )}
-            </Container>
+            <Form>
+              <Form.Item label="KYC Image">
+                <Container className="wrap_img">
+                  {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+                    <img
+                      src={bufferToURI(requestModal.imageKYC)}
+                      alt="preview image"
+                      srcSet=""
+                    />
+                  )}
+                </Container>
+              </Form.Item>
+
+              <Form.Item label="Logo Image">
+                <Container>
+                  {requestModal?.imageLogo && ( // render image if exist, replace false by uri
+                    <img
+                      src={bufferToURI(requestModal.imageLogo)}
+                      alt="preview image"
+                      srcSet=""
+                    />
+                  )}
+                </Container>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       </Modal>
@@ -237,8 +245,8 @@ function AdminPage() {
 export default AdminPage
 
 const Container = styled.div`
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   border-radius: 8px;
   border: 1px dashed #ccc;
   overflow: hidden;
