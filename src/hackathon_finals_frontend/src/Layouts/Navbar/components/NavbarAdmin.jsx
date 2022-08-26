@@ -24,6 +24,7 @@ function NavbarEducation() {
           </Link>
         )
       })}
+      <button className="btn btn-success text-white">Mint DIP20</button>
     </>
   )
 }

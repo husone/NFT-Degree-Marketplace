@@ -151,7 +151,7 @@ function Home() {
             {listNFT.map(nft => {
               const id = Number(nft?.id)
               return (
-                <div className="col-xl-4 col-lg-6 col-md-6">
+                <div className="col-xl-4 col-lg-6 col-md-6" key={id}>
                   <Link to={`/nft/${id}`} key={id}>
                     <MyNFTItem nft={nft} />
                   </Link>
