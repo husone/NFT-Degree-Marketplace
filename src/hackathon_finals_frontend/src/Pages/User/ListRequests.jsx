@@ -111,7 +111,7 @@ function ListRequests() {
 
   return (
     <div className='d-flex flex-column align-items-center'>
-      <h2 className="py-4 px-4 heading1 text-center">List of user's requests</h2>
+      <h2 className="py-4 px-4 heading1 te">LIST OF USER'S REQUEST</h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}
@@ -124,44 +124,40 @@ function ListRequests() {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={800}
+        width={600}
       >
-        <div className="d-flex justify-content-between">
-          <Form
-            labelCol={{ span: 12 }}
-            wrapperCol={{ span: 20 }}
-            disabled
-            className="col-5 ml-4"
-          >
-            <Form.Item label="KYC Image" name="imageKYC" className="mx-4">
-              <Container className="wrap_img mb-4">
-                {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+        <Container className='d-flex justify-content-around'>
+          <div>
+            {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+              <>
+                <Container className="wrap_img">
                   <img
                     src={bufferToURI(requestModal?.imageKYC)}
                     alt="preview image"
                     srcSet=""
                   />
-                )}
-              </Container>
-            </Form.Item>
-            <Form.Item label="Certificate Image" name="file" className="mx-4">
-              <Container className="wrap_img">
-                {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+                </Container>
+
+                <h3 className='text-center text-light'>KYC Image</h3>
+              </>
+            )}
+          </div>
+          <div>
+            {requestModal?.imageNFT && ( // render image if exist, replace false by uri
+              <>
+                <Container className="wrap_img">
                   <img
                     src={bufferToURI(requestModal?.imageNFT)}
                     alt="preview image"
                     srcSet=""
                   />
-                )}
-              </Container>
-            </Form.Item>
-          </Form>
-          {/* <Container className="wrap_img">
-            {false && ( // render image if exist, replace false by uri
-              <img src="" alt="preview image" srcset="" />
+                </Container>
+
+                <h3 className='text-center text-light'>NFT Image</h3>
+              </>
             )}
-          </Container> */}
-        </div>
+          </div>
+        </Container>
       </Modal>
     </div>
   )
@@ -170,14 +166,5 @@ function ListRequests() {
 export default ListRequests
 
 const Container = styled.div`
-  width: 350px;
-  height: 350px;
-  border-radius: 8px;
-  border: 1px dashed #ccc;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  column-gap: 15px;
 `
