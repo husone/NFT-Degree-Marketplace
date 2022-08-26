@@ -24,6 +24,7 @@ function AdminPage() {
       'http://localhost:5000/api/v1/education?status=pending'
     )
     const filteredRequest = res.data.education.map(education => {
+      console.log(education)
       return {
         ...education,
         createdAt: formatDate(new Date(education.createdAt)),
@@ -207,9 +208,17 @@ function AdminPage() {
             </Form.Item>
           </Form>
           <Container className="wrap_img">
-            {requestModal?.image && ( // render image if exist, replace false by uri
+            {requestModal?.imageKYC && ( // render image if exist, replace false by uri
               <img
-                src={bufferToURI(requestModal.image)}
+                src={bufferToURI(requestModal.imageKYC)}
+                alt="preview image"
+                srcSet=""
+                style={{ width: '100px', height: '100px' }}
+              />
+            )}
+            {requestModal?.imageLogo && ( // render image if exist, replace false by uri
+              <img
+                src={bufferToURI(requestModal.imageLogo)}
                 alt="preview image"
                 srcSet=""
               />
