@@ -4,10 +4,12 @@
 }
 colgroup {
   background: #343444;
+  color: #fff !important;
 }
 .ant-table-tbody > tr.ant-table-row:hover > td {
-  background: rgba(240, 82, 164, 0.1) !important ;
+  background: #14161B !important ;
   cursor: pointer;
+  color: #fff !important;
 }
 .ant-btn-primary {
   color: #3c3939 !important;
@@ -150,4 +152,7 @@ colgroup {
     display: flex;
     justify-content: center !important;
   }
+}
+.ant-table-cell{
+  background-color: #343444;
 }
