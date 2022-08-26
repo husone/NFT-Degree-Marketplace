@@ -305,7 +305,7 @@ function UserKYC() {
         <div className="d-flex justify-content-center">
           <Input
             type="submit"
-            value="Upload NFT"
+            value="Send Request"
             className="btn-submit-custom"
             style={{ width: 'fit-content', color: '#fff' }}
           />

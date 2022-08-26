@@ -32,7 +32,7 @@ function NavBar(props) {
 
   return (
     role && (
-      <Container>
+      <div>
         <Nav className="navbar navbar-expand-lg ">
           <ConnectDialog />
           <div className="container-fluid px-5">
@@ -54,7 +54,7 @@ function NavBar(props) {
             </div>
           </div>
         </Nav>
-      </Container>
+      </div>
     )
   )
 }
@@ -142,24 +142,24 @@ const Nav = styled.nav`
     }
   }
 `
-const Container = styled.div`
-  .dialog-styles {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    margin-top: -100px;
-    margin-left: -100px;
-    background-color: #00000050;
-    button {
-      background-color: #fff;
-      padding: 35px;
-      border-radius: 10px;
-      img {
-        width: 50px;
-        height: 50px;
-      }
-    }
-  }
-`
+// const Container = styled.div`
+//   .dialog-styles {
+//     position: fixed;
+//     top: 50%;
+//     left: 50%;
+//     width: 200px;
+//     height: 200px;
+//     margin-top: -100px;
+//     margin-left: -100px;
+//     background-color: #00000050;
+//     button {
+//       background-color: #fff;
+//       padding: 35px;
+//       border-radius: 10px;
+//       img {
+//         width: 50px;
+//         height: 50px;
+//       }
+//     }
+//   }
+// `

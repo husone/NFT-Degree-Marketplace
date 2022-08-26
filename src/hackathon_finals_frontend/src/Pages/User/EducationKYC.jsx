@@ -162,7 +162,7 @@ function EducationKYC() {
           >
             <Input
               type="submit"
-              value="Upload Image"
+              value="Send Request"
               className="btn-submit-custom"
               style={{ width: 'fit-content', color: '#fff' }}
             />

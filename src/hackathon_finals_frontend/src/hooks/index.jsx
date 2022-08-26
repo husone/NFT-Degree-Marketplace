@@ -33,7 +33,8 @@ const Provider = ({ children }) => {
   useEffect(() => {
     localStorage.clear()
     if (!isConnected) {
-      // connectWallet()
+      // const res = window.ic.plug.requestConnect()
+      // console.log(res)
     }
     if (!principalStorage) {
       setIsLoaded(true)
@@ -45,7 +46,8 @@ const Provider = ({ children }) => {
     setBalanceDIP20(`${Number(res).toString()} DBZ`)
   }
   const connectWallet = () => {
-    window.ic.plug.requestConnect()
+    // window.ic.plug.requestConnect()
+    connect('plug')
   }
 
   const getRoleUser = async () => {
