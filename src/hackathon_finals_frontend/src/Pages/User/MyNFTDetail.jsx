@@ -88,7 +88,9 @@ function MyNFTDetail() {
   }
 
   const getNftFromDB = async () => {
-    const res = await axios.get(`http://localhost:5000/api/v1/nft?id=${id}`)
+    const res = await axios.get(
+      `${process.env.BACKEND_OFF_HEROKU}/nft?id=${id}`
+    )
     console.log(res?.data?.nft[0])
     const { education, name, cer_owner, tokenID, imgURI, studentID } =
       res?.data?.nft[0]

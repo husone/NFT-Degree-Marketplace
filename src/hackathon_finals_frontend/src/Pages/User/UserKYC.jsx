@@ -23,7 +23,7 @@ function UserKYC() {
 
   const getEducations = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?status=approved'
+      `${process.env.BACKEND_OFF_HEROKU}/education?status=approved`
     )
     setEducationList(res.data.education)
   }
@@ -65,7 +65,7 @@ function UserKYC() {
       }
 
       const res = await axios
-        .post('http://localhost:5000/api/v1/request', formData)
+        .post(`${process.env.BACKEND_OFF_HEROKU}/v1/request`, formData)
         .catch(e => {
           console.log(e)
           toast.error('Submit request failed', { autoClose: 1500 })

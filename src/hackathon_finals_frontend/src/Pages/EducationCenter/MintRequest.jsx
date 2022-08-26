@@ -27,11 +27,11 @@ function MintRequest() {
 
   const getAllRequests = async () => {
     const resFirst = await axios.get(
-      `http://localhost:5000/api/v1/education?principal=${principal}`
+      `${process.env.BACKEND_OFF_HEROKU}/education?principal=${principal}`
     )
     const educationId = resFirst?.data?.education[0]?._id
     const res = await axios.get(
-      `http://localhost:5000/api/v1/request?status=pending&educationId=${educationId}`
+      `${process.env.BACKEND_OFF_HEROKU}/request?status=pending&educationId=${educationId}`
     )
     const request = res.data.request
     console.log(request)
@@ -196,10 +196,13 @@ function MintRequest() {
       for (let key in data) {
         formData.append(key, data[key])
       }
-      const res = await axios.post('http://localhost:5000/api/v1/nft', formData)
+      const res = await axios.post(
+        `${process.env.BACKEND_OFF_HEROKU}/nft`,
+        formData
+      )
       console.log('store db')
       if (res.status === 201) {
-        await axios.patch(`http://localhost:5000/api/v1/request/${_id}`, {
+        await axios.patch(`${process.env.BACKEND_OFF_HEROKU}/request/${_id}`, {
           status: 'approved',
         })
         console.log('change request db')
@@ -222,7 +225,7 @@ function MintRequest() {
 
   const rejectRequest = async id => {
     const res = await axios.patch(
-      `http://localhost:5000/api/v1/request/${id}`,
+      `${process.env.BACKEND_OFF_HEROKU}/request/${id}`,
       {
         status: 'rejected',
       }

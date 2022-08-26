@@ -26,7 +26,7 @@ function ListRequests() {
 
   const getAllRequests = async () => {
     const res = await axios.get(
-      `http://localhost:5000/api/v1/request?principal=${principal}`
+      `${process.env.BACKEND_OFF_HEROKU}/request?principal=${principal}`
     )
     const request = res.data.request
     console.log(request)
@@ -110,7 +110,7 @@ function ListRequests() {
   }
 
   return (
-    <div className='d-flex flex-column align-items-center'>
+    <div className="d-flex flex-column align-items-center">
       <h2 className="py-4 px-4 heading1 te">LIST OF USER'S REQUEST</h2>
       <Table
         columns={columns}
@@ -126,7 +126,7 @@ function ListRequests() {
         onCancel={handleCancel}
         width={600}
       >
-        <Container className='d-flex justify-content-around'>
+        <Container className="d-flex justify-content-around">
           <div>
             {requestModal?.imageKYC && ( // render image if exist, replace false by uri
               <>
@@ -138,7 +138,7 @@ function ListRequests() {
                   />
                 </Container>
 
-                <h3 className='text-center text-light'>KYC Image</h3>
+                <h3 className="text-center text-light">KYC Image</h3>
               </>
             )}
           </div>
@@ -153,7 +153,7 @@ function ListRequests() {
                   />
                 </Container>
 
-                <h3 className='text-center text-light'>NFT Image</h3>
+                <h3 className="text-center text-light">NFT Image</h3>
               </>
             )}
           </div>

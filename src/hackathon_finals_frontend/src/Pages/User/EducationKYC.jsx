@@ -54,7 +54,7 @@ function EducationKYC() {
       }
 
       const res = await axios
-        .post('http://localhost:5000/api/v1/education', formData)
+        .post(`${process.env.BACKEND_OFF_HEROKU}/education`, formData)
         .catch(e => {
           console.log(e)
           toast.error('Submit request failed', { autoClose: 1500 })

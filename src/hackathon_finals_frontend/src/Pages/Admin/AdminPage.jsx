@@ -21,7 +21,7 @@ function AdminPage() {
 
   const fetchRequestKYC = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?status=pending'
+      `${process.env.BACKEND_OFF_HEROKU}/education?status=pending`
     )
     const filteredRequest = res.data.education.map(education => {
       console.log(education)
@@ -102,7 +102,7 @@ function AdminPage() {
         volume: 0,
       })
       const res = await axios.patch(
-        `http://localhost:5000/api/v1/education/${id}`,
+        `${process.env.BACKEND_OFF_HEROKU}/education/${id}`,
         {
           status: 'approved',
         }
@@ -124,12 +124,9 @@ function AdminPage() {
   }
 
   const rejectRequest = async id => {
-    const res = await axios.patch(
-      `http://localhost:5000/api/v1/education/${id}`,
-      {
-        status: 'rejected',
-      }
-    )
+    const res = await axios.patch(`/education/${id}`, {
+      status: 'rejected',
+    })
     console.log(res)
     fetchRequestKYC()
     if (res.status === 200) {
@@ -144,8 +141,12 @@ function AdminPage() {
 
   return (
     <div>
-      <div className='d-flex justify-content-center'>
-        <Table columns={columns} dataSource={filteredRequestKYC} className="mt-5" />
+      <div className="d-flex justify-content-center">
+        <Table
+          columns={columns}
+          dataSource={filteredRequestKYC}
+          className="mt-5"
+        />
       </div>
 
       <Modal
@@ -228,8 +229,8 @@ function AdminPage() {
             </Container>
           </div>
         </div>
-      </Modal >
-    </div >
+      </Modal>
+    </div>
   )
 }
 
