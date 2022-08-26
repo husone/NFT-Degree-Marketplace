@@ -16,10 +16,9 @@ function NavBar(props) {
   const { role, logout, setRole, login, balanceDIP20 } = props
   const { principal, isConnected, disconnect } = useConnect()
 
-  useEffect(() => {
-  }, [role])
+  useEffect(() => {}, [role])
 
-  const onConnectWallet = async () => {
+  const onConnectWallet = () => {
     login()
   }
 

@@ -44,8 +44,8 @@ const Provider = ({ children }) => {
     const res = await final_be.balanceOfDIP20(Principal.fromText(principal))
     setBalanceDIP20(`${Number(res).toString()} DBZ`)
   }
-  const connectWallet = async () => {
-    await connect('plug')
+  const connectWallet = () => {
+    window.ic.plug.requestConnect()
   }
 
   const getRoleUser = async () => {
@@ -55,6 +55,7 @@ const Provider = ({ children }) => {
 
   const login = () => {
     try {
+      connectWallet()
       localStorage.setItem('prinp', principal)
       setPrincipalStorage(principal)
       navigate('/', {
