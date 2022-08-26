@@ -143,15 +143,16 @@ function AdminPage() {
 
   return (
     <div>
-      <h1>Admin Page</h1>
-      <Table columns={columns} dataSource={filteredRequestKYC} />
+      <div className='d-flex justify-content-center'>
+        <Table columns={columns} dataSource={filteredRequestKYC} className="mt-5" />
+      </div>
 
       <Modal
         title="Minted NFT"
         visible={isModalVisible}
         onOk={approveRequest}
         onCancel={handleCancel}
-        width={800}
+        width={600}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Cancel
@@ -206,15 +207,26 @@ function AdminPage() {
               />
             </Form.Item>
           </Form>
-          <Container className="wrap_img">
-            {requestModal?.image && ( // render image if exist, replace false by uri
-              <img
-                src={bufferToURI(requestModal.image)}
-                alt="preview image"
-                srcSet=""
-              />
-            )}
-          </Container>
+          <div>
+            <Container className="wrap_img mb-3">
+              {requestModal?.image && ( // render image if exist, replace false by uri
+                <img
+                  src={bufferToURI(requestModal.image)}
+                  alt="preview image"
+                  srcSet=""
+                />
+              )}
+            </Container>
+            <Container className="wrap_img">
+              {requestModal?.image && ( // render image if exist, replace false by uri
+                <img
+                  src={bufferToURI(requestModal.image)}
+                  alt="preview image"
+                  srcSet=""
+                />
+              )}
+            </Container>
+          </div>
         </div>
       </Modal>
     </div>
@@ -224,8 +236,8 @@ function AdminPage() {
 export default AdminPage
 
 const Container = styled.div`
-  width: 350px;
-  height: 350px;
+  width: 180px;
+  height: 180px;
   border-radius: 8px;
   border: 1px dashed #ccc;
   overflow: hidden;

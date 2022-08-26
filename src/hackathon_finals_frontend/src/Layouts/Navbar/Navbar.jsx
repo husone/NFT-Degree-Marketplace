@@ -8,6 +8,7 @@ import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import { useNavigate } from 'react-router-dom'
+import CointLogo from "../../Assets/Images/DBZ.png"
 
 import './Navbar.scss'
 
@@ -17,7 +18,7 @@ function NavBar(props) {
   const { principal, isConnected, disconnect, onConnect, onDisconnect } =
     useConnect()
 
-  useEffect(() => {}, [role])
+  useEffect(() => { }, [role])
 
   const onConnectWallet = () => {
     // window.ic.plug.requestConnect()
@@ -45,8 +46,19 @@ function NavBar(props) {
               {role === 'admin' && <NavbarAdmin />}
             </div>
             <div className="d-flex align-items-center h100">
-              {balanceDIP20 && <div className="mx-3">{balanceDIP20}</div>}
-              {principal && <div className="wallet_id mx-3">{principal}</div>}
+              {
+                balanceDIP20 &&
+                <div className="mx-3 d-flex align-items-center">
+                  {balanceDIP20}
+                  <img className='coint_logo ms-1' src={CointLogo} alt="coint logo" />
+                </div>
+              }
+              {
+                principal &&
+                <div className="wallet_id mx-3 text-light">
+                  {principal}
+                </div>
+              }
               <ConnectButton
                 onConnect={onConnectWallet}
                 onDisconnect={onDisconnected}
@@ -91,10 +103,11 @@ const Nav = styled.nav`
   .wallet_id {
     width: 100px;
     height: 35px;
+    line-height: 29px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border: 3px solid #000;
+    border: 3px solid #f62fbe;
     border-radius: 30px;
     padding: 0px 10px;
     margin-right: 15px;
@@ -161,5 +174,10 @@ const Container = styled.div`
         height: 50px;
       }
     }
+  }
+  .coint_logo{
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
   }
 `

@@ -89,10 +89,6 @@ section {
   color: #fff !important;
 }
 
-.ant-btn {
-  background: #14161B !important;
-}
-
 .ant-tabs-tab-btn {
   font-size: 20px;
 }
@@ -116,4 +112,12 @@ section {
 .ant-table{
   border-radius: 8px !important;
   overflow: hidden;
+}
+
+.ant-input[disabled]{
+  background-color: #343444 !important;
+}
+
+.ant-btn {
+  background-color: #3f3f8e !important;
 }
