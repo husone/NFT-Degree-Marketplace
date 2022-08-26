@@ -50,3 +50,95 @@
         box-shadow: 0 0 0 2px #f052a480 !important;
       }
 }
+
+.top_center_wrapper{
+  display: flex;
+  width: 100%;
+  column-gap: 15px;
+  div{
+    img{
+      width: 60%;
+    }
+  }
+}
+
+.center_wrapper{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  row-gap: 15px;
+  column-gap: 30px;
+  img{
+    width: 100%;
+  }
+}
+
+.top_center_btn {
+  display: inline-block;
+  position: relative;
+  padding: 9px 22px;
+  outline: 0 none;
+  cursor: pointer;
+  z-index: 1;
+  transition: .2s linear;
+  border-radius: 50px;
+  background-color: #DC39FC50;
+  color: #fff;
+
+  &:hover {
+    background-image: linear-gradient(to left, #6345ED 58.12%, #DC39FC 81.74%);
+    border: unset;
+    background-size: 200% auto;
+    color: #fff;
+  }
+}
+
+.certificates_wrapper{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  row-gap: 30px;
+  column-gap: 30px;
+  >div{
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #cccccc10;
+    background-color: #343444;
+    .description{
+      font-size: 22px;
+    }
+    .cer_img{
+      width: 100%;
+      overflow: hidden;
+      max-height: 250px;
+      border-radius: 15px;
+      img{
+        width: 100%;
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: .2s linear;
+        &:hover{
+          transform: scale(1.2);
+        }
+      }
+    }
+    .cer_content{
+      img{
+        width: 45px;
+        height: 45px;
+        border-radius: 35px;
+      }
+      h3{
+        font-size: 16px;
+        font-weight: bold;
+      }
+      p{
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+    .coin_logo{
+      width: 15px;
+      height: 15px
+    }
+  }
+}

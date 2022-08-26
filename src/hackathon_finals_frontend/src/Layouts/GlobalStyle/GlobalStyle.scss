@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans&family=Urbanist:ital,wght@0,600;0,900;1,600;1,900&display=swap');
 @import 'normalize.css';
 
-html {
-}
+html {}
 
 body {
   color: #fff;
@@ -57,11 +56,9 @@ section {
   position: relative;
   background: #fff;
   background-size: cover;
-  background: linear-gradient(
-    130.35deg,
-    rgba(99, 69, 237, 0.85) 17.35%,
-    rgba(220, 57, 252, 0.85) 78.23%
-  );
+  background: linear-gradient(130.35deg,
+      rgba(99, 69, 237, 0.85) 17.35%,
+      rgba(220, 57, 252, 0.85) 78.23%);
 }
 
 .fl-page-title .overlay {
@@ -127,6 +124,7 @@ section {
 
 #root {
   position: relative;
+
   .dialog-styles {
     position: fixed;
     top: 100px;
@@ -137,8 +135,44 @@ section {
     justify-content: center;
     align-items: center;
     z-index: 1;
+
     .dialog-container {
       width: fit-content;
     }
+  }
+}
+
+.gradient-heading {
+  background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.is_dark .sc-button.btn-bordered-white {
+  border: 2px solid #fff;
+}
+
+.sc-author .sc-button {
+  padding: 3px 19px;
+}
+
+.sc-button {
+  display: inline-block;
+  position: relative;
+  padding: 9px 22px;
+  border-radius: 100px !important;
+  border: 2px solid #fff;
+  outline: 0 none;
+  cursor: pointer;
+  z-index: 1;
+  background-color: transparent !important;
+  width: fit-content;
+  height: fit-content;
+
+  &:hover {
+    background-image: linear-gradient(to left, #6345ED 58.12%, #DC39FC 81.74%);
+    border: unset;
+    background-size: 200% auto;
+    border: 2px solid transparent;
   }
 }
