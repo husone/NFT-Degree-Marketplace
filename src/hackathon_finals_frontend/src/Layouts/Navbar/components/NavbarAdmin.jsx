@@ -70,12 +70,17 @@ function NavbarEducation() {
         onOk={mintDIP20}
         onCancel={() => setIsModalVisible(false)}
       >
-        <Form.Item className="mt-5" label="Enter principal minter">
-          <Input type="text" onChange={handleChange} name="prinp" />
-        </Form.Item>
-        <Form.Item className="mt-5" label="Enter amount">
-          <Input type="text" onChange={handleChange} name="amount" />
-        </Form.Item>
+        <Form
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+        >
+          <Form.Item className="mt-5" label="Enter principal minter">
+            <Input type="text" onChange={handleChange} name="prinp" />
+          </Form.Item>
+          <Form.Item className="mt-5" label="Enter amount">
+            <Input type="text" onChange={handleChange} name="amount" />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   )

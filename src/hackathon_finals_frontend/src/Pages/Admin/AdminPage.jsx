@@ -209,19 +209,18 @@ function AdminPage() {
             </Form.Item>
           </Form>
           <div>
-            <Container className="wrap_img mb-3">
-              {requestModal?.image && ( // render image if exist, replace false by uri
+            <Container className="wrap_img">
+              {requestModal?.imageKYC && ( // render image if exist, replace false by uri
                 <img
-                  src={bufferToURI(requestModal.image)}
+                  src={bufferToURI(requestModal.imageKYC)}
                   alt="preview image"
                   srcSet=""
+                  style={{ width: '100px', height: '100px' }}
                 />
               )}
-            </Container>
-            <Container className="wrap_img">
-              {requestModal?.image && ( // render image if exist, replace false by uri
+              {requestModal?.imageLogo && ( // render image if exist, replace false by uri
                 <img
-                  src={bufferToURI(requestModal.image)}
+                  src={bufferToURI(requestModal.imageLogo)}
                   alt="preview image"
                   srcSet=""
                 />
@@ -229,28 +228,8 @@ function AdminPage() {
             </Container>
           </div>
         </div>
-=======
-          <Container className="wrap_img">
-            {requestModal?.imageKYC && ( // render image if exist, replace false by uri
-              <img
-                src={bufferToURI(requestModal.imageKYC)}
-                alt="preview image"
-                srcSet=""
-                style={{ width: '100px', height: '100px' }}
-              />
-            )}
-            {requestModal?.imageLogo && ( // render image if exist, replace false by uri
-              <img
-                src={bufferToURI(requestModal.imageLogo)}
-                alt="preview image"
-                srcSet=""
-              />
-            )}
-          </Container>
->>>>>>> 836938844ee7d56b750dce3c72e14ae424838a48
-        </div>
-      </Modal>
-    </div>
+      </Modal >
+    </div >
   )
 }
 
