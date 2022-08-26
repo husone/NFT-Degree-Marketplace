@@ -18,13 +18,13 @@ function EducationKYC() {
 
   useEffect(() => {
     if (!isConnected) {
-      connectWallet()
+      window.ic.plug.requestConnect()
     }
   }, [])
-  const connectWallet = async () => {
-    await connect('plug')
-  }
 
+  const connectWallet = () => {
+    window.ic.plug.requestConnect()
+  }
   const handleChange = event => {
     const name = event.target.name
     const value = event.target.value
@@ -41,10 +41,13 @@ function EducationKYC() {
       const formData = new FormData()
       for (let key in education) {
         if (key === 'imageKYC') {
+          console.log(key + ' ' + education[key])
           formData.append('image', education.imageKYC)
         } else if (key === 'imageLogo') {
+          console.log(key + ' ' + education[key])
           formData.append('image', education.imageLogo)
         } else {
+          console.log(key + ' ' + education[key])
           formData.append(key, education[key])
         }
       }
@@ -135,7 +138,7 @@ function EducationKYC() {
               value={education.legalRepresentative || ''}
               name="legalRepresentative"
               onChange={handleChange}
-            // required
+              // required
             />
           </Form.Item>
 
@@ -149,12 +152,15 @@ function EducationKYC() {
               name="address"
             />
           </Form.Item>
-          <Form.Item className="button-submit hidden_label" label="Click to upload Item">
+          <Form.Item
+            className="button-submit hidden_label"
+            label="Click to upload Item"
+          >
             <Input
               type="submit"
               value="Upload Image"
               className="btn-submit-custom"
-              style={{ width: 'fit-content', color: "#fff" }}
+              style={{ width: 'fit-content', color: '#fff' }}
             />
           </Form.Item>
         </div>

@@ -46,7 +46,6 @@ function App() {
                 )
               })}
             </Routes>
-            <ConnectDialog />
             <ToastContainer
               position="top-right"
               autoClose={2500}
@@ -67,26 +66,3 @@ function App() {
 
 const root = createRoot(document.getElementById('root'))
 root.render(<App />)
-
-const Container = styled.div`
-  .dialog-styles {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: #00000050;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    button {
-      background-color: #fff;
-      padding: 35px;
-      border-radius: 10px;
-      img {
-        width: 50px;
-        height: 50px;
-      }
-    }
-  }
-`

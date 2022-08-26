@@ -33,7 +33,7 @@ const Provider = ({ children }) => {
   useEffect(() => {
     localStorage.clear()
     if (!isConnected) {
-      connectWallet()
+      // connectWallet()
     }
     if (!principalStorage) {
       setIsLoaded(true)
@@ -55,7 +55,6 @@ const Provider = ({ children }) => {
 
   const login = () => {
     try {
-      connectWallet()
       localStorage.setItem('prinp', principal)
       setPrincipalStorage(principal)
       navigate('/', {

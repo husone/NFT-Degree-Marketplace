@@ -1,8 +1,8 @@
-import { useState, useEffect, useContext, useLayoutEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../Assets/Images/logo.png'
-import { ConnectButton, useConnect } from '@connect2ic/react'
+import { ConnectButton, useConnect, ConnectDialog } from '@connect2ic/react'
 import { withContext } from '../../hooks/index'
 import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
@@ -14,15 +14,17 @@ import './Navbar.scss'
 function NavBar(props) {
   const navigate = useNavigate()
   const { role, logout, setRole, login, balanceDIP20 } = props
-  const { principal, isConnected, disconnect } = useConnect()
+  const { principal, isConnected, disconnect, onConnect, onDisconnect } =
+    useConnect()
 
   useEffect(() => {}, [role])
 
   const onConnectWallet = () => {
+    // window.ic.plug.requestConnect()
     login()
   }
 
-  const onDisconnect = () => {
+  const onDisconnected = () => {
     disconnect()
     logout()
     console.log('Disconnected from Plug')
@@ -30,26 +32,29 @@ function NavBar(props) {
 
   return (
     role && (
-      <Nav className="navbar navbar-expand-lg ">
-        <div className="container-fluid px-5">
-          <div className="d-flex gap-4">
-            <Link className="navbar-brand" to="/">
-              <img src={Logo} alt="Home" />
-            </Link>
-            {role === 'user' && <NavbarUser />}
-            {role === 'education' && <NavbarEducation />}
-            {role === 'admin' && <NavbarAdmin />}
+      <Container>
+        <Nav className="navbar navbar-expand-lg ">
+          <ConnectDialog dark={false} />
+          <div className="container-fluid px-5">
+            <div className="d-flex gap-4">
+              <Link className="navbar-brand" to="/">
+                <img src={Logo} alt="Home" />
+              </Link>
+              {role === 'user' && <NavbarUser />}
+              {role === 'education' && <NavbarEducation />}
+              {role === 'admin' && <NavbarAdmin />}
+            </div>
+            <div className="d-flex align-items-center h100">
+              {balanceDIP20 && <div className="mx-3">{balanceDIP20}</div>}
+              {principal && <div className="wallet_id mx-3">{principal}</div>}
+              <ConnectButton
+                onConnect={onConnectWallet}
+                onDisconnect={onDisconnected}
+              />
+            </div>
           </div>
-          <div className="d-flex align-items-center h100">
-            {balanceDIP20 && <div className="mx-3">{balanceDIP20}</div>}
-            {principal && <div className="wallet_id mx-3">{principal}</div>}
-            <ConnectButton
-              onConnect={onConnectWallet}
-              onDisconnect={onDisconnect}
-            />
-          </div>
-        </div>
-      </Nav>
+        </Nav>
+      </Container>
     )
   )
 }
@@ -134,6 +139,27 @@ const Nav = styled.nav`
     }
     100% {
       background-position: 0% 50%;
+    }
+  }
+`
+const Container = styled.div`
+  .dialog-styles {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin-top: -100px;
+    margin-left: -100px;
+    background-color: #00000050;
+    button {
+      background-color: #fff;
+      padding: 35px;
+      border-radius: 10px;
+      img {
+        width: 50px;
+        height: 50px;
+      }
     }
   }
 `
