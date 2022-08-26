@@ -18,12 +18,12 @@ function EducationKYC() {
 
   useEffect(() => {
     if (!isConnected) {
-      window.ic.plug.requestConnect()
+      connectWallet()
     }
   }, [])
 
   const connectWallet = () => {
-    window.ic.plug.requestConnect()
+    connect('plug')
   }
   const handleChange = event => {
     const name = event.target.name
@@ -36,29 +36,30 @@ function EducationKYC() {
 
   const handleSubmit = async e => {
     if (!isConnected) {
-      await connectWallet()
+      connectWallet()
     } else {
       const formData = new FormData()
       for (let key in education) {
         if (key === 'imageKYC') {
-          console.log(key + ' ' + education[key])
           formData.append('image', education.imageKYC)
         } else if (key === 'imageLogo') {
-          console.log(key + ' ' + education[key])
           formData.append('image', education.imageLogo)
         } else {
-          console.log(key + ' ' + education[key])
           formData.append(key, education[key])
         }
       }
 
+      for (const [key, value] of formData) {
+        console.log(`${key}: ${value}`)
+      }
+
       const res = await axios
         .post('http://localhost:5000/api/v1/education', formData)
-        .catch(() => {
+        .catch(e => {
+          console.log(e)
           toast.error('Submit request failed', { autoClose: 1500 })
         })
 
-      // Doing something to notification to user
       if (res.status === 201) {
         console.log('success')
         toast.success('Submit request successfully', { autoClose: 1500 })
@@ -66,6 +67,9 @@ function EducationKYC() {
         toast.error('Submit request failed', { autoClose: 1500 })
         console.log('error')
       }
+      setEducation({})
+      setImgUriKYC('')
+      setImgUriLogo('')
     }
   }
 
@@ -81,7 +85,7 @@ function EducationKYC() {
           setImgUriLogo(result)
           setEducation(values => ({
             ...values,
-            imgLogo: file,
+            imageLogo: file,
             principal,
             status: 'pending',
           }))
@@ -158,7 +162,7 @@ function EducationKYC() {
           >
             <Input
               type="submit"
-              value="Upload Image"
+              value="Send Request"
               className="btn-submit-custom"
               style={{ width: 'fit-content', color: '#fff' }}
             />
