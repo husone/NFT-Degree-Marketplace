@@ -47,17 +47,16 @@ function NavBar(props) {
             </div>
             <div className="d-flex align-items-center h100">
               {
-                balanceDIP20 &&
-                <div className="mx-3 d-flex align-items-center">
-                  {balanceDIP20}
-                  <img className='coint_logo ms-1' src={CointLogo} alt="coint logo" />
-                </div>
-              }
-              {
                 principal &&
-                <div className="wallet_id mx-3 text-light">
-                  {principal}
-                </div>
+                <>
+                  <div className="mx-3 d-flex align-items-center">
+                    {balanceDIP20}
+                    <img className='coint_logo ms-1' src={CointLogo} alt="coint logo" />
+                  </div>
+                  <div className="wallet_id mx-3 text-light">
+                    {principal}
+                  </div>
+                </>
               }
               <ConnectButton
                 onConnect={onConnectWallet}
