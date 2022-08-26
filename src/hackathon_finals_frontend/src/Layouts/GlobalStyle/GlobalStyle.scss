@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans&family=Urbanist:ital,wght@0,600;0,900;1,600;1,900&display=swap');
 @import 'normalize.css';
 
-html {
-}
+html {}
 
 body {
   color: #fff;
@@ -12,6 +11,7 @@ body {
 section {
   padding: 30px 0;
 }
+
 .sc-author {
   position: relative;
   padding: 28px 0px;
@@ -56,11 +56,9 @@ section {
   position: relative;
   background: #fff;
   background-size: cover;
-  background: linear-gradient(
-    130.35deg,
-    rgba(99, 69, 237, 0.85) 17.35%,
-    rgba(220, 57, 252, 0.85) 78.23%
-  );
+  background: linear-gradient(130.35deg,
+      rgba(99, 69, 237, 0.85) 17.35%,
+      rgba(220, 57, 252, 0.85) 78.23%);
 }
 
 .fl-page-title .overlay {
@@ -92,9 +90,30 @@ section {
 }
 
 .ant-btn {
-  background: #212529 !important;
+  background: #14161B !important;
 }
 
 .ant-tabs-tab-btn {
   font-size: 20px;
+}
+
+.ant-pagination {
+  .ant-pagination-item-active{
+    background-color: #14161B;
+    border: 0px !important;
+    color: #fff;
+  }
+
+  .ant-pagination-disabled .ant-pagination-item-link,
+  .ant-pagination-disabled:hover .ant-pagination-item-link {
+    color: #ccc;
+    border: 0px !important;
+    background-color: #343444;
+    cursor: not-allowed;
+  }
+}
+
+.ant-table{
+  border-radius: 8px !important;
+  overflow: hidden;
 }
