@@ -8,7 +8,7 @@ import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import { useNavigate } from 'react-router-dom'
-import CoinIcon from '../../Assets/Images/DBZcoin.png'
+import CoinLogo from '../../Assets/Images/DBZ.png'
 
 import './Navbar.scss'
 
@@ -33,9 +33,9 @@ function NavBar(props) {
 
   return (
     role && (
-      <div>
+      <Container>
         <Nav className="navbar navbar-expand-lg ">
-          <ConnectDialog />
+          <ConnectDialog dark={false} />
           <div className="container-fluid px-5">
             <div className="d-flex gap-4">
               <Link className="navbar-brand" to="/">
@@ -47,17 +47,18 @@ function NavBar(props) {
             </div>
             <div className="d-flex align-items-center h100">
               {principal && (
-                <div className="mx-3 d-flex align-items-center">
-                  <img
-                    src={CoinIcon}
-                    alt=""
-                    style={{ height: '22px', width: '22px' }}
-                    className="me-2"
-                  />
-                  <h6 className="text-white fw-bolder mt-2">{balanceDIP20}</h6>
-                </div>
+                <>
+                  <div className="mx-3 d-flex align-items-center">
+                    {balanceDIP20}
+                    <img
+                      className="coint_logo ms-1"
+                      src={CoinLogo}
+                      alt="coint logo"
+                    />
+                  </div>
+                  <div className="wallet_id mx-3 text-light">{principal}</div>
+                </>
               )}
-              {principal && <div className="wallet_id mx-3">{principal}</div>}
               <ConnectButton
                 onConnect={onConnectWallet}
                 onDisconnect={onDisconnected}
@@ -65,7 +66,7 @@ function NavBar(props) {
             </div>
           </div>
         </Nav>
-      </div>
+      </Container>
     )
   )
 }
@@ -102,10 +103,11 @@ const Nav = styled.nav`
   .wallet_id {
     width: 100px;
     height: 35px;
+    line-height: 29px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border: 3px solid #000;
+    border: 3px solid #f62fbe;
     border-radius: 30px;
     padding: 0px 10px;
     margin-right: 15px;
@@ -153,24 +155,29 @@ const Nav = styled.nav`
     }
   }
 `
-// const Container = styled.div`
-//   .dialog-styles {
-//     position: fixed;
-//     top: 50%;
-//     left: 50%;
-//     width: 200px;
-//     height: 200px;
-//     margin-top: -100px;
-//     margin-left: -100px;
-//     background-color: #00000050;
-//     button {
-//       background-color: #fff;
-//       padding: 35px;
-//       border-radius: 10px;
-//       img {
-//         width: 50px;
-//         height: 50px;
-//       }
-//     }
-//   }
-// `
+const Container = styled.div`
+  .dialog-styles {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin-top: -100px;
+    margin-left: -100px;
+    background-color: #00000050;
+    button {
+      background-color: #fff;
+      padding: 35px;
+      border-radius: 10px;
+      img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+  .coint_logo {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+  }
+`
