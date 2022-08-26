@@ -170,7 +170,8 @@ function MintRequest() {
       cer_owner: '',
     }
     const ownerPrincipal = requestModal.principal
-    const resCanister = await final_be.mintDip721(
+    const resCanister = await final_be.mintDip721ABCD(
+      Principal.fromText(principal),
       Principal.fromText(ownerPrincipal),
       metadata
     )
@@ -182,7 +183,7 @@ function MintRequest() {
     } else {
       const tokenID = Number(resCanister?.Ok?.token_id)
       const data = {
-        education,
+        education: education._id,
         studentID,
         nationID,
         dob,

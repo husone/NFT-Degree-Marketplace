@@ -16,7 +16,7 @@ const Provider = ({ children }) => {
   const [principalStorage, setPrincipalStorage] = useState(
     localStorage.getItem('prinp')
   )
-  const [role, setRole] = useState('user')
+  const [role, setRole] = useState('')
   const [isLoaded, setIsLoaded] = useState(false)
   const [balanceDIP20, setBalanceDIP20] = useState('0 DBZ')
   const navigate = useNavigate()
@@ -25,22 +25,13 @@ const Provider = ({ children }) => {
     if (principal) {
       getRoleUser()
       getBalanceDIP20(principal)
-      setIsLoaded(true)
     }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
-  }, [principal, role])
-
-  useEffect(() => {
-    localStorage.clear()
-    if (!isConnected) {
-      // const res = window.ic.plug.requestConnect()
-      // console.log(res)
-    }
-    if (!principalStorage) {
+    if (role && principal) {
       setIsLoaded(true)
     }
-  }, [])
+  }, [principal, role])
 
   const getBalanceDIP20 = async principal => {
     const res = await final_be.balanceOfDIP20(Principal.fromText(principal))
@@ -85,6 +76,7 @@ const Provider = ({ children }) => {
     isLoaded,
     login,
     balanceDIP20,
+    setIsLoaded,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

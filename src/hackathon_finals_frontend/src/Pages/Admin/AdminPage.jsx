@@ -8,15 +8,18 @@ import { formatDate, bufferToURI } from '../.././Utils/format'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
+import { MutatingDots } from 'react-loader-spinner'
 
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [filteredRequestKYC, setFilteredRequestKYC] = useState([])
   const [requestModal, setRequestModal] = useState({})
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     fetchRequestKYC()
+    setIsLoaded(true)
   }, [])
 
   const fetchRequestKYC = async () => {
@@ -96,6 +99,7 @@ function AdminPage() {
   const approveRequest = async id => {
     const principal = requestModal.principal
     try {
+      toast('Approving...', { autoClose: 1500 })
       console.log(await final_be.callerToText())
       await final_be.addCenter({
         address: Principal.fromText(principal),
@@ -141,13 +145,32 @@ function AdminPage() {
 
   return (
     <div>
-      <div className="d-flex justify-content-center">
-        <Table
-          columns={columns}
-          dataSource={filteredRequestKYC}
-          className="mt-5"
-        />
-      </div>
+      {isLoaded ? (
+        <div className="d-flex justify-content-center">
+          <Table
+            columns={columns}
+            dataSource={filteredRequestKYC}
+            className="mt-5"
+          />
+        </div>
+      ) : (
+        <div
+          className="w-100 d-flex justify-content-center align-items-center"
+          style={{ paddingTop: '100px' }}
+        >
+          <MutatingDots
+            height="100"
+            width="100"
+            color="#4fa94d"
+            secondaryColor="#4fa94d"
+            radius="12.5"
+            ariaLabel="mutating-dots-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      )}
 
       <Modal
         title="Minted NFT"
