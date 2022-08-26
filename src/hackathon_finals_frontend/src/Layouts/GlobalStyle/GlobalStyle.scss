@@ -121,3 +121,21 @@ section {
 .ant-btn {
   background-color: #3f3f8e !important;
 }
+
+#root{
+  position: relative;
+  .dialog-styles{
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    .dialog-container{
+      width: fit-content;
+    }
+  }
+}
