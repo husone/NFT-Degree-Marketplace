@@ -177,10 +177,10 @@ function MintRequest() {
     console.log(resCanister)
     console.log('store canister')
     if (Object.keys(resCanister)[0] !== 'Ok') {
+      toast.error('Mint fail')
       console.log('error')
     } else {
       const tokenID = Number(resCanister?.Ok?.token_id)
-      const id = Number(resCanister?.Ok?.id)
       const data = {
         education,
         studentID,
@@ -193,8 +193,8 @@ function MintRequest() {
         image: fileImg,
       }
       const formData = new FormData()
-      for (let key in education) {
-        formData.append(key, education[key])
+      for (let key in data) {
+        formData.append(key, data[key])
       }
       const res = await axios.post('http://localhost:5000/api/v1/nft', formData)
       console.log('store db')
@@ -205,6 +205,7 @@ function MintRequest() {
         console.log('change request db')
         getAllRequests()
       } else {
+        toast.error('Mint fail')
         console.log('error')
       }
       toast.dismiss(toastId.current)
@@ -213,27 +214,6 @@ function MintRequest() {
     }
     setIsModalVisible(false)
     console.log('Minted')
-
-    // const fileName = new Date().getTime().toString()
-    // const nFile = new File(
-    //   [
-    //     JSON.stringify({
-    //       certificate,
-    //       image: `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`,
-    //     }),
-    //   ],
-    //   `${fileName}.json`,
-    //   { type: 'text/plain' }
-    // )
-    // const metadataCID = await storeFiles([nFile])
-    // // Call backend to mint the token
-    // const tokenURI = `https://${metadataCID}.${process.env.IPFS_LINK}/${fileName}.json`
-    // console.log(tokenURI)
-    // const res = await superheroes.mint(Principal.fromText(principal), [
-    //   { tokenUri: `${IPFS_LINK}${metadataCID}/${values?.name}.json` },
-    // ])
-
-    // // Doing something to notification to user
   }
 
   const handleCancel = () => {

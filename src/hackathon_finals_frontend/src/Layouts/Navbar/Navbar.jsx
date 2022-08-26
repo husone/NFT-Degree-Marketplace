@@ -8,6 +8,7 @@ import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import { useNavigate } from 'react-router-dom'
+import CoinIcon from '../../Assets/Images/DBZcoin.png'
 
 import './Navbar.scss'
 
@@ -45,7 +46,17 @@ function NavBar(props) {
               {role === 'admin' && <NavbarAdmin />}
             </div>
             <div className="d-flex align-items-center h100">
-              {balanceDIP20 && <div className="mx-3">{balanceDIP20}</div>}
+              {principal && (
+                <div className="mx-3 d-flex align-items-center">
+                  <img
+                    src={CoinIcon}
+                    alt=""
+                    style={{ height: '22px', width: '22px' }}
+                    className="me-2"
+                  />
+                  <h6 className="text-white fw-bolder mt-2">{balanceDIP20}</h6>
+                </div>
+              )}
               {principal && <div className="wallet_id mx-3">{principal}</div>}
               <ConnectButton
                 onConnect={onConnectWallet}

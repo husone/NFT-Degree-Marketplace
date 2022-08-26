@@ -39,8 +39,8 @@ function MyNFT() {
     <>
       {isLoaded && (
         <div>
-          <section class="fl-page-title">
-            <div class="container">
+          <section className="fl-page-title">
+            <div className="container">
               <h1
                 className="text-white fw-bold mb-0"
                 style={{ fontSize: '55px' }}

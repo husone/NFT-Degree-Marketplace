@@ -15,7 +15,7 @@ import {
 } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import './index.css'
-
+import CoinIcon from '../../Assets/Images/DBZcoin.png'
 const { confirm } = Modal
 
 function MyNFTDetail() {
@@ -34,7 +34,9 @@ function MyNFTDetail() {
 
   console.log(nft)
   useEffect(() => {
-    loadStatusNFT()
+    if (principal) {
+      loadStatusNFT()
+    }
   }, [])
 
   useEffect(() => {
@@ -243,6 +245,7 @@ function MyNFTDetail() {
   }
 
   const setNFTPublic = async () => {
+    toast('Setting public...', { autoClose: 1500 })
     const metadata = {
       id: nft?.metadata?.id,
       cid: nft?.metadata?.cid,
@@ -252,6 +255,7 @@ function MyNFTDetail() {
     }
     const res = await final_be.setPublic(BigInt(id), metadata)
     console.log(res)
+    toast.success('Set public successfully', { autoClose: 1500 })
     setStatus({ ...status, isPublic: true })
   }
 
@@ -260,6 +264,8 @@ function MyNFTDetail() {
     const res = await final_be.cancelListing(BigInt(id))
     if (res.Ok) {
       toast.success('Cancel listing successfully')
+    } else {
+      toast.error('Cancel listing fail')
     }
   }
 
@@ -339,12 +345,19 @@ function MyNFTDetail() {
                   <h6 className="text-secondary">Current Price</h6>
                   {nft?.price === 0 ? (
                     <div className="d-flex">
-                      <h2
-                        className="text-white fw-bold"
-                        style={{ margin: 'auto 0' }}
-                      >
-                        {nft?.price}
-                      </h2>
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={CoinIcon}
+                          alt=""
+                          style={{ width: '30px', height: '30px' }}
+                        />
+                        <h2
+                          className="text-white fw-bold ms-2"
+                          style={{ margin: 'auto 0' }}
+                        >
+                          {`${nft?.price} DBZ`}
+                        </h2>
+                      </div>
                       <button
                         className="btn btn-primary ms-3 text-white d-flex align-items-center"
                         onClick={() => setIsShowSetPrice(true)}

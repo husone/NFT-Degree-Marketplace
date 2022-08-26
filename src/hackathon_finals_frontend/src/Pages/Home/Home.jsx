@@ -5,14 +5,12 @@ import { Input, Tabs } from 'antd'
 import Item from './Item'
 import { Link } from 'react-router-dom'
 import MyNFTItem from '../User/MyNFTItem'
-import image1 from '../../Assets/hktPicture/1.png'
-import image2 from '../../Assets/hktPicture/2.png'
-import image3 from '../../Assets/hktPicture/3.jpg'
+import IMAGES from '../../Assets/IMAGE'
 import Carousel from 'react-bootstrap/Carousel'
 
 const { Search } = Input
 const { TabPane } = Tabs
-
+const { header_1, header_2, header_3, icon_1, icon_2, icon_3, icon_4 } = IMAGES
 function Home() {
   const [size, setSize] = useState('large')
   const [listNFT, setListNFT] = useState([])
@@ -43,7 +41,7 @@ function Home() {
         <div className="carousel-inner">
           <div className="carousel-item active" data-bs-interval="1800">
             <img
-              src={image1}
+              src={header_1}
               className="d-block w-100 img-fluid carousel-header-img"
               alt="..."
               style={{ objectFit: 'cover' }}
@@ -51,7 +49,7 @@ function Home() {
           </div>
           <div className="carousel-item" data-bs-interval="1800">
             <img
-              src={image2}
+              src={header_2}
               className="d-block w-100 img-fluid carousel-header-img"
               alt="..."
               style={{ objectFit: 'cover' }}
@@ -59,7 +57,7 @@ function Home() {
           </div>
           <div className="carousel-item">
             <img
-              src={image3}
+              src={header_3}
               className="d-block w-100 img-fluid carousel-header-img"
               alt="..."
               style={{ objectFit: 'cover' }}
@@ -108,7 +106,7 @@ function Home() {
             <div className="col-xl-4 col-lg-6 col-md-6">
               <div className="sc-author style-2">
                 <div className="card-avatar">
-                  <img src={image1} alt="" className="" />
+                  <img src={header_1} alt="" className="" />
                 </div>
                 <div className="infor">
                   <h5>
@@ -180,11 +178,7 @@ function Home() {
             <div className="col-lg-3 col-md-6 col-12">
               <div className="sc-wallet style-2 active">
                 <div className="icon">
-                  <img
-                    src="assets/images/icon/icon-10.svg"
-                    alt=""
-                    className=""
-                  />
+                  <img src={icon_1} alt="" className="" />
                 </div>
                 <div className="content st-current">
                   <h5 className="">
@@ -204,11 +198,7 @@ function Home() {
             <div className="col-lg-3 col-md-6 col-12">
               <div className="sc-wallet style-2">
                 <div className="icon">
-                  <img
-                    src="assets/images/icon/icon-11.svg"
-                    alt=""
-                    className=""
-                  />
+                  <img src={icon_2} alt="" className="" />
                 </div>
                 <div className="content">
                   <h5 className="">
@@ -228,11 +218,7 @@ function Home() {
             <div className="col-lg-3 col-md-6 col-12">
               <div className="sc-wallet style-2 mg-bt-0">
                 <div className="icon">
-                  <img
-                    src="assets/images/icon/icon-12.svg"
-                    alt=""
-                    className=""
-                  />
+                  <img src={icon_3} alt="" className="" />
                 </div>
                 <div className="content">
                   <h5>
@@ -250,7 +236,7 @@ function Home() {
             <div className="col-lg-3 col-md-6 col-12">
               <div className="sc-wallet style-2 mg-bt-0 end">
                 <div className="icon">
-                  <img src="assets/images/icon/icon-13.svg" alt="" />
+                  <img src={icon_4} alt="" />
                 </div>
                 <div className="content">
                   <h5>
