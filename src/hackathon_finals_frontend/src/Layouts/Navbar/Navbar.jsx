@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../Assets/Images/logo.png'
@@ -9,7 +9,7 @@ import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import { useNavigate } from 'react-router-dom'
 import CoinLogo from '../../Assets/Images/DBZ.png'
-
+import { Popover } from 'antd'
 import './Navbar.scss'
 
 function NavBar(props) {
@@ -56,7 +56,15 @@ function NavBar(props) {
                       alt="coint logo"
                     />
                   </div>
-                  <div className="wallet_id mx-3 text-light">{principal}</div>
+                  <Popover
+                    content={principal}
+                    placement="top"
+                    className="wallet_id mx-3 text-light"
+                  >
+                    <div className="wallet_id mx-3 text-light">{principal}</div>
+                    {/* <Button type="primary">Hover me</Button> */}
+                  </Popover>
+                  {/* <div className="wallet_id mx-3 text-light">{principal}</div> */}
                 </>
               )}
               <ConnectButton
