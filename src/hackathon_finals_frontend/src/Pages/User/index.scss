@@ -3,11 +3,11 @@
   background: #14161B;
 }
 colgroup {
-  background: #343444;
+  background: #000 !important;
   color: #fff !important;
 }
 .ant-table-tbody > tr.ant-table-row:hover > td {
-  background: #14161B !important ;
+  background: #3c3939 !important ;
   cursor: pointer;
   color: #fff !important;
 }
@@ -18,7 +18,11 @@ colgroup {
   border-radius: 5px !important;
 }
 .ant-tag {
-  border-radius: 5px !important;
+  border-radius: 8px !important;
+  background-color: #41ec8b50 !important;
+  color: rgb(53, 255, 53) !important;
+  padding: 5px 15px !important;
+  border: 0px !important;
 }
 .ant-input {
   border-radius: 8px !important;
@@ -155,4 +159,14 @@ colgroup {
 }
 .ant-table-cell{
   background-color: #343444;
+}
+
+.ant-form-item-label label{
+  color: transparent !important;
+}
+
+.hidden_label .ant-form-item-label{
+  label{
+    color: transparent !important;
+  }
 }

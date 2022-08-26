@@ -149,7 +149,7 @@ function EducationKYC() {
               name="address"
             />
           </Form.Item>
-          <Form.Item className="button-submit" label="Click to upload Item">
+          <Form.Item className="button-submit hidden_label" label="Click to upload Item">
             <Input
               type="submit"
               value="Upload Image"
