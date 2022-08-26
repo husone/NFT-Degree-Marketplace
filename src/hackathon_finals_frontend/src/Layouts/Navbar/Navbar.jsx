@@ -34,7 +34,7 @@ function NavBar(props) {
     role && (
       <Container>
         <Nav className="navbar navbar-expand-lg ">
-          <ConnectDialog dark={false} />
+          <ConnectDialog />
           <div className="container-fluid px-5">
             <div className="d-flex gap-4">
               <Link className="navbar-brand" to="/">

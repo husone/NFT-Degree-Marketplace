@@ -37,78 +37,84 @@ function Home() {
     <div>
       <div
         id="carouselExampleInterval"
-        class="carousel slide carousel-fade w-100"
+        className="carousel slide carousel-fade w-100"
         data-bs-ride="carousel"
       >
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-bs-interval="1800">
+        <div className="carousel-inner">
+          <div className="carousel-item active" data-bs-interval="1800">
             <img
               src={image1}
-              class="d-block w-100 img-fluid carousel-header-img"
+              className="d-block w-100 img-fluid carousel-header-img"
               alt="..."
               style={{ objectFit: 'cover' }}
             />
           </div>
-          <div class="carousel-item" data-bs-interval="1800">
+          <div className="carousel-item" data-bs-interval="1800">
             <img
               src={image2}
-              class="d-block w-100 img-fluid carousel-header-img"
+              className="d-block w-100 img-fluid carousel-header-img"
               alt="..."
               style={{ objectFit: 'cover' }}
             />
           </div>
-          <div class="carousel-item">
+          <div className="carousel-item">
             <img
               src={image3}
-              class="d-block w-100 img-fluid carousel-header-img"
+              className="d-block w-100 img-fluid carousel-header-img"
               alt="..."
               style={{ objectFit: 'cover' }}
             />
           </div>
         </div>
         <button
-          class="carousel-control-prev"
+          className="carousel-control-prev"
           type="button"
           data-bs-target="#carouselExampleInterval"
           data-bs-slide="prev"
         >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Previous</span>
         </button>
         <button
-          class="carousel-control-next"
+          className="carousel-control-next"
           type="button"
           data-bs-target="#carouselExampleInterval"
           data-bs-slide="next"
         >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
+          <span className="visually-hidden">Next</span>
         </button>
       </div>
 
       <section>
         <div className="container">
           <div className="row">
-            <div class="col-md-12">
-              <div class="sc-heading style-2">
-                <div class="content-left">
-                  <div class="inner">
-                    <h3 class="">Top Centers</h3>
-                    <p class="desc">Most popular education centers </p>
+            <div className="col-md-12">
+              <div className="sc-heading style-2">
+                <div className="content-left">
+                  <div className="inner">
+                    <h3 className="">Top Centers</h3>
+                    <p className="desc">Most popular education centers </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-xl-4 col-lg-6 col-md-6">
-              <div class="sc-author style-2">
-                <div class="card-avatar">
-                  <img src={image1} alt="" class="" />
+            <div className="col-xl-4 col-lg-6 col-md-6">
+              <div className="sc-author style-2">
+                <div className="card-avatar">
+                  <img src={image1} alt="" className="" />
                 </div>
-                <div class="infor">
+                <div className="infor">
                   <h5>
                     <p href="author.html">Frank F. Chan</p>
                   </h5>
-                  <div class="details">523.7 ETH</div>
+                  <div className="details">523.7 ETH</div>
                 </div>
               </div>
             </div>
@@ -119,33 +125,33 @@ function Home() {
       <section>
         <div className="container">
           <div className="row">
-            <div class="col-md-12">
-              <div class="sc-heading style-2">
-                <div class="content-left">
-                  <div class="inner">
-                    <h3 class="">Top Centers</h3>
-                    <p class="desc">Most popular education centers </p>
+            <div className="col-md-12">
+              <div className="sc-heading style-2">
+                <div className="content-left">
+                  <div className="inner">
+                    <h3 className="">Top Centers</h3>
+                    <p className="desc">Most popular education centers </p>
                   </div>
                 </div>
               </div>
             </div>
-            {/* <div class="col-xl-4 col-lg-6 col-md-6">
-              <div class="sc-author style-2">
-                <div class="card-avatar">
-                  <img src={image1} alt="" class="" />
+            {/* <div className="col-xl-4 col-lg-6 col-md-6">
+              <div className="sc-author style-2">
+                <div className="card-avatar">
+                  <img src={image1} alt="" className="" />
                 </div>
-                <div class="infor">
+                <div className="infor">
                   <h5>
                     <p href="author.html">Frank F. Chan</p>
                   </h5>
-                  <div class="details">523.7 ETH</div>
+                  <div className="details">523.7 ETH</div>
                 </div>
               </div>
             </div> */}
             {listNFT.map(nft => {
               const id = Number(nft?.id)
               return (
-                <div class="col-xl-4 col-lg-6 col-md-6">
+                <div className="col-xl-4 col-lg-6 col-md-6">
                   <Link to={`/nft/${id}`} key={id}>
                     <MyNFTItem nft={nft} />
                   </Link>
@@ -156,93 +162,105 @@ function Home() {
         </div>
       </section>
 
-      <section class="create-and-sell tf-section bg-color-14161B">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="sc-heading style-2 create-and-sell">
-                <div class="content-left">
-                  <div class="inner">
-                    <h3 class="">Create and sell your NFTs</h3>
-                    <p class="desc">
+      <section className="create-and-sell tf-section bg-color-14161B">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="sc-heading style-2 create-and-sell">
+                <div className="content-left">
+                  <div className="inner">
+                    <h3 className="">Create and sell your NFTs</h3>
+                    <p className="desc">
                       Most popular gaming digital nft market place{' '}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12">
-              <div class="sc-wallet style-2 active">
-                <div class="icon">
-                  <img src="assets/images/icon/icon-10.svg" alt="" class="" />
+            <div className="col-lg-3 col-md-6 col-12">
+              <div className="sc-wallet style-2 active">
+                <div className="icon">
+                  <img
+                    src="assets/images/icon/icon-10.svg"
+                    alt=""
+                    className=""
+                  />
                 </div>
-                <div class="content st-current">
-                  <h5 class="">
-                    <a href="" class="">
+                <div className="content st-current">
+                  <h5 className="">
+                    <a href="" className="">
                       Set Up Your Wallet
                     </a>
                   </h5>
-                  <p class="">
+                  <p className="">
                     Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
                   </p>
-                  <a href="" class="read-more">
-                    <i class="fas fa-arrow-right"></i>
+                  <a href="" className="read-more">
+                    <i className="fas fa-arrow-right"></i>
                   </a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12">
-              <div class="sc-wallet style-2">
-                <div class="icon">
-                  <img src="assets/images/icon/icon-11.svg" alt="" class="" />
+            <div className="col-lg-3 col-md-6 col-12">
+              <div className="sc-wallet style-2">
+                <div className="icon">
+                  <img
+                    src="assets/images/icon/icon-11.svg"
+                    alt=""
+                    className=""
+                  />
                 </div>
-                <div class="content">
-                  <h5 class="">
-                    <a href="" class="">
+                <div className="content">
+                  <h5 className="">
+                    <a href="" className="">
                       Create Your Collection
                     </a>
                   </h5>
-                  <p class="">
+                  <p className="">
                     Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
                   </p>
-                  <a href="" class="read-more">
-                    <i class="fas fa-arrow-right"></i>
+                  <a href="" className="read-more">
+                    <i className="fas fa-arrow-right"></i>
                   </a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12">
-              <div class="sc-wallet style-2 mg-bt-0">
-                <div class="icon">
-                  <img src="assets/images/icon/icon-12.svg" alt="" class="" />
+            <div className="col-lg-3 col-md-6 col-12">
+              <div className="sc-wallet style-2 mg-bt-0">
+                <div className="icon">
+                  <img
+                    src="assets/images/icon/icon-12.svg"
+                    alt=""
+                    className=""
+                  />
                 </div>
-                <div class="content">
+                <div className="content">
                   <h5>
                     <a href="author.html">Add Your NFTs</a>
                   </h5>
-                  <p class="">
+                  <p className="">
                     Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
                   </p>
-                  <a href="author.html" class="read-more">
-                    <i class="fas fa-arrow-right"></i>
+                  <a href="author.html" className="read-more">
+                    <i className="fas fa-arrow-right"></i>
                   </a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-12">
-              <div class="sc-wallet style-2 mg-bt-0 end">
-                <div class="icon">
+            <div className="col-lg-3 col-md-6 col-12">
+              <div className="sc-wallet style-2 mg-bt-0 end">
+                <div className="icon">
                   <img src="assets/images/icon/icon-13.svg" alt="" />
                 </div>
-                <div class="content">
+                <div className="content">
                   <h5>
                     <a href="item.html">List Them For Sale</a>
                   </h5>
                   <p>
                     Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
                   </p>
-                  <a href="item.html" class="read-more">
-                    <i class="fas fa-arrow-right"></i>
+                  <a href="item.html" className="read-more">
+                    <i className="fas fa-arrow-right"></i>
                   </a>
                 </div>
               </div>

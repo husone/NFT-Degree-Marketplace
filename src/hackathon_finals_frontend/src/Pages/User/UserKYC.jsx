@@ -30,8 +30,8 @@ function UserKYC() {
     setEducationList(res.data.education)
   }
 
-  const connectWallet = async () => {
-    await connect('plug')
+  const connectWallet = () => {
+    connect('plug')
   }
 
   const handleChange = event => {
@@ -51,32 +51,40 @@ function UserKYC() {
   }
 
   const handleSubmit = async e => {
-    const formData = new FormData()
-
-    for (let key in user) {
-      if (key === 'imageKYC') {
-        formData.append('image', user.imageKYC)
-      } else if (key === 'imageNFT') {
-        formData.append('image', user.imageNFT)
-      } else {
-        formData.append(key, user[key])
-      }
-    }
-
-    const res = await axios
-      .post('http://localhost:5000/api/v1/request', formData)
-      .catch(() => {
-        toast.error('Submit request failed', { autoClose: 1500 })
-      })
-
-    console.log(res)
-    // Doing something to notification to user
-    if (res.status === 201) {
-      console.log('success')
-      toast.success('Submit request successfully', { autoClose: 1500 })
+    if (!isConnected) {
+      connectWallet()
     } else {
-      toast.error('Submit request failed', { autoClose: 1500 })
-      console.log('error')
+      const formData = new FormData()
+
+      for (let key in user) {
+        if (key === 'imageKYC') {
+          formData.append('image', user.imageKYC)
+        } else if (key === 'imageNFT') {
+          formData.append('image', user.imageNFT)
+        } else {
+          formData.append(key, user[key])
+        }
+      }
+
+      const res = await axios
+        .post('http://localhost:5000/api/v1/request', formData)
+        .catch(e => {
+          console.log(e)
+          toast.error('Submit request failed', { autoClose: 1500 })
+        })
+
+      console.log(res)
+      // Doing something to notification to user
+      if (res.status === 201) {
+        console.log('success')
+        toast.success('Submit request successfully', { autoClose: 1500 })
+      } else {
+        toast.error('Submit request failed', { autoClose: 1500 })
+        console.log('error')
+      }
+      setUser({})
+      setImgUriKYC('')
+      setImgUriNFT('')
     }
   }
 
@@ -294,12 +302,12 @@ function UserKYC() {
             </Form.Item>
           </div>
         </div>
-        <div className='d-flex justify-content-center'>
+        <div className="d-flex justify-content-center">
           <Input
             type="submit"
             value="Upload NFT"
             className="btn-submit-custom"
-            style={{ width: 'fit-content', color: "#fff" }}
+            style={{ width: 'fit-content', color: '#fff' }}
           />
         </div>
       </Form>
