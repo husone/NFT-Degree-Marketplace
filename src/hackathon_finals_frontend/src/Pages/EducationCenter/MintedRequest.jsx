@@ -98,92 +98,18 @@ function MintedRequest() {
   }
 
   return (
-    <div>
-      <h2 className="my-4">MINTED REQUESTS</h2>
-      {/* <Table columns={columns} dataSource={data} />
-
-      <Modal
-        title="Minted NFT"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={800}
-      >
-        <div className="d-flex justify-content-between row">
-          <Form
-            encType="multipart/form-data"
-            style={{ maxWidth: '60vw', margin: '0px auto' }}
-            labelCol={{ span: 9 }}
-            wrapperCol={{ span: 20 }}
-            disabled
-            className="col-7"
-          >
-            <Form.Item label="First name" name="firstName">
-              <Input type="text" id="firstName" value={'temp first name'} />
-            </Form.Item>
-
-            <Form.Item label="Last name" name="lastName">
-              <Input value={'temp last name'} />
-            </Form.Item>
-
-            <Form.Item label="Date of Birth" name="dob">
-              <Input value={'temp date of birth'} />
-            </Form.Item>
-
-            <Form.Item label="Education center" name="educationCenter">
-              <Input value={'temp education center'} />
-            </Form.Item>
-
-            <Form.Item label="Nation ID Number" name="nationIdNumber">
-              <Input value={'temp nation id number'} />
-            </Form.Item>
-
-            <Form.Item label="Student ID" name="studentId">
-              <Input value={'temp student id'} />
-            </Form.Item>
-
-            <Form.Item label="Name of Certificate" name="nameOfCertificate">
-              <Input value={'temp name of certificate'} />
-            </Form.Item>
-          </Form> */}
-
-      {/* <Container className="wrap_img">
-            {
-              false && // render image if exist, replace false by uri
-              <img src="" alt="preview image" srcset="" />
-            }
-          </Container> */}
-      {/* 
-          <Form
-            labelCol={{ span: 12 }}
-            wrapperCol={{ span: 20 }}
-            disabled
-            className="col-5 ml-4"
-          >
-            <Form.Item
-              label="Legal representative"
-              name="legalRepresentative"
-              className="mx-4"
-            >
-              <Container className="wrap_img mb-4">
-                {false && ( // render image if exist, replace false by uri
-                  <img src="" alt="preview image" srcset="" />
-                )}
-              </Container>
-            </Form.Item>
-            <Form.Item label="KYC Image" name="file" className="mx-4">
-              <Container className="wrap_img">
-                {false && ( // render image if exist, replace false by uri
-                  <img src="" alt="preview image" srcset="" />
-                )}
-              </Container>
-            </Form.Item>
-          </Form>
-        </div>
-      </Modal> */}
-      {listNFTMinted.map(nft => {
-        return <MyNFTItem nft={nft} key={Number(nft?.id)} />
-      })}
+    <div className="pt-5 container">
+      <h2 className="my-4 mt-2 text-white text-center">MINTED REQUESTS</h2>
+      <hr />
+      <div className="row g-2 ">
+        {listNFTMinted.map(nft => {
+          return (
+            <div className="col-lg-4">
+              <MyNFTItem nft={nft} key={Number(nft?.id)} />
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

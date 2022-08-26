@@ -239,9 +239,13 @@ function MintRequest() {
   }
 
   return (
-    <div>
-      <h2 className="my-4">MINT REQUESTS</h2>
-      <Table columns={columns} dataSource={requestsFilter} />
+    <div className="pt-5">
+      <h2 className="my-4 mt-0 text-white text-center">MINT REQUESTS</h2>
+      <Table
+        columns={columns}
+        dataSource={requestsFilter}
+        style={{ margin: '0 auto' }}
+      />
 
       <Modal
         title="User KYC to mint NFT"
