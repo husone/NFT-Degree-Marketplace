@@ -13,10 +13,13 @@ import Types "./Types";
 shared actor class DAO(dip20 : Principal, init : Types.BasicDaoStableStorage) = Self {
 
     stable var daoToken : Types.IDIP20 = actor (Principal.toText(dip20));
-    stable var accounts = Types.accounts_fromArray(init.accounts);
-    stable var proposals = Types.proposals_fromArray(init.proposals);
+    stable var accounts = Trie.empty<Principal, Types.Tokens>();
+    stable var proposals = Trie.empty<Nat, Types.Proposal>();
     stable var next_proposal_id : Nat = 0;
-    stable var system_params : Types.SystemParams = init.system_params;
+    stable let transfer_fee : Types.Tokens = {amount_e8s = 10_000};
+    stable let proposal_vote_threshold : Types.Tokens = {amount_e8s = 10_000_000};
+    stable let proposal_submission_deposit : Types.Tokens = {amount_e8s = 10_000};
+    stable var system_params : Types.SystemParams = {transfer_fee = transfer_fee; proposal_vote_threshold = proposal_vote_threshold; proposal_submission_deposit = proposal_submission_deposit};
 
     system func heartbeat() : async () {
         await execute_accepted_proposals();
