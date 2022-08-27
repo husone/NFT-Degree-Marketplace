@@ -317,7 +317,7 @@ shared actor class Dip721NFT() = Self {
   };
 
   public shared({caller}) func addCenter(center: Types.Center) : async Bool {
-    if (!(caller ==ad or caller == nftMain)) {
+    if (not (caller == ad or caller == nftMain)) {
       return false;
     };
     centers := List.push(center, centers);
