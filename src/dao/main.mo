@@ -16,13 +16,13 @@ shared actor class DAO(dip20 : Principal) = Self {
     stable var accounts = Trie.empty<Principal, Types.Tokens>();
     stable var proposals = Trie.empty<Nat, Types.Proposal>();
     stable var next_proposal_id : Nat = 0;
-    stable let transfer_fee : Types.Tokens = {amount_e8s = 10_000};
+    stable let transfer_fee : Types.Tokens = {amount_e8s = 0};
     stable let proposal_vote_threshold : Types.Tokens = {amount_e8s = 10_000_000};
-    stable let proposal_submission_deposit : Types.Tokens = {amount_e8s = 10_000};
+    stable let proposal_submission_deposit : Types.Tokens = {amount_e8s = 100};
     stable var system_params : Types.SystemParams = {transfer_fee = transfer_fee; proposal_vote_threshold = proposal_vote_threshold; proposal_submission_deposit = proposal_submission_deposit};
 
     system func heartbeat() : async () {
-        await execute_accepted_proposals();
+        // await execute_accepted_proposals();
     };
 
     func account_get(id : Principal) : ?Types.Tokens = Trie.get(accounts, Types.account_key(id), Principal.equal);
@@ -34,46 +34,108 @@ shared actor class DAO(dip20 : Principal) = Self {
         proposals := Trie.put(proposals, Types.proposal_key(id), Nat.equal, proposal).0;
     };
 
-
     /// Transfer tokens from the caller's account to another account
-    public shared({caller}) func transfer(transfer: Types.TransferArgs) : async Types.Result<(), Text> {
-        switch (account_get caller) {
-        case null { #err "Caller needs an account to transfer funds" };
-        case (?from_tokens) {
-                 let fee = system_params.transfer_fee.amount_e8s;
-                 let amount = transfer.amount.amount_e8s;
-                 if (from_tokens.amount_e8s < amount + fee) {
-                     #err ("Caller's account has insufficient funds to transfer " # debug_show(amount));
-                 } else {
-                     let from_amount : Nat = from_tokens.amount_e8s - amount - fee;
-                     account_put(caller, { amount_e8s = from_amount });
-                     let to_amount = Option.get(account_get(transfer.to), Types.zeroToken).amount_e8s + amount;
-                     account_put(transfer.to, { amount_e8s = to_amount });
-                     #ok;
-                 };
+    // public shared({caller}) func transfer(transfer: Types.TransferArgs) : async Types.Result<(), Text> {
+    //     switch (account_get caller) {
+    //     case null { #err "Caller needs an account to transfer funds" };
+    //     case (?from_tokens) {
+    //              let fee = system_params.transfer_fee.amount_e8s;
+    //              let amount = transfer.amount.amount_e8s;
+    //              if (from_tokens.amount_e8s < amount + fee) {
+    //                  #err ("Caller's account has insufficient funds to transfer " # debug_show(amount));
+    //              } else {
+    //                  let from_amount : Nat = from_tokens.amount_e8s - amount - fee;
+    //                  account_put(caller, { amount_e8s = from_amount });
+    //                  let to_amount = Option.get(account_get(transfer.to), Types.zeroToken).amount_e8s + amount;
+    //                  account_put(transfer.to, { amount_e8s = to_amount });
+    //                  #ok;
+    //              };
+    //     };
+    //   };
+    // };
+
+        public type TxReceipt = {
+        #Ok: Nat;
+        #Err: {
+            #InsufficientAllowance;
+            #InsufficientBalance;
+            #ErrorOperationStyle;
+            #Unauthorized;
+            #LedgerTrap;
+            #ErrorTo;
+            #Other: Text;
+            #BlockUsed;
+            #AmountTooSmall;
         };
-      };
     };
 
-    /// Return the account balance of the caller
-    public query({caller}) func account_balance() : async Types.Tokens {
-        Option.get(account_get(caller), Types.zeroToken)
+    public shared({caller}) func stake(amount : Nat) {
+        let t = await transfer(caller,amount);
+        switch (t) {
+            case (true) {
+                let t1 = account_get(caller);
+                switch (t1){
+                    case null{
+                        account_put(caller,{amount_e8s = amount});
+                    };
+                    case (?tokens){
+                        let new_amount = tokens.amount_e8s + amount;
+                        account_put(caller,{amount_e8s = new_amount});
+                    };
+                };
+
+            };
+            case (false){
+                return;
+            };
+        };
     };
+
+    public shared({caller}) func unstake(amount : Nat) {
+        let t1 = account_get(caller);
+        switch (t1){
+            case null{
+                return;
+            };
+            case (?tokens){
+                if (tokens.amount_e8s >= amount){
+                    let new_amount = tokens.amount_e8s - amount;
+                    account_put(caller,{amount_e8s = new_amount});
+                    let t = await daoToken.transfer(caller, amount);
+                } else {
+                    return;
+                    };
+                };
+            };
+        };
 
     /// Lists all accounts
-    public query func list_accounts() : async [Types.Account] {
-        Iter.toArray(
-          Iter.map(Trie.iter(accounts),
-                   func ((owner : Principal, tokens : Types.Tokens)) : Types.Account = { owner; tokens }))
-    };
+    // public query func list_accounts() : async [Types.Account] {
+    //     Iter.toArray(
+    //       Iter.map(Trie.iter(accounts),
+    //                func ((owner : Principal, tokens : Types.Tokens)) : Types.Account = { owner; tokens }))
+    // };
 
     /// Submit a proposal
     ///
     /// A proposal contains a canister ID, method name and method args. If enough users
     /// vote "yes" on the proposal, the given method will be called with the given method
     /// args on the given canister.
-    public shared({caller}) func submit_proposal(payload: Types.ProposalPayload) : async Types.Result<Nat, Text> {
-        Result.chain(deduct_proposal_submission_deposit(caller), func (()) : Types.Result<Nat, Text> {
+
+    public shared({caller}) func transfer(id : Principal, amount : Nat) : async Bool {
+        let t1 = (await daoToken.allowance(caller, Principal.fromActor(Self)));
+        let t2 = (await daoToken.balanceOf(caller));
+        if (t1>= amount and t2>= amount){
+            let t3 = await daoToken.transferFrom(caller, Principal.fromActor(Self), amount);
+            return true;
+        };
+        return false;
+    };
+
+    public shared({caller}) func submit_proposal(payload: Text) : async Types.Result<Nat, Text> {
+        let t = await transfer(caller, 1000);
+        switch (t){
+            case (true){
             let proposal_id = next_proposal_id;
             next_proposal_id += 1;
 
@@ -89,7 +151,11 @@ shared actor class DAO(dip20 : Principal) = Self {
             };
             proposal_put(proposal_id, proposal);
             #ok(proposal_id)
-        })
+            };
+            case (false){
+                return #err("Not enough tokens");
+            };
+        };
     };
 
     /// Return the proposal with the given ID, if one exists
@@ -159,76 +225,76 @@ shared actor class DAO(dip20 : Principal) = Self {
     };
 
     /// Get the current system params
-    public query func get_system_params() : async Types.SystemParams { system_params };
+    // public query func get_system_params() : async Types.SystemParams { system_params };
 
     /// Update system params
     ///
     /// Only callable via proposal execution
-    public shared({caller}) func update_system_params(payload: Types.UpdateSystemParamsPayload) : async () {
-        if (caller != Principal.fromActor(Self)) {
-            return;
-        };
-        system_params := {
-            transfer_fee = Option.get(payload.transfer_fee, system_params.transfer_fee);
-            proposal_vote_threshold = Option.get(payload.proposal_vote_threshold, system_params.proposal_vote_threshold);
-            proposal_submission_deposit = Option.get(payload.proposal_submission_deposit, system_params.proposal_submission_deposit);
-        };
-    };
+    // public shared({caller}) func update_system_params(payload: Types.UpdateSystemParamsPayload) : async () {
+    //     if (caller != Principal.fromActor(Self)) {
+    //         return;
+    //     };
+    //     system_params := {
+    //         transfer_fee = Option.get(payload.transfer_fee, system_params.transfer_fee);
+    //         proposal_vote_threshold = Option.get(payload.proposal_vote_threshold, system_params.proposal_vote_threshold);
+    //         proposal_submission_deposit = Option.get(payload.proposal_submission_deposit, system_params.proposal_submission_deposit);
+    //     };
+    // };
 
     /// Deduct the proposal submission deposit from the caller's account
-    func deduct_proposal_submission_deposit(caller : Principal) : Types.Result<(), Text> {
-        switch (account_get(caller)) {
-        case null { #err "Caller needs an account to submit a proposal" };
-        case (?from_tokens) {
-                 let threshold = system_params.proposal_submission_deposit.amount_e8s;
-                 if (from_tokens.amount_e8s < threshold) {
-                     #err ("Caller's account must have at least " # debug_show(threshold) # " to submit a proposal")
-                 } else {
-                     let from_amount : Nat = from_tokens.amount_e8s - threshold;
-                     account_put(caller, { amount_e8s = from_amount });
-                     #ok
-                 };
-             };
-        };
-    };
+    // func deduct_proposal_submission_deposit(caller : Principal) : Types.Result<(), Text> {
+    //     switch (account_get(caller)) {
+    //     case null { #err "Caller needs an account to submit a proposal" };
+    //     case (?from_tokens) {
+    //              let threshold = system_params.proposal_submission_deposit.amount_e8s;
+    //              if (from_tokens.amount_e8s < threshold) {
+    //                  #err ("Caller's account must have at least " # debug_show(threshold) # " to submit a proposal")
+    //              } else {
+    //                  let from_amount : Nat = from_tokens.amount_e8s - threshold;
+    //                  account_put(caller, { amount_e8s = from_amount });
+    //                  #ok
+    //              };
+    //          };
+    //     };
+    // };
 
     /// Execute all accepted proposals
-    func execute_accepted_proposals() : async () {
-        let accepted_proposals = Trie.filter(proposals, func (_ : Nat, proposal : Types.Proposal) : Bool = proposal.state == #accepted);
-        // Update proposal state, so that it won't be picked up by the next heartbeat
-        for ((id, proposal) in Trie.iter(accepted_proposals)) {
-            update_proposal_state(proposal, #executing);
-        };
+    // func execute_accepted_proposals() : async () {
+    //     let accepted_proposals = Trie.filter(proposals, func (_ : Nat, proposal : Types.Proposal) : Bool = proposal.state == #accepted);
+    //     // Update proposal state, so that it won't be picked up by the next heartbeat
+    //     for ((id, proposal) in Trie.iter(accepted_proposals)) {
+    //         update_proposal_state(proposal, #executing);
+    //     };
 
-        for ((id, proposal) in Trie.iter(accepted_proposals)) {
-            switch (await execute_proposal(proposal)) {
-            case (#ok) { update_proposal_state(proposal, #succeeded); };
-            case (#err(err)) { update_proposal_state(proposal, #failed(err)); };
-            };
-        };
-    };
+    //     for ((id, proposal) in Trie.iter(accepted_proposals)) {
+    //         switch (await execute_proposal(proposal)) {
+    //         case (#ok) { update_proposal_state(proposal, #succeeded); };
+    //         case (#err(err)) { update_proposal_state(proposal, #failed(err)); };
+    //         };
+    //     };
+    // };
 
     /// Execute the given proposal
-    func execute_proposal(proposal: Types.Proposal) : async Types.Result<(), Text> {
-        try {
-            let payload = proposal.payload;
-            ignore await ICRaw.call(payload.canister_id, payload.method, payload.message);
-            #ok
-        }
-        catch (e) { #err(Error.message e) };
-    };
+    // func execute_proposal(proposal: Types.Proposal) : async Types.Result<(), Text> {
+    //     try {
+    //         let payload = proposal.payload;
+    //         ignore await ICRaw.call(payload.canister_id, payload.method, payload.message);
+    //         #ok
+    //     }
+    //     catch (e) { #err(Error.message e) };
+    // };
 
-    func update_proposal_state(proposal: Types.Proposal, state: Types.ProposalState) {
-        let updated = {
-            state;
-            id = proposal.id;
-            votes_yes = proposal.votes_yes;
-            votes_no = proposal.votes_no;
-            voters = proposal.voters;
-            timestamp = proposal.timestamp;
-            proposer = proposal.proposer;
-            payload = proposal.payload;
-        };
-        proposal_put(proposal.id, updated);
-    };
+    // func update_proposal_state(proposal: Types.Proposal, state: Types.ProposalState) {
+    //     let updated = {
+    //         state;
+    //         id = proposal.id;
+    //         votes_yes = proposal.votes_yes;
+    //         votes_no = proposal.votes_no;
+    //         voters = proposal.voters;
+    //         timestamp = proposal.timestamp;
+    //         proposer = proposal.proposer;
+    //         payload = proposal.payload;
+    //     };
+    //     proposal_put(proposal.id, updated);
+    // };
 };
