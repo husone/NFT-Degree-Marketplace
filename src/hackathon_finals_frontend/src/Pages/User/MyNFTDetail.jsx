@@ -33,6 +33,7 @@ function MyNFTDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [infoUpdate, setInfoUpdate] = useState({})
   const [isShowSetPrice, setIsShowSetPrice] = useState(false)
+  const [price, setPrice] = useState(0)
 
   useEffect(() => {
     if (principal) {
@@ -50,6 +51,9 @@ function MyNFTDetail() {
       } else {
         getNftFromDB()
         getNFTViewer()
+      }
+      if (isPublic) {
+        getPriceNFT()
       }
       setIsLoaded(true)
     }
@@ -192,7 +196,12 @@ function MyNFTDetail() {
     setViewers(res)
   }
 
-  const setPrice = async () => {
+  const getPriceNFT = async () => {
+    const res = await final_be.getPrice(BigInt(id))
+    setPrice(Number(res))
+  }
+
+  const setPriceNFT = async () => {
     // a is price from input
     if (!status.isPublic) {
       info()
@@ -200,7 +209,7 @@ function MyNFTDetail() {
       if (infoUpdate.price) {
         toast('Setting price...', { autoClose: 1500 })
         const res = await final_be.listing(BigInt(id), BigInt(infoUpdate.price))
-        console.log(res)
+        setPrice(Number(res))
       } else {
         toast.warn('Please enter price')
       }
@@ -273,6 +282,8 @@ function MyNFTDetail() {
     toast('Canceling...', { autoClose: 1500 })
     const res = await final_be.cancelListing(BigInt(id))
     if (res.Ok) {
+      const priceRes = await final_be.getPrice(BigInt(id))
+      setPrice(Number(priceRes))
       toast.success('Cancel listing successfully')
     } else {
       toast.error('Cancel listing fail')
@@ -351,7 +362,7 @@ function MyNFTDetail() {
               <div className="card card-style">
                 <div className="card-body d-flex justify-content-between flex-column">
                   <h6 className="text-secondary">Current Price</h6>
-                  {nft?.price === 0 ? (
+                  {price === 0 ? (
                     <div className="d-flex">
                       <div className="d-flex align-items-center">
                         <img
@@ -363,7 +374,7 @@ function MyNFTDetail() {
                           className="text-white fw-bold ms-2"
                           style={{ margin: 'auto 0' }}
                         >
-                          {`${nft?.price} DBZ`}
+                          {`${price} DBZ`}
                         </h2>
                       </div>
                       <button
@@ -387,12 +398,19 @@ function MyNFTDetail() {
                     </div>
                   ) : (
                     <div className="d-flex">
-                      <h2
-                        className="text-white fw-bold"
-                        style={{ margin: 'auto 0' }}
-                      >
-                        {nft?.price}
-                      </h2>
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={CoinIcon}
+                          alt=""
+                          style={{ width: '30px', height: '30px' }}
+                        />
+                        <h2
+                          className="text-white fw-bold ms-2"
+                          style={{ margin: 'auto 0' }}
+                        >
+                          {`${price} DBZ`}
+                        </h2>
+                      </div>
                       <button
                         className="btn btn-danger ms-3 text-white d-flex align-items-center"
                         onClick={showConfirmCancelListing}
@@ -522,7 +540,7 @@ function MyNFTDetail() {
           <Modal
             title="Transfer NFT"
             visible={isShowSetPrice}
-            onOk={() => setPrice()}
+            onOk={() => setPriceNFT()}
             onCancel={() => setIsShowSetPrice(false)}
           >
             <Form.Item className="mt-5" label="Enter price">

@@ -9,9 +9,9 @@ import IMAGES from '../../Assets/IMAGE'
 import Carousel from 'react-bootstrap/Carousel'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
 import { Principal } from '@dfinity/principal'
-import axios from "axios";
+import axios from 'axios'
 import { bufferToURI } from '../../Utils/format'
-
+import IntroduceComponent from './components/IntroduceComponent'
 const topCenter = [
   {
     name: 'FPT University',
@@ -95,7 +95,7 @@ const topCertificate = [
 ]
 const { Search } = Input
 const { TabPane } = Tabs
-const { header_1, header_2, header_3, icon_1, icon_2, icon_3, icon_4 } = IMAGES
+const { header_1, header_2, header_3 } = IMAGES
 function Home() {
   const [size, setSize] = useState('large')
   const [listNFT, setListNFT] = useState([])
@@ -104,35 +104,25 @@ function Home() {
   console.log(listNFT)
   useEffect(() => {
     getAllNFT()
-    getCenters()
     getEducation()
   }, [])
 
-  const getCenters = async () => {
-    const res = await final_be.getCenters()
-    console.log(res)
-  }
-
   const getAllNFT = async () => {
     const res = await final_be.getNFTPublic()
+    console.log(res)
     setListNFT(res)
   }
-
-  const onSearch = () => {}
 
   const onChange = key => {
     console.log(key)
   }
 
   const getEducation = () => {
-    axios.get(`${process.env.BACKEND_OFF_HEROKU}/education`)
-      .then(
-        res => {
-          console.log(res.data.education)
-          setEducation(res.data.education)
-          console.log(education)
-        }
-      )
+    axios.get(`${process.env.BACKEND_OFF_HEROKU}/education`).then(res => {
+      console.log(res.data.education)
+      setEducation(res.data.education)
+      console.log(education)
+    })
   }
 
   return (
@@ -229,12 +219,18 @@ function Home() {
                   <div className="sc-author col">
                     <div className="p-1">
                       <div className="card-avatar mb-4">
-                        <img src={bufferToURI(center.imageLogo)} alt="center uri" />
+                        <img
+                          src={bufferToURI(center.imageLogo)}
+                          alt="center uri"
+                        />
                       </div>
                       <div className="infor">
                         <h6>
                           {' '}
-                          <a className="text-light text-capitalize" href="author.html">
+                          <a
+                            className="text-light text-capitalize"
+                            href="author.html"
+                          >
                             {center.name}
                           </a>{' '}
                         </h6>
@@ -287,17 +283,14 @@ function Home() {
                       </div>
                     </div>
                     <div className="certificates_wrapper">
-                      {topCertificate.map((certificate, index) => {
+                      {listNFT.map((nft, index) => {
                         return (
                           <div>
                             <div className="cer_img">
-                              <img
-                                src={certificate.uri}
-                                alt="certificate uri"
-                              />
+                              <img src={nft?.metadata?.cid} alt="nft uri" />
                             </div>
-                            <h6 className="description mx-3 my-3 text-light">
-                              "This is description for certificate"
+                            <h6 className="description mx-3 my-3 text-light text-capitalize">
+                              {nft?.metadata?.name}
                             </h6>
                             <div
                               className="row d-flex cer_content px-4"
@@ -305,10 +298,10 @@ function Home() {
                             >
                               <div className="col px-0 border-end my-3">
                                 <h3 className="text-light m-0 text-center">
-                                  {certificate.owner}
+                                  {nft?.metadata?.center}
                                 </h3>
                                 <p className="text-muted text-center m-0">
-                                  Owner
+                                  Education
                                 </p>
                               </div>
                               <div className="col text-center px-0 my-3">
@@ -328,116 +321,11 @@ function Home() {
                 </div>
               </div>
             </div>
-            {listNFT.map(nft => {
-              const id = Number(nft?.id)
-              return (
-                <div className="col-xl-4 col-lg-6 col-md-6" key={id}>
-                  <Link to={`/nft/${id}`} key={id}>
-                    <MyNFTItem nft={nft} />
-                  </Link>
-                </div>
-              )
-            })}
           </div>
         </div>
       </section>
 
-      <section className="create-and-sell tf-section bg-color-14161B">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="sc-heading style-2 create-and-sell">
-                <div className="content-left">
-                  <div className="inner">
-                    <h3 className="text-light">Create and sell your NFTs</h3>
-                    <p className="desc">
-                      Most popular gaming digital nft market place{' '}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 col-12">
-              <div className="sc-wallet style-2 active">
-                <div className="icon">
-                  <img src={icon_1} alt="" className="" />
-                </div>
-                <div className="content st-current">
-                  <h5 className="">
-                    <a href="" className="gradient-heading">
-                      Set Up Your Wallet
-                    </a>
-                  </h5>
-                  <p className="">
-                    Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
-                  </p>
-                  <a href="" className="read-more">
-                    <i className="fas fa-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 col-12">
-              <div className="sc-wallet style-2">
-                <div className="icon">
-                  <img src={icon_2} alt="" className="" />
-                </div>
-                <div className="content">
-                  <h5 className="">
-                    <a href="" className="gradient-heading">
-                      Create Your Collection
-                    </a>
-                  </h5>
-                  <p className="">
-                    Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
-                  </p>
-                  <a href="" className="read-more">
-                    <i className="fas fa-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 col-12">
-              <div className="sc-wallet style-2 mg-bt-0">
-                <div className="icon">
-                  <img src={icon_3} alt="" className="" />
-                </div>
-                <div className="content">
-                  <h5>
-                    <a href="author.html" className="gradient-heading">
-                      Add Your NFTs
-                    </a>
-                  </h5>
-                  <p className="">
-                    Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
-                  </p>
-                  <a href="author.html" className="read-more">
-                    <i className="fas fa-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 col-12">
-              <div className="sc-wallet style-2 mg-bt-0 end">
-                <div className="icon">
-                  <img src={icon_4} alt="" />
-                </div>
-                <div className="content">
-                  <h5>
-                    <a href="item.html">List Them For Sale</a>
-                  </h5>
-                  <p>
-                    Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}
-                  </p>
-                  <a href="item.html" className="read-more">
-                    <i className="fas fa-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <IntroduceComponent />
     </div>
   )
 }
