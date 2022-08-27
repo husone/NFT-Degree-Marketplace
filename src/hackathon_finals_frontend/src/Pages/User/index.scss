@@ -1,0 +1,185 @@
+.ant-table-thead .ant-table-cell {
+  font-size: 16px;
+  background: #14161B;
+}
+colgroup {
+  background: #000 !important;
+  color: #fff !important;
+}
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #3c3939 !important ;
+  cursor: pointer;
+  color: #fff !important;
+}
+.ant-btn-primary {
+  color: #3c3939 !important;
+  border-color: rgba(149, 143, 143, 0.12) !important;
+  background: rgba(149, 143, 143, 0.12) !important;
+  border-radius: 5px !important;
+}
+.ant-tag {
+  border-radius: 8px !important;
+  background-color: #41ec8b50 !important;
+  color: rgb(53, 255, 53) !important;
+  padding: 5px 15px !important;
+  border: 0px !important;
+}
+.ant-input {
+  border-radius: 8px !important;
+  height: 40px;
+  &:focus {
+    border-color: #f052a4 !important;
+    box-shadow: 0 0 0 2px #f052a4 !important;
+  }
+  &:hover {
+    border-color: #f052a480 !important;
+  }
+}
+.button-submit .ant-form-item-control-input-content {
+  margin-left: 45%;
+}
+.btn-submit-custom {
+  font-weight: bold !important;
+  height: 2.5rem;
+  background-color: #343444 !important;
+  color: #fff;
+  border: none !important;
+}
+.btn-submit-custom:hover {
+  background: #41ec8b !important;
+  transition: 0.3s;
+  background-position: right center;
+  border: none !important;
+  color: white !important;
+}
+#fileUpload {
+  display: none;
+}
+.ant-form-horizontal .ant-form-item-label {
+  text-align: left !important;
+}
+.ant-modal {
+  &-header {
+    border-radius: 20px 20px 0 0 !important;
+    text-align: center;
+  }
+  &-content {
+    border-radius: 20px !important;
+  }
+  &-title {
+    font-weight: bold !important;
+  }
+  &-footer {
+    display: flex;
+    justify-content: center;
+    padding: 0px 16px 30px 16px !important;
+    border-top: none !important;
+  }
+
+  .ant-btn {
+    width: 100% !important;
+    &:hover {
+      border: 1px solid #f052a444 !important;
+      box-shadow: 0 0 0 2px #f052a444 !important;
+      color: #f052a4 !important;
+    }
+  }
+  .ant-form-item-label > label {
+    color: rgb(111, 110, 110);
+}
+}
+
+.ant-table-tbody > tr.ant-table-placeholder:hover > td {
+  background-color: #3c3939 !important;
+}
+
+.ant-spin-nested-loading{
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td{
+  border-bottom: 0px !important;
+  color: #fff !important;
+}
+
+.ant-input{
+  background-color: #343444 !important;
+  border: none !important;
+}
+
+.ant-select-selector{
+  background-color: #343444 !important;
+  border: none !important;
+  width: 100%;
+  height: 100% !important;
+  display: flex;
+  align-items: center;
+  .ant-select-selection-search{
+    line-height: 40px;
+  }
+}
+
+.ant-select.ant-select-in-form-item{
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100% !important;
+}
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: #3c3939 !important;
+  box-shadow: 0px 0px 5px 2px #ffffff15;
+}
+.rc-virtual-list-holder-inner{
+  background-color: #3c3939 !important;
+}
+
+.ant-select-dropdown{
+  background-color: #3c3939 !important;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.heading1{
+  font-size: 43px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ant-table-wrapper{
+  width: 80%;
+}
+.ant-form-item-control-input{
+  .ant-form-item-control-input-content{
+    margin: 0px !important;
+    display: flex;
+    justify-content: center !important;
+  }
+}
+.ant-table-cell{
+  background-color: #343444;
+}
+
+.ant-form-item-label label{
+  color: transparent !important;
+}
+
+.hidden_label .ant-form-item-label{
+  label{
+    color: transparent !important;
+  }
+}
+
+.ant-modal .ant-btn{
+  border-radius: 5px;
+  padding: 5px 15px !important;
+  border: 0px !important;
+  &:hover{
+    border: 0px !important;
+  }
+}
+
+.ant-modal-content{
+  box-shadow: 0px 0px 10px 5px #ffffff30 !important;
+}

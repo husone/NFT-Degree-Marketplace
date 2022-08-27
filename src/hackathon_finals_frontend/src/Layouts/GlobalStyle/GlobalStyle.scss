@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans&family=Urbanist:ital,wght@0,600;0,900;1,600;1,900&display=swap');
+@import 'normalize.css';
+
+html {}
+
+body {
+  color: #fff;
+  font-family: 'Urbanist', sans-serif;
+}
+
+section {
+  padding: 30px 0;
+}
+
+.sc-author {
+  position: relative;
+  padding: 28px 0px;
+  border: 2px solid rgba(99, 69, 237, 0.1);
+  border-radius: 12px;
+  background-color: #343444;
+  text-align: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.sc-author.style-2 {
+  position: relative;
+  display: flex;
+  text-align: left;
+  align-items: center;
+  padding: 24px 20px 22px 24px;
+  margin-bottom: 30px;
+  background-color: #343444;
+}
+
+.sc-author.style-2 .card-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  overflow: hidden;
+  margin-right: 30px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+/* Page Title Inner
+-------------------------------------------------------------- */
+.fl-page-title {
+  padding: 83px 0;
+  position: relative;
+  background: #fff;
+  background-size: cover;
+  background: linear-gradient(130.35deg,
+      rgba(99, 69, 237, 0.85) 17.35%,
+      rgba(220, 57, 252, 0.85) 78.23%);
+}
+
+.fl-page-title .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.page-title-inner {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-title-heading .heading {
+  color: #fff;
+  letter-spacing: -2px;
+}
+
+// ANTD
+.ant-modal-confirm-body,
+.ant-modal-confirm-content,
+.ant-modal-confirm-title,
+.ant-btn span,
+.ant-form-item-label label,
+.ant-form-item-control-input-content input {
+  color: #fff !important;
+}
+
+.ant-tabs-tab-btn {
+  font-size: 20px;
+}
+
+.ant-pagination {
+  .ant-pagination-item-active {
+    background-color: #14161b;
+    border: 0px !important;
+    color: #fff;
+  }
+
+  .ant-pagination-disabled .ant-pagination-item-link,
+  .ant-pagination-disabled:hover .ant-pagination-item-link {
+    color: #ccc;
+    border: 0px !important;
+    background-color: #343444;
+    cursor: not-allowed;
+  }
+}
+
+.ant-table {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.ant-input[disabled] {
+  background-color: #343444 !important;
+}
+
+.ant-btn {
+  background-color: #3f3f8e !important;
+}
+
+#root {
+  position: relative;
+
+  .dialog-styles {
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+
+    .dialog-container {
+      width: fit-content;
+    }
+  }
+}
+
+<<<<<<< HEAD
+.gradient-heading {
+  background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.is_dark .sc-button.btn-bordered-white {
+  border: 2px solid #fff;
+}
+
+.sc-author .sc-button {
+  padding: 3px 19px;
+}
+
+.sc-button {
+  display: inline-block;
+  position: relative;
+  padding: 9px 22px;
+  border-radius: 100px !important;
+  border: 2px solid #fff;
+  outline: 0 none;
+  cursor: pointer;
+  z-index: 1;
+  background-color: transparent !important;
+  width: fit-content;
+  height: fit-content;
+
+  &:hover {
+    background-image: linear-gradient(to left, #6345ED 58.12%, #DC39FC 81.74%);
+    border: unset;
+    background-size: 200% auto;
+    border: 2px solid transparent;
+  }
+}
+=======
+.ant-modal-body p {
+  color: #fff !important;
+}
+
+.ant-select-selection-item {
+  text-transform: capitalize !important;
+  color: #fff !important;
+}
+>>>>>>> 4a9d3d840c8f0ea60eb87f9b8e9da1a1e17d64ae

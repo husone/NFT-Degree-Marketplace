@@ -1,5 +1,5 @@
 function AllNFTs() {
-  return <h1>All NFT page</h1>
+  return <h2>All NFT page</h2>
 }
 
 export default AllNFTs

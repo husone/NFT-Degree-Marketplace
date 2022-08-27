@@ -1,0 +1,49 @@
+.card-style {
+  border: 2px solid rgba(99, 69, 237, 0.1) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease;
+  background-color: #343444 !important;
+}
+
+.accordion-item,
+.accordion-header {
+  background-color: #343444 !important;
+  border-radius: 12px !important;
+}
+
+.accordion {
+  --bs-accordion-border-color: none;
+}
+
+.accordion-button:not(.collapsed) {
+  border: 2px solid rgba(99, 69, 237, 0.1);
+  background-color: #343444;
+  color: #fff;
+}
+
+.accordion-button,
+.list-group-item {
+  background-color: #343444;
+  color: #fff;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 2px solid rgba(99, 69, 237, 0.1);
+}
+
+.accordion-button::after {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: rgba(99, 69, 237, 0.1);
+}
+
+/* ANTD */
+/* MODAL NOTIFICATION*/
+
+.ant-modal-content {
+  background-color: #212529 !important;
+}
