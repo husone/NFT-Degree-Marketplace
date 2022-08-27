@@ -118,7 +118,6 @@ function Home() {
   return (
     <div>
       <CarouselHeader />
-
       <section className="tf-best-seller">
         <div className="best-seller-inner">
           <div className="container">

@@ -11,6 +11,7 @@ import DetailNFT from '../Pages/NFTs/DetailNFT'
 import MyNFTDetail from '../Pages/User/MyNFTDetail'
 import Staking from '../Pages/DAO/Staking'
 import MarketPlace from '../Pages/Marketplace/MarketPlace'
+import Voting from '../Pages/DAO/Voting'
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -63,7 +64,7 @@ const publicRoutes = [
   },
   {
     path: '/voting',
-    component: MyNFT,
+    component: Voting,
     role: 'user',
     desc: 'Voting',
     dropdown: 'DAO',

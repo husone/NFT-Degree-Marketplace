@@ -68,7 +68,7 @@ shared actor class Dip721NFT() = Self {
     };
 
 public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
-    // assert caller == ad;
+    assert caller == ad;
     var center  = List.find(centers, func (c : Types.Center) : Bool { c.address == centerPrincipal});
     centers := List.filter(centers, func (c : Types.Center) : Bool {
       return (?c != center);
@@ -271,7 +271,7 @@ public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
 
 
 public query func getCenters() : async [Types.Center]  {
-    // assert caller == ad;
+  
     return List.toArray(centers);
   };
     public query func getCid(token_id : Types.TokenId) : async ?Text {

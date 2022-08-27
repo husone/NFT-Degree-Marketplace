@@ -90,7 +90,7 @@ function DetailNFT() {
   }
 
   const loadStatusNFT = async () => {
-    const res = await final_be.isPublic(BigInt(id))
+    const res = await nftCanister.isPublic(BigInt(id))
     const isPublic = res.Ok
     const resu = await final_be.isViewer(
       BigInt(id),

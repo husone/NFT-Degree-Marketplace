@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Principal } from '@dfinity/principal'
 import { useConnect } from '@connect2ic/react'
 import { final_be } from '../../../../declarations/final_be'
+// import { final_be as canister } from '../../../'
 import { nftCanister } from '../../../../declarations/nftCanister'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -19,10 +20,12 @@ import './index.css'
 import CoinIcon from '../../Assets/Images/DBZcoin.png'
 import { MutatingDots } from 'react-loader-spinner'
 import { bufferToURI } from '../../Utils/format'
+import { useCanister } from '@connect2ic/react'
 
 const { confirm } = Modal
 
 function MyNFTDetail() {
+  console.log(canister)
   const textInput = useRef()
   const navigate = useNavigate()
   const { principal } = useConnect()
@@ -273,7 +276,7 @@ function MyNFTDetail() {
       name: nft?.metadata?.name,
       cer_owner: nft?.metadata?.cer_owner,
     }
-    const res = await final_be.setPublic(BigInt(id), metadata)
+    const res = await nftCanister.setPublic(BigInt(id), metadata)
     console.log(res)
     toast.success('Set public successfully', { autoClose: 1500 })
     setStatus({ ...status, isPublic: true })

@@ -19,8 +19,7 @@ function MintedRequest() {
 
   const getNFTMinted = async () => {
     const res = await nftCanister.getNFTsFromCenter(
-      Principal.fromText('2vxsx-fae')
-      // Principal.fromText(Principal.fromText(principal))
+      Principal.fromText(Principal.fromText(principal))
     )
     console.log(res)
     setListNFTMinted(res)
