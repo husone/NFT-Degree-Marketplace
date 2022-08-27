@@ -4,7 +4,7 @@ import Int "mo:base/Int";
 import Nat "mo:base/Nat";
 import List "mo:base/List";
 import Principal "mo:base/Principal";
-
+import Time "mo:base/Time";
 module {
   public type Result<T, E> = Result.Result<T, E>;
   public type Account = { owner : Principal; tokens : Tokens };
@@ -83,4 +83,54 @@ module {
   
   public let oneToken = { amount_e8s = 10_000_000 };
   public let zeroToken = { amount_e8s = 0 };  
+  public type TxReceipt = Result<Nat, ApiError>;
+  public type ApiError = {
+    #Unauthorized;
+    #InvalidTokenId;
+    #ZeroAddress;
+    #Other;
+  };
+  public type Metadata = {
+        logo : Text;
+        name : Text;
+        symbol : Text;
+        decimals : Nat8;
+        totalSupply : Nat;
+        owner : Principal;
+        fee : Nat;
+    };
+    public type TokenInfo = {
+        metadata: Metadata;
+        feeTo: Principal;
+        // status info
+        historySize: Nat;
+        deployTime: Time.Time;
+        holderNumber: Nat;
+        cycles: Nat;
+    };
+  public type IDIP20 = actor {
+       allowance: (Principal, Principal) -> async (Nat) ;
+    approve: (Principal, Nat) -> async (TxReceipt);
+   balanceOf: (Principal) -> async (Nat) ;
+   burn: (Nat) -> async (TxReceipt);
+   decimals: () -> async (Nat8) ;
+   getAllowanceSize: () -> async (Nat) ;
+   getMetadata: () -> async (Metadata) ;
+   getTokenFee: () -> async (Nat) ;
+   getTokenInfo: () -> async (TokenInfo) ;
+   getUserApprovals: (Principal) -> async ([(Principal, Nat)]) ;
+   historySize: () -> async (Nat) ;
+   logo: () -> async (Text) ;
+   mint: (Principal, Nat) -> async (TxReceipt);
+   name: () -> async (Text) ;
+   setFee: (Nat) -> async () ;
+   setFeeTo: (Principal) -> async () ;
+   setLogo: (Text) -> async () ;
+   setName: (Text) -> async () ;
+   setOwner: (Principal) -> async () ;
+   symbol: () -> async (Text) ;
+   totalSupply: () -> async (Nat) ;
+   transfer: (Principal, Nat) -> async (TxReceipt);
+   transferFrom: (Principal, Principal, Nat) -> async (TxReceipt);
+    };
 }

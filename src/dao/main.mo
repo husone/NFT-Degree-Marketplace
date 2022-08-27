@@ -10,7 +10,9 @@ import List "mo:base/List";
 import Time "mo:base/Time";
 import Types "./Types";
 
-shared actor class DAO(init : Types.BasicDaoStableStorage) = Self {
+shared actor class DAO(dip20 : Principal, init : Types.BasicDaoStableStorage) = Self {
+
+    stable var daoToken : Types.IDIP20 = actor (Principal.toText(dip20));
     stable var accounts = Types.accounts_fromArray(init.accounts);
     stable var proposals = Types.proposals_fromArray(init.proposals);
     stable var next_proposal_id : Nat = 0;
