@@ -140,7 +140,7 @@ function ListRequests() {
                         src={bufferToURI(requestModal?.imageKYC)}
                         alt="preview image"
                         srcSet=""
-                        style={{ width: '250px', height: '250px' }}
+                        style={{ width: '250px', height: '250px', borderRadius: "8px", objectFit: "cover" }}
                       />
                     </Container>
 
@@ -156,7 +156,7 @@ function ListRequests() {
                         src={bufferToURI(requestModal?.imageNFT)}
                         alt="preview image"
                         srcSet=""
-                        style={{ width: '250px', height: '250px' }}
+                        style={{ width: '250px', height: '250px', borderRadius: "8px", objectFit: "cover" }}
                       />
                     </Container>
                     <h4 className="text-center text-light">NFT Image</h4>
