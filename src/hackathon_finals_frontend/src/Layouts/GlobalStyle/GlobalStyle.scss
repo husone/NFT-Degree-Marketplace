@@ -188,3 +188,24 @@ section {
   text-transform: capitalize !important;
   color: #fff !important;
 }
+
+.heading1 {
+  font-size: 43px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ant-tabs-tab-btn {
+  font-size: 20px;
+  color: #fff;
+}
+
+.ant-spin-dot-spin {
+  transform: rotate(0deg) scale(5);
+  -webkit-animation: antRotate 1.2s infinite linear;
+  animation: antRotate 1.2s infinite linear;
+}
+
+.ant-empty-description{
+  color: #fff !important;
+}

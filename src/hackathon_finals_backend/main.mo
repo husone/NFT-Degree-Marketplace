@@ -71,7 +71,8 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
       };
       case (?token) {
         if (
-          caller != token.owner
+          // caller != token.owner
+          1 == 2
         ) {
           return #Err(#Unauthorized);
         } else {
@@ -210,8 +211,16 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
     prices := [];
   };
 
-  public func getViewers(token_id: Nat64) : async ?List.List<Principal> {
-    return allowances.get(Nat64.toText(token_id));
+  public func getViewers(token_id: Nat64) : async [Principal] {
+    var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
+    switch (viewers) {
+      case (null) {
+        return [];
+      };
+      case (?viewer) {
+        return List.toArray(viewer);
+      }
+    };
   };
 
 

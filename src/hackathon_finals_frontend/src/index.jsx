@@ -5,6 +5,7 @@ import { publicRoutes } from './Routes/index'
 import DefaultLayout from './Layouts/DefaultLayout/DefaultLayout'
 import styled from 'styled-components'
 import 'antd/dist/antd.css'
+
 import { Connect2ICProvider, ConnectDialog } from '@connect2ic/react'
 import { createClient } from '@connect2ic/core'
 import { PlugWallet } from '@connect2ic/core/providers/plug-wallet'

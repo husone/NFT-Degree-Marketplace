@@ -99,7 +99,7 @@ function MintedRequest() {
 
   return (
     <div className="pt-5 container">
-      <h2 className="my-4 mt-2 text-white text-center">MINTED REQUESTS</h2>
+      <h2 className="my-4 mt-2 text-white text-center heading1">MINTED REQUESTS</h2>
       <hr />
       <div className="row g-2 ">
         {listNFTMinted.map(nft => {
