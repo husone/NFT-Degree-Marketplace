@@ -303,15 +303,6 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
   };
 
 
-
-
-  public func setAdmin(adSet : Principal) {
-
-    ad := adSet;
-
-  };
-
-
   // func check viewer is viewer of NFT or not 
   public shared({ caller }) func isViewer(token_id: Types.TokenId, viewer: Principal) : async Types.TxReceipt {
     let item = await token721.getNFT(token_id);
