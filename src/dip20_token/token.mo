@@ -6,22 +6,21 @@
  * Stability  : Experimental
  */
 
-import Array "mo:base/Array";
-import Cap "./cap/Cap";
-import Debug "mo:base/Debug";
-import ExperimentalCycles "mo:base/ExperimentalCycles";
 import HashMap "mo:base/HashMap";
+import Principal "mo:base/Principal";
+import Types "./types";
+import Time "mo:base/Time";
 import Iter "mo:base/Iter";
-import Nat "mo:base/Nat";
-import Nat64 "mo:base/Nat64";
+import Array "mo:base/Array";
 import Option "mo:base/Option";
 import Order "mo:base/Order";
-import Principal "mo:base/Principal";
+import Nat "mo:base/Nat";
+import Nat64 "mo:base/Nat64";
 import Result "mo:base/Result";
-import Root "./cap/Root";
 import Text "mo:base/Text";
-import Time "mo:base/Time";
-import Types "./types";
+import ExperimentalCycles "mo:base/ExperimentalCycles";
+import Cap "./cap/Cap";
+import Root "./cap/Root";
 
 shared(msg) actor class Token(
     ) = this {
@@ -168,8 +167,6 @@ shared(msg) actor class Token(
 
     /// Transfers value amount of tokens from Principal from to Principal to.
     public shared(msg) func transferFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
-
-        Debug.print(Principal.toText(from) # "to:" #Principal.toText(to) # "caller: " # Principal.toText(msg.caller));
         if (_balanceOf(from) < value + fee) { return #Err(#InsufficientBalance); };
         let allowed : Nat = _allowance(from, msg.caller);
         if (allowed < value + fee) { return #Err(#InsufficientAllowance); };
@@ -440,10 +437,4 @@ shared(msg) actor class Token(
         };
         allowanceEntries := [];
     };
-
-      public func setAdmin(adSet : Principal) {
-
-    owner_ := adSet;
-
-  };
 };

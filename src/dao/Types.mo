@@ -78,20 +78,13 @@ module {
   
   public let oneToken = { amount_e8s = 10_000_000 };
   public let zeroToken = { amount_e8s = 0 };  
-     public type TxReceipt = {
-        #Ok: Nat;
-        #Err: {
-            #InsufficientAllowance;
-            #InsufficientBalance;
-            #ErrorOperationStyle;
-            #Unauthorized;
-            #LedgerTrap;
-            #ErrorTo;
-            #Other: Text;
-            #BlockUsed;
-            #AmountTooSmall;
-        };
-    };
+  public type TxReceipt = Result<Nat, ApiError>;
+  public type ApiError = {
+    #Unauthorized;
+    #InvalidTokenId;
+    #ZeroAddress;
+    #Other;
+  };
   public type Metadata = {
         logo : Text;
         name : Text;
