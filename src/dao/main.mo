@@ -9,6 +9,7 @@ import ICRaw "mo:base/ExperimentalInternetComputer";
 import List "mo:base/List";
 import Time "mo:base/Time";
 import Types "./Types";
+import Debug "mo:base/Debug";
 
 shared actor class DAO(dip20 : Principal) = Self {
 
@@ -131,7 +132,11 @@ shared actor class DAO(dip20 : Principal) = Self {
     public shared({caller}) func transfer(id : Principal, amount : Nat) : async Bool {
         let t1 = (await daoToken.allowance(id, Principal.fromActor(Self)));
         let t2 = (await daoToken.balanceOf(id));
+        Debug.print(Nat.toText(t1));
+        
+        Debug.print(Nat.toText(t2));
         if (t1>= amount and t2>= amount){
+            
             let t3 = await daoToken.transferFrom(id,Principal.fromActor(Self), amount);
             return true;
         };
