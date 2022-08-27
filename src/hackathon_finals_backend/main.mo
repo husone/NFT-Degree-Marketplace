@@ -19,7 +19,6 @@ import Types "./Types";
 import token "token";
 import types "types";
 import Random "mo:base/Random";
-import dip721 "canister:nft";
 
 actor Main {
   stable var init : Types.Dip721NonFungibleToken = { name = "My DIP721";symbol = "DFXB";
