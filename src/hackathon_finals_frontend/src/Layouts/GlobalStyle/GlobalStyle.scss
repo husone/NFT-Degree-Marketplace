@@ -142,6 +142,7 @@ section {
   }
 }
 
+<<<<<<< HEAD
 .gradient-heading {
   background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
   -webkit-background-clip: text;
@@ -176,3 +177,13 @@ section {
     border: 2px solid transparent;
   }
 }
+=======
+.ant-modal-body p {
+  color: #fff !important;
+}
+
+.ant-select-selection-item {
+  text-transform: capitalize !important;
+  color: #fff !important;
+}
+>>>>>>> 4a9d3d840c8f0ea60eb87f9b8e9da1a1e17d64ae

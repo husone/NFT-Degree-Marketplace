@@ -8,20 +8,23 @@ import { formatDate, bufferToURI } from '../.././Utils/format'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
+import { MutatingDots } from 'react-loader-spinner'
 
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [filteredRequestKYC, setFilteredRequestKYC] = useState([])
   const [requestModal, setRequestModal] = useState({})
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     fetchRequestKYC()
+    setIsLoaded(true)
   }, [])
 
   const fetchRequestKYC = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?status=pending'
+      `${process.env.BACKEND_OFF_HEROKU}/education?status=pending`
     )
     const filteredRequest = res.data.education.map(education => {
       console.log(education)
@@ -96,13 +99,14 @@ function AdminPage() {
   const approveRequest = async id => {
     const principal = requestModal.principal
     try {
+      toast('Approving...', { autoClose: 1500 })
       console.log(await final_be.callerToText())
       await final_be.addCenter({
         address: Principal.fromText(principal),
         volume: 0,
       })
       const res = await axios.patch(
-        `http://localhost:5000/api/v1/education/${id}`,
+        `${process.env.BACKEND_OFF_HEROKU}/education/${id}`,
         {
           status: 'approved',
         }
@@ -124,12 +128,9 @@ function AdminPage() {
   }
 
   const rejectRequest = async id => {
-    const res = await axios.patch(
-      `http://localhost:5000/api/v1/education/${id}`,
-      {
-        status: 'rejected',
-      }
-    )
+    const res = await axios.patch(`/education/${id}`, {
+      status: 'rejected',
+    })
     console.log(res)
     fetchRequestKYC()
     if (res.status === 200) {
@@ -144,9 +145,32 @@ function AdminPage() {
 
   return (
     <div>
-      <div className='d-flex justify-content-center'>
-        <Table columns={columns} dataSource={filteredRequestKYC} className="mt-5" />
-      </div>
+      {isLoaded ? (
+        <div className="d-flex justify-content-center">
+          <Table
+            columns={columns}
+            dataSource={filteredRequestKYC}
+            className="mt-5"
+          />
+        </div>
+      ) : (
+        <div
+          className="w-100 d-flex justify-content-center align-items-center"
+          style={{ paddingTop: '100px' }}
+        >
+          <MutatingDots
+            height="100"
+            width="100"
+            color="#4fa94d"
+            secondaryColor="#4fa94d"
+            radius="12.5"
+            ariaLabel="mutating-dots-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      )}
 
       <Modal
         title="Minted NFT"
@@ -209,35 +233,43 @@ function AdminPage() {
             </Form.Item>
           </Form>
           <div>
-            <Container className="wrap_img">
-              {requestModal?.imageKYC && ( // render image if exist, replace false by uri
-                <img
-                  src={bufferToURI(requestModal.imageKYC)}
-                  alt="preview image"
-                  srcSet=""
-                  style={{ width: '100px', height: '100px' }}
-                />
-              )}
-              {requestModal?.imageLogo && ( // render image if exist, replace false by uri
-                <img
-                  src={bufferToURI(requestModal.imageLogo)}
-                  alt="preview image"
-                  srcSet=""
-                />
-              )}
-            </Container>
+            <Form>
+              <Form.Item label="KYC Image">
+                <Container className="wrap_img">
+                  {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+                    <img
+                      src={bufferToURI(requestModal.imageKYC)}
+                      alt="preview image"
+                      srcSet=""
+                    />
+                  )}
+                </Container>
+              </Form.Item>
+
+              <Form.Item label="Logo Image">
+                <Container>
+                  {requestModal?.imageLogo && ( // render image if exist, replace false by uri
+                    <img
+                      src={bufferToURI(requestModal.imageLogo)}
+                      alt="preview image"
+                      srcSet=""
+                    />
+                  )}
+                </Container>
+              </Form.Item>
+            </Form>
           </div>
         </div>
-      </Modal >
-    </div >
+      </Modal>
+    </div>
   )
 }
 
 export default AdminPage
 
 const Container = styled.div`
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   border-radius: 8px;
   border: 1px dashed #ccc;
   overflow: hidden;

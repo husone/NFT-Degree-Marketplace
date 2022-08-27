@@ -37,7 +37,7 @@ function DetailNFT() {
   }
 
   const buyNFT = async () => {
-    const res = await final_be.buyNFT(BigInt(id))
+    const res = await final_be.buyNFTABCD(BigInt(id))
     console.log(res)
     toast.success('Buy NFT successfully')
     navigate('/my-nfts', { replace: true })

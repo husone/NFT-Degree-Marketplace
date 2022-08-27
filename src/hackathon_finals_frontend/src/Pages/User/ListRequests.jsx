@@ -6,18 +6,21 @@ import './index.scss'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { formatDate, bufferToURI } from '../../Utils/format'
+import { MutatingDots } from 'react-loader-spinner'
 
 function ListRequests() {
   const { principal, isConnected, connect } = useConnect()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [requestsFilter, setRequestsFilter] = useState([])
   const [requestModal, setRequestModal] = useState({})
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     if (!isConnected) {
       connectWallet()
     }
     getAllRequests()
+    setIsLoaded(true)
   }, [])
 
   const connectWallet = async () => {
@@ -26,7 +29,7 @@ function ListRequests() {
 
   const getAllRequests = async () => {
     const res = await axios.get(
-      `http://localhost:5000/api/v1/request?principal=${principal}`
+      `${process.env.BACKEND_OFF_HEROKU}/request?principal=${principal}`
     )
     const request = res.data.request
     console.log(request)
@@ -110,55 +113,72 @@ function ListRequests() {
   }
 
   return (
-    <div className='d-flex flex-column align-items-center'>
+    <div className="d-flex flex-column align-items-center">
       <h2 className="py-4 px-4 heading1 te">LIST OF USER'S REQUEST</h2>
-      <Table
-        columns={columns}
-        dataSource={requestsFilter}
-        style={{ color: '#333' }}
-        className="px-4"
-      />
+      {isLoaded ? (
+        <>
+          <Table
+            columns={columns}
+            dataSource={requestsFilter}
+            style={{ color: '#333' }}
+            className="px-4"
+          />
 
-      <Modal
-        title="Minted NFT"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={600}
-      >
-        <Container className='d-flex justify-content-around'>
-          <div>
-            {requestModal?.imageKYC && ( // render image if exist, replace false by uri
-              <>
-                <Container className="wrap_img">
-                  <img
-                    src={bufferToURI(requestModal?.imageKYC)}
-                    alt="preview image"
-                    srcSet=""
-                  />
-                </Container>
+          <Modal
+            title="Minted NFT"
+            visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            width={600}
+          >
+            <Container className="d-flex justify-content-around">
+              <div>
+                {requestModal?.imageKYC && ( // render image if exist, replace false by uri
+                  <>
+                    <Container className="wrap_img">
+                      <img
+                        src={bufferToURI(requestModal?.imageKYC)}
+                        alt="preview image"
+                        srcSet=""
+                        style={{ width: '250px', height: '250px' }}
+                      />
+                    </Container>
 
-                <h3 className='text-center text-light'>KYC Image</h3>
-              </>
-            )}
-          </div>
-          <div>
-            {requestModal?.imageNFT && ( // render image if exist, replace false by uri
-              <>
-                <Container className="wrap_img">
-                  <img
-                    src={bufferToURI(requestModal?.imageNFT)}
-                    alt="preview image"
-                    srcSet=""
-                  />
-                </Container>
-
-                <h3 className='text-center text-light'>NFT Image</h3>
-              </>
-            )}
-          </div>
-        </Container>
-      </Modal>
+                    <h4 className="text-center text-light">KYC Image</h4>
+                  </>
+                )}
+              </div>
+              <div>
+                {requestModal?.imageNFT && ( // render image if exist, replace false by uri
+                  <>
+                    <Container className="wrap_img">
+                      <img
+                        src={bufferToURI(requestModal?.imageNFT)}
+                        alt="preview image"
+                        srcSet=""
+                        style={{ width: '250px', height: '250px' }}
+                      />
+                    </Container>
+                    <h4 className="text-center text-light">NFT Image</h4>
+                  </>
+                )}
+              </div>
+            </Container>
+          </Modal>
+        </>
+      ) : (
+        <MutatingDots
+          height="100"
+          width="100"
+          color="#4fa94d"
+          secondaryColor="#4fa94d"
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      )}
     </div>
   )
 }

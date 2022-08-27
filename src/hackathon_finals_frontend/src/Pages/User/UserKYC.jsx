@@ -1,9 +1,9 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './index.scss'
 import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { PlusOutlined } from '@ant-design/icons'
-import { Form, Input, Button, Select } from 'antd'
+import { Form, Input, Select } from 'antd'
 import { axios } from 'axios'
 import { toast } from 'react-toastify'
 
@@ -14,6 +14,9 @@ function UserKYC() {
   const [imgUriKYC, setImgUriKYC] = useState('')
   const [educationList, setEducationList] = useState([])
 
+  const fileInputCert = useRef()
+  const fileInputKYC = useRef()
+
   useEffect(() => {
     if (!isConnected) {
       connectWallet()
@@ -23,7 +26,7 @@ function UserKYC() {
 
   const getEducations = async () => {
     const res = await axios.get(
-      'http://localhost:5000/api/v1/education?status=approved'
+      `${process.env.BACKEND_OFF_HEROKU}/education?status=approved`
     )
     setEducationList(res.data.education)
   }
@@ -52,8 +55,8 @@ function UserKYC() {
     if (!isConnected) {
       connectWallet()
     } else {
+      toast('Sending...', { autoClose: 1500 })
       const formData = new FormData()
-
       for (let key in user) {
         if (key === 'imageKYC') {
           formData.append('image', user.imageKYC)
@@ -65,7 +68,7 @@ function UserKYC() {
       }
 
       const res = await axios
-        .post('http://localhost:5000/api/v1/request', formData)
+        .post(`${process.env.BACKEND_OFF_HEROKU}/request`, formData)
         .catch(e => {
           console.log(e)
           toast.error('Submit request failed', { autoClose: 1500 })
@@ -230,9 +233,11 @@ function UserKYC() {
                       marginRight: '15px',
                       objectFit: 'cover',
                     }}
+                    onClick={() => fileInputCert.current.click()}
                   />
                 )}
                 <input
+                  ref={fileInputCert}
                   type="file"
                   name="imgNFT"
                   id="fileUpload"
@@ -241,18 +246,20 @@ function UserKYC() {
                   required
                   style={{ display: 'none' }}
                 />
-                <label
-                  htmlFor="fileUpload"
-                  className="d-flex justify-content-center align-items-center"
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    borderRadius: '5px',
-                    border: '1px dashed #ccc',
-                  }}
-                >
-                  <PlusOutlined />
-                </label>
+                {!imgUriNFT && (
+                  <label
+                    htmlFor="fileUpload"
+                    className="d-flex justify-content-center align-items-center"
+                    style={{
+                      width: '200px',
+                      height: '200px',
+                      borderRadius: '5px',
+                      border: '1px dashed #ccc',
+                    }}
+                  >
+                    <PlusOutlined />
+                  </label>
+                )}
               </div>
             </Form.Item>
           </div>
@@ -273,9 +280,11 @@ function UserKYC() {
                       marginRight: '15px',
                       objectFit: 'cover',
                     }}
+                    onClick={() => fileInputKYC.current.click()}
                   />
                 )}
                 <input
+                  ref={fileInputKYC}
                   type="file"
                   name="imgKYC"
                   id="kycImage"
@@ -284,18 +293,20 @@ function UserKYC() {
                   required
                   style={{ display: 'none' }}
                 />
-                <label
-                  htmlFor="kycImage"
-                  className="d-flex justify-content-center align-items-center"
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    borderRadius: '5px',
-                    border: '1px dashed #ccc',
-                  }}
-                >
-                  <PlusOutlined />
-                </label>
+                {!imgUriKYC && (
+                  <label
+                    htmlFor="kycImage"
+                    className="d-flex justify-content-center align-items-center"
+                    style={{
+                      width: '200px',
+                      height: '200px',
+                      borderRadius: '5px',
+                      border: '1px dashed #ccc',
+                    }}
+                  >
+                    <PlusOutlined />
+                  </label>
+                )}
               </div>
             </Form.Item>
           </div>

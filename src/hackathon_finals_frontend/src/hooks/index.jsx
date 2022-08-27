@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useLayoutEffect } from 'react'
 import { checkRole } from '../Utils/CheckRole'
 import { useConnect } from '@connect2ic/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { final_be } from '../../../declarations/final_be'
@@ -11,11 +11,12 @@ import axios from 'axios'
 export const Context = createContext()
 
 const Provider = ({ children }) => {
+  let location = useLocation()
   const { principal, isConnected, connect, isConnecting } = useConnect()
   const [principalStorage, setPrincipalStorage] = useState(
     localStorage.getItem('prinp')
   )
-  const [role, setRole] = useState('user')
+  const [role, setRole] = useState('')
   const [isLoaded, setIsLoaded] = useState(false)
   const [balanceDIP20, setBalanceDIP20] = useState('0 DBZ')
   const navigate = useNavigate()
@@ -24,22 +25,13 @@ const Provider = ({ children }) => {
     if (principal) {
       getRoleUser()
       getBalanceDIP20(principal)
-      setIsLoaded(true)
     }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
-  }, [principal, role])
-
-  useEffect(() => {
-    localStorage.clear()
-    if (!isConnected) {
-      // const res = window.ic.plug.requestConnect()
-      // console.log(res)
-    }
-    if (!principalStorage) {
+    if (role && principal) {
       setIsLoaded(true)
     }
-  }, [])
+  }, [principal, role])
 
   const getBalanceDIP20 = async principal => {
     const res = await final_be.balanceOfDIP20(Principal.fromText(principal))
@@ -59,10 +51,10 @@ const Provider = ({ children }) => {
     try {
       localStorage.setItem('prinp', principal)
       setPrincipalStorage(principal)
-      navigate('/', {
+      console.log('Connected to Plug')
+      navigate(`${location.pathname}`, {
         replace: true,
       })
-      console.log('Connected to Plug')
     } catch (e) {
       console.log(e)
     }
@@ -84,6 +76,7 @@ const Provider = ({ children }) => {
     isLoaded,
     login,
     balanceDIP20,
+    setIsLoaded,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

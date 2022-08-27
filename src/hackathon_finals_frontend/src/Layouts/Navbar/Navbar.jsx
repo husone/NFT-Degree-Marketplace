@@ -7,18 +7,21 @@ import { withContext } from '../../hooks/index'
 import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
-import { useNavigate } from 'react-router-dom'
 import CoinLogo from '../../Assets/Images/DBZ.png'
 import { Popover } from 'antd'
 import './Navbar.scss'
 
 function NavBar(props) {
-  const navigate = useNavigate()
-  const { role, logout, setRole, login, balanceDIP20 } = props
+  const { role, logout, login, balanceDIP20, setIsLoaded } = props
   const { principal, isConnected, disconnect, onConnect, onDisconnect } =
     useConnect()
 
-  useEffect(() => {}, [role])
+  // useEffect(() => {
+  //   if (role || principal) {
+  //     console.log(1)
+  //     setIsLoaded(true)
+  //   }
+  // }, [role, principal])
 
   const onConnectWallet = () => {
     // window.ic.plug.requestConnect()
@@ -35,7 +38,7 @@ function NavBar(props) {
     role && (
       <Container>
         <Nav className="navbar navbar-expand-lg ">
-          <ConnectDialog dark={false} />
+          <ConnectDialog />
           <div className="container-fluid px-5">
             <div className="d-flex gap-4">
               <Link className="navbar-brand" to="/">
