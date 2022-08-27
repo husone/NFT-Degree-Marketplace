@@ -14,6 +14,7 @@ module {
     voters : List.List<Principal>;
     state : ProposalState;
     timestamp : Int;
+    endTime : Int;
     votes_yes : Tokens;
     proposer : Principal;
     payload : Text;
