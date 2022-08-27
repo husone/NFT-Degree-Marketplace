@@ -39,6 +39,18 @@ shared actor class Dip721NFT() = Self {
     nftMain := p;
   };
 
+    public func isOwner(token_id: Types.TokenId, owner: Principal) : async Bool {
+    let item = await getNFT(token_id);
+    switch (item) {
+      case null {
+        return false;
+      };
+      case (?token) {
+        return token.owner == owner;
+      };
+    };
+  };
+
   public shared(msg) func callerToText() : async [Text] {
     return [Principal.toText(msg.caller), Principal.toText(ad)];
   };
