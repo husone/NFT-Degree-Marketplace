@@ -5,9 +5,10 @@ import { Input, Tabs } from 'antd'
 import Item from './Item'
 import { Link } from 'react-router-dom'
 import MyNFTItem from '../User/MyNFTItem'
-import IMAGES from '../../Assets/IMAGE'
+import IMAGES from '../../Assets/IMAGE'   
 import Carousel from 'react-bootstrap/Carousel'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
+import { Principal } from '@dfinity/principal'
 
 const topCenter = [
   {
@@ -94,7 +95,13 @@ function Home() {
   console.log(listNFT)
   useEffect(() => {
     getAllNFT()
+    getCenters()
   }, [])
+
+  const  getCenters = async () => {
+    const res = await final_be.getCenters();
+    console.log(res)
+  }
 
   const getAllNFT = async () => {
     const res = await final_be.getNFTPublic()

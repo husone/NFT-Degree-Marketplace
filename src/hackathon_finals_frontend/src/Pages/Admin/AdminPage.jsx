@@ -53,19 +53,6 @@ function AdminPage() {
       dataIndex: 'createdAt',
       key: 'createdAt',
     },
-    // {
-    //   title: 'Status',
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   render: (_, { status }) => {
-    //     let color = 'green'
-    //     if (status === 'Deny') {
-    //       color = 'volcano'
-    //       return <Tag color={color}>Deny</Tag>
-    //     }
-    //     return <Tag color={color}>Accept</Tag>
-    //   },
-    // },
     {
       title: 'Preview',
       key: 'preview',
@@ -177,7 +164,7 @@ function AdminPage() {
         visible={isModalVisible}
         onOk={approveRequest}
         onCancel={handleCancel}
-        width={600}
+        width={680}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Cancel
@@ -246,7 +233,7 @@ function AdminPage() {
                 </Container>
               </Form.Item>
 
-              <Form.Item label="Logo Image">
+              <Form.Item label="NFT Image">
                 <Container>
                   {requestModal?.imageLogo && ( // render image if exist, replace false by uri
                     <img
