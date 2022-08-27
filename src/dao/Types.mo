@@ -14,14 +14,9 @@ module {
     voters : List.List<Principal>;
     state : ProposalState;
     timestamp : Int;
-    proposer : Principal;
     votes_yes : Tokens;
-    payload : ProposalPayload;
-  };
-  public type ProposalPayload = {
-    method : Text;
-    canister_id : Principal;
-    message : Blob;
+    proposer : Principal;
+    payload : Text;
   };
   public type ProposalState = {
       // A failure occurred while executing the proposal

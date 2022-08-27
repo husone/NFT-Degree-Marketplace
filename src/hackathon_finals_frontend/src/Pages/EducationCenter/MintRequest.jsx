@@ -176,7 +176,7 @@ function MintRequest() {
       cer_owner: '',
     }
     const ownerPrincipal = requestModal.principal
-    const resCanister = await final_be.mintDip721(
+    const resCanister = await nftCanister.mintDip721(
       Principal.fromText(principal),
       Principal.fromText(ownerPrincipal),
       metadata

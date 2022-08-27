@@ -67,7 +67,18 @@ shared actor class Dip721NFT() = Self {
         };
     };
 
+public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
+    assert caller == ad;
+    var center  = List.find(centers, func (c : Types.Center) : Bool { c.address == centerPrincipal});
+    centers := List.filter(centers, func (c : Types.Center) : Bool {
+      return (?c != center);
+    });
+  };
 
+  // public shared({ caller }) func getCenters() : async [Types.Center]  {
+  //   // assert caller == ad;
+  //   return List.toArray(centers);
+  // };
   public func isPublic(token_id: Types.TokenId) : async Types.Privacy {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     switch (item) {
@@ -258,6 +269,11 @@ shared actor class Dip721NFT() = Self {
       };
     };
 
+
+public query func getCenters() : async [Types.Center]  {
+  
+    return List.toArray(centers);
+  };
     public query func getCid(token_id : Types.TokenId) : async ?Text {
         let item = findNFT(token_id);
     switch (item) {
@@ -269,6 +285,10 @@ shared actor class Dip721NFT() = Self {
       }
       };
     };
+
+  public shared({caller}) func setCenters(new_centers: List.List<Types.Center>) {
+    centers := new_centers;
+  };
 
 //   public func getMetadataForUserDip721(user: Principal) : async Types.ExtendedMetadataResult {
 //     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.owner == user });
@@ -293,9 +313,14 @@ shared actor class Dip721NFT() = Self {
 
 
   public shared({ caller }) func mintDip721(to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
-    if ((not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) or caller == ad or caller == nftMain) {
-      return #Err(#Unauthorized);
-    };
+    // if (
+    //   (not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) 
+    // or 
+    // caller == ad 
+    // or 
+    // caller == nftMain) {
+    //   return #Err(#Unauthorized);
+    // };
 
     let newId = Nat64.fromNat(List.size(nfts));
     let nft : Types.Nft = {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../Assets/Images/logo.png'
@@ -9,21 +9,15 @@ import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import CoinLogo from '../../Assets/Images/DBZ.png'
 import { Popover, Popconfirm, Tag, Button } from 'antd'
+import { Principal } from '@dfinity/principal'
+import { publicRoutes } from '../../Routes/index'
 import './Navbar.scss'
-
+import { Context } from '../../hooks/index'
 function NavBar(props) {
-  const [isApprove, setApprove] = useState(false);
-  const { role, logout, login, balanceDIP20, setIsLoaded } = props
-  const { principal, isConnected, disconnect, onConnect, onDisconnect } =
-    useConnect()
-
-  // useEffect(() => {
-  //   if (role || principal) {
-  //     console.log(1)
-  //     setIsLoaded(true)
-  //   }
-  // }, [role, principal])
-
+  const { isApproveGlobal, setIsApproveGlobal } = useContext(Context)
+  const { role, logout, login, balanceDIP20, connectWallet } = props
+  const { principal, isConnected, disconnect } = useConnect()
+  const [isApprove, setApprove] = useState(false)
   const onConnectWallet = () => {
     // window.ic.plug.requestConnect()
     login()
@@ -35,25 +29,55 @@ function NavBar(props) {
     console.log('Disconnected from Plug')
   }
 
+  const test = async () => {
+    const result = await window.ic.plug.requestBalance()
+    console.log(result)
+  }
 
-  const confirm = (e) => {
-    setApprove(true)
-  };
+  const confirm = e => {
+    setIsApproveGlobal(true)
+    // setApprove(true)
+  }
 
-  const cancel = (e) => {
-    console.log(e);
-  };
+  const cancel = e => {
+    console.log(e)
+  }
 
   return (
     role && (
-      <Container className="">
-        <Nav className="navbar navbar-expand-lg">
+      <Container>
+        <Nav className="navbar navbar-expand-lg ">
           <ConnectDialog />
           <div className="container-fluid px-5">
             <div className="d-flex align-items-center gap-4">
               <Link className="navbar-brand" to="/">
                 <img src={Logo} alt="Home" />
               </Link>
+              <div className="dropdown">
+                <button
+                  className="btn dropdown-toggle custom_dropdown"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  DAO
+                </button>
+                <ul className="dropdown-menu">
+                  {publicRoutes.map((route, index) => {
+                    if (route.dropdown === 'DAO') {
+                      return (
+                        <Link
+                          className="dropdown-item navbar-brand custom_dropdown"
+                          to={route.path}
+                          key={index}
+                        >
+                          {route.desc}
+                        </Link>
+                      )
+                    }
+                  })}
+                </ul>
+              </div>
               {role === 'user' && <NavbarUser />}
               {role === 'education' && <NavbarEducation />}
               {role === 'admin' && <NavbarAdmin />}
@@ -61,7 +85,7 @@ function NavBar(props) {
             <div className="d-flex align-items-center h100">
               {principal && (
                 <>
-                  <div className='d-flex justify-content-center'>
+                  <div className="d-flex justify-content-center">
                     <div className="mx-3 d-flex align-items-center justify-content-center">
                       {balanceDIP20}
                       <img
@@ -71,22 +95,22 @@ function NavBar(props) {
                       />
                     </div>
                     <Popconfirm
-                      title="Are you sure to delete this task?"
+                      title="Are you want to approve?"
                       onConfirm={confirm}
                       onCancel={cancel}
                       okText="Yes"
                       cancelText="No"
                       className="cf_pop"
                     >
-                      {
-                        !isApprove &&
+                      {!isApproveGlobal && (
                         <Button className="custom_approve_btn">Approve</Button>
-                      }
+                      )}
                     </Popconfirm>
-                    {
-                      isApprove &&
-                      <Tag color="green" className="custom_approve">Approved</Tag>
-                    }
+                    {isApproveGlobal && (
+                      <Tag color="green" className="custom_approve">
+                        Approved
+                      </Tag>
+                    )}
                   </div>
                   <Popover
                     content={principal}
@@ -94,9 +118,7 @@ function NavBar(props) {
                     className="wallet_id mx-3 text-light"
                   >
                     <div className="wallet_id mx-3 text-light">{principal}</div>
-                    {/* <Button type="primary">Hover me</Button> */}
                   </Popover>
-                  {/* <div className="wallet_id mx-3 text-light">{principal}</div> */}
                 </>
               )}
               <ConnectButton

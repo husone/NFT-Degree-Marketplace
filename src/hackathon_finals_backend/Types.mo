@@ -163,6 +163,8 @@ module {
     };
 
     public type IDIP721 = actor {
+      setCenters: (Center) -> async ();
+      getCenters: () -> async ([Center]);
       balanceOfDip721: (Principal) -> async (Nat64) ;
    callerToText: () -> async ([Text]);
    getAllTokens: () -> async ([Nft]) ;
