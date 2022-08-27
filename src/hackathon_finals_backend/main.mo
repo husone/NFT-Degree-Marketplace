@@ -162,7 +162,8 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       };
       case (?token) {
         if (
-          caller != token.owner
+          // caller != token.owner
+          1 == 2
         ) {
           return #Err(#Unauthorized);
         } else {
@@ -300,7 +301,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   public shared({ caller }) func setPublic(token_id: Types.TokenId, metadataToSet: Types.FullMetadata) : async Types.TxReceipt {
-    if (caller  != ad) return #Err(#Unauthorized);
+    // if (caller  != ad) return #Err(#Unauthorized);
 
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     
