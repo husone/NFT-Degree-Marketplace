@@ -5,7 +5,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { Table, Button, Modal, Form, Input, Tag } from 'antd'
 import styled from 'styled-components'
 import { formatDate, bufferToURI } from '../.././Utils/format'
-import { final_be } from '../../../../declarations/final_be'
+import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
 import { MutatingDots } from 'react-loader-spinner'
@@ -88,8 +88,7 @@ function AdminPage() {
     const principal = requestModal.principal
     try {
       toast('Approving...', { autoClose: 1500 })
-      console.log(await final_be.callerToText())
-      await final_be.addCenter({
+      await nftCanister.addCenter({
         address: Principal.fromText(principal),
         volume: 0,
       })

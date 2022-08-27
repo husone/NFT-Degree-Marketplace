@@ -3,7 +3,7 @@ import { EyeOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import './MintRequest.scss'
-import { final_be } from '../../../../declarations/final_be'
+import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
 import { useConnect } from '@connect2ic/react'
 import MyNFTItem from '../User/MyNFTItem'
@@ -18,8 +18,9 @@ function MintedRequest() {
   }, [])
 
   const getNFTMinted = async () => {
-    const res = await final_be.getNFTsFromCenter(
+    const res = await nftCanister.getNFTsFromCenter(
       Principal.fromText('2vxsx-fae')
+      // Principal.fromText(Principal.fromText(principal))
     )
     console.log(res)
     setListNFTMinted(res)
@@ -99,7 +100,9 @@ function MintedRequest() {
 
   return (
     <div className="pt-5 container">
-      <h2 className="my-4 mt-2 text-white text-center heading1">MINTED REQUESTS</h2>
+      <h2 className="my-4 mt-2 text-white text-center heading1">
+        MINTED REQUESTS
+      </h2>
       <hr />
       <div className="row g-2 ">
         {listNFTMinted.map(nft => {

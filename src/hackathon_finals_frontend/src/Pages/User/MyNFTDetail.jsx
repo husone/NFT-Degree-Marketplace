@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Principal } from '@dfinity/principal'
 import { useConnect } from '@connect2ic/react'
 import { final_be } from '../../../../declarations/final_be'
+import { nftCanister } from '../../../../declarations/nftCanister'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -76,7 +77,7 @@ function MyNFTDetail() {
   }
 
   const loadStatusNFT = async () => {
-    const res = await final_be.isPublic(BigInt(id))
+    const res = await nftCanister.isPublic(BigInt(id))
     const isPublic = res.Ok
     const resu = await final_be.isViewer(
       BigInt(id),
@@ -87,7 +88,7 @@ function MyNFTDetail() {
   }
 
   const getNft = async () => {
-    const res = await final_be.getNFT(BigInt(id))
+    const res = await nftCanister.getNFT(BigInt(id))
     const price = await final_be.getPrice(BigInt(id))
     setNft({ ...res[0], price: Number(price) })
   }
@@ -121,7 +122,7 @@ function MyNFTDetail() {
   const handleOk = async () => {
     if (infoUpdate.prinpTransfer) {
       toast('Transferring...', { autoClose: 1500 })
-      const res = await final_be.transferDIP721(
+      const res = await nftCanister.transferDIP721(
         BigInt(id),
         Principal.fromText(infoUpdate.prinpTransfer)
       )

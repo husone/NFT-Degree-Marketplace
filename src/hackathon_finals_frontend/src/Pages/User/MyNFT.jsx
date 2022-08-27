@@ -1,11 +1,10 @@
 import { Tabs } from 'antd'
 import MyNFTItem from './MyNFTItem'
-import { final_be } from '../../../../declarations/final_be'
+import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
 import { useEffect, useState } from 'react'
 import { useConnect } from '@connect2ic/react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 const { TabPane } = Tabs
 import { MutatingDots } from 'react-loader-spinner'
 
@@ -27,7 +26,7 @@ function MyNFT() {
   }
 
   const getAllNFTs = async () => {
-    const res = await final_be.getNFTsFromUser(Principal.fromText(principal))
+    const res = await nftCanister.getNFTsFromUser(Principal.fromText(principal))
     setNftsList(res)
     console.log(res)
   }

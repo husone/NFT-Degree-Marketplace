@@ -8,6 +8,7 @@ import { useConnect } from '@connect2ic/react'
 import './MintRequest.scss'
 import { storeFiles } from '../../Utils/web3Storage'
 import { final_be } from '../../../../declarations/final_be'
+import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
 
@@ -175,7 +176,7 @@ function MintRequest() {
       cer_owner: '',
     }
     const ownerPrincipal = requestModal.principal
-    const resCanister = await final_be.mintDip721ABCD(
+    const resCanister = await final_be.mintDip721(
       Principal.fromText(principal),
       Principal.fromText(ownerPrincipal),
       metadata
@@ -249,7 +250,9 @@ function MintRequest() {
 
   return (
     <div className="pt-5">
-      <h2 className="my-4 mt-0 text-white text-center heading1">MINT REQUESTS</h2>
+      <h2 className="my-4 mt-0 text-white text-center heading1">
+        MINT REQUESTS
+      </h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}
