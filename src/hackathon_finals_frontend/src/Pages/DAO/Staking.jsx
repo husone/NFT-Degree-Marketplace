@@ -1,69 +1,127 @@
 import React from 'react'
-import { Button, Space } from "antd"
+import { Button, Space, Tag } from "antd"
 import StakedItem from "./StakedItem";
+import CoinLogo from "../../Assets/Images/DBZcoin.png"
 
 import "./Staking.scss"
 
-const stakedItem = [
+const tokenData = [
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
     {
-        price: "8 DZB"
+        quantity: '10000',
+        principle: "zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"
     },
 ]
 
 export default function Staking() {
     return (
-        <div className='wrap_staking'>
-            <h2 className="py-4 px-4 heading1 text-center">NFT Staking</h2>
-            <div className="row w-100">
-                <div className="col d-flex align-items-center justify-content-center">
-                    <Button className="d-flex align-items-center px-5 py-4 rounded-pill custom_btn_stack">
-                        <span className='me-1'>Stake</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" className="ms-1 bi bi-arrow-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-                        </svg>
-                    </Button>
-                </div>
-                <div className="col d-flex flex-column align-items-center justify-content-center">
-                    <div className="staked px-5 py-5 d-flex flex-column align-items-center justify-content-center">
-                        <h3 className='text-light m-0'>Staked</h3>
-                        <div className='staked_wrapper px-3 my-3'>
-                            {
-                                stakedItem.map((item, index) => {
-                                    return <StakedItem key={index} itemData={item} />
-                                })
-                            }
-                        </div>
-                        <Space size={15}>
-                            <Button className="d-flex align-items-center px-5 py-4 rounded-pill">Claim</Button>
-                            <Button className="d-flex align-items-center px-5 py-4 rounded-pill">Unstake</Button>
-                        </Space>
+        <div>
+            <div className="wrap_staking row mx-5 container">
+                <div className="row">
+                    <div className="col-8 d-flex align-items-center justify-content-start">
+                        <h1 className="heading1">Tokens</h1>
+                        <Tag className="ms-3" color="green">DBZ</Tag>
+                    </div>
+                    <div className="col-4 d-flex align-items-center  justify-content-end">
+                        <Button className="custom_add_btn">Add Token</Button>
                     </div>
                 </div>
             </div>
+
+            <div class="container">
+                <div class="row gx-5">
+                    <div class="col-8 ">
+                        <div class="rounded" style={{ backgroundColor: "#343444" }}>
+                            <div className="row py-3 px-3">
+                                <div className="col-8 staking_title">HOLDER</div>
+                                <div className="col-2 staking_title">BALANCE</div>
+                            </div>
+                            <div className='token_wrapper'>
+                                {
+                                    tokenData.map((data, index) => {
+                                        return <StakedItem data={data} />
+                                    })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-4">
+                        <div className="mb-3 rounded p-0" style={{ backgroundColor: "#343444", height: "fit-content" }}>
+                            <div className="p-3 staking_title">TOKEN INFOR</div>
+                            <div className='token_infor_wrapper m-0'>
+                                <div className='mx-3'>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <h1>Total supply</h1>
+                                        <h1 style={{ color: "#ff00aa" }}>10000</h1>
+                                    </div>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <h1>Transferable</h1>
+                                        <Tag color="green" className="m-0">YES</Tag>
+                                    </div>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <h1>Token</h1>
+                                        <div className='d-flex align-items-center'>
+                                            DBZ
+                                            <img className='ms-2' src={CoinLogo} alt="coin logo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="rounded p-0" style={{ backgroundColor: "#343444", height: "fit-content" }}>
+                            <div className="p-3 staking_title">OWNERSHIP DISTRIBUTION</div>
+                            <div className='token_infor_wrapper m-0 py-2'>
+                                <div className='mx-3'>
+                                    <div className="d-flex justify-content-between my-2">
+                                        <div className="principle_staking principle_staking2">
+                                            {"zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"}
+                                        </div>
+                                        <div>87%</div>
+                                    </div>
+                                    <div className="d-flex justify-content-between my-2 align-items-center">
+                                        <div className="principle_staking principle_staking2">
+                                            {"zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe"}
+                                        </div>
+                                        <div>23%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     )
 }
