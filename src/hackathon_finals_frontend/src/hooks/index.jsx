@@ -4,10 +4,7 @@ import { useConnect } from '@connect2ic/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
-import { Principal } from '@dfinity/principal'
 import { ft } from '../../.././declarations/ft'
-
-import axios from 'axios'
 
 export const Context = createContext()
 
@@ -20,6 +17,8 @@ const Provider = ({ children }) => {
   const [role, setRole] = useState('user')
   const [isLoaded, setIsLoaded] = useState(false)
   const [balanceDIP20, setBalanceDIP20] = useState('0 DBZ')
+  const [isApproveGlobal, setIsApproveGlobal] = useState(false)
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -89,6 +88,9 @@ const Provider = ({ children }) => {
     login,
     balanceDIP20,
     setIsLoaded,
+    connectWallet,
+    isApproveGlobal,
+    setIsApproveGlobal,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

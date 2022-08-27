@@ -6,16 +6,18 @@ import { Table, Button, Modal, Form, Input, Tag } from 'antd'
 import styled from 'styled-components'
 import { formatDate, bufferToURI } from '../.././Utils/format'
 import { nftCanister } from '../../../../declarations/nftCanister'
+import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
 import { MutatingDots } from 'react-loader-spinner'
-
+import { useConnect, useCanister } from '@connect2ic/react'
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [filteredRequestKYC, setFilteredRequestKYC] = useState([])
   const [requestModal, setRequestModal] = useState({})
   const [isLoaded, setIsLoaded] = useState(false)
+  const [nftCanister] = useCanister('nftCanister')
 
   useEffect(() => {
     fetchRequestKYC()
@@ -88,6 +90,7 @@ function AdminPage() {
     const principal = requestModal.principal
     try {
       toast('Approving...', { autoClose: 1500 })
+
       await nftCanister.addCenter({
         address: Principal.fromText(principal),
         volume: 0,

@@ -49,8 +49,7 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
       };
       case (?token) {
         if (
-          // caller != token.owner
-          1 == 2
+          caller != token.owner
         ) {
           return #Err(#Unauthorized);
         } else {
@@ -211,7 +210,7 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        // assert token.owner == caller;
+        assert token.owner == caller;
         var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
         switch (viewers) {
           case (null) {
@@ -247,7 +246,7 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        // assert token.owner == caller;
+        assert token.owner == caller;
         var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
         switch (viewers) {
           case (null) {
@@ -277,7 +276,7 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
         return #Err(#InvalidTokenId);
       };
       case (?token) {
-        // assert token.owner == caller;
+        assert token.owner == caller;
         allowances.delete(Nat64.toText(token_id));
         #Ok(0);
       };

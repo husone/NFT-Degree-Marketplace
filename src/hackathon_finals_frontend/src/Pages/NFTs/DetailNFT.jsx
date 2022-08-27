@@ -17,21 +17,27 @@ const { confirm } = Modal
 
 function DetailNFT() {
   const navigate = useNavigate()
-  const { principal } = useConnect()
+  const { principal, isConnecting, isConnected } = useConnect()
   const { id } = useParams()
   const [nft, setNft] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [status, setStatus] = useState(null)
   const [price, setPrice] = useState(0)
+  const [isOwner, setIsOwner] = useState(false)
   useEffect(() => {
-    if (principal) {
+    if (isConnected) {
+      checkOwner()
       loadStatusNFT()
     }
-  }, [])
+  }, [isConnected])
 
   useEffect(() => {
     if (status) {
       const { isPublic, isViewed } = status
+      console.log(isOwner)
+      if (isOwner) {
+        navigate(`/me/nft/${id}`)
+      }
       if (!isViewed) {
         toast.warn('You are not allowed to view this NFT!')
         navigate('/', {
@@ -47,6 +53,13 @@ function DetailNFT() {
     }
   }, [status])
 
+  const checkOwner = async () => {
+    const res = await final_be.isOwner(
+      BigInt(id),
+      Principal.fromText(principal)
+    )
+    setIsOwner(res)
+  }
   const getNftFromDB = async () => {
     const res = await axios.get(
       `${process.env.BACKEND_OFF_HEROKU}/nft?id=${id}`
@@ -90,7 +103,7 @@ function DetailNFT() {
   }
 
   const loadStatusNFT = async () => {
-    const res = await final_be.isPublic(BigInt(id))
+    const res = await nftCanister.isPublic(BigInt(id))
     const isPublic = res.Ok
     const resu = await final_be.isViewer(
       BigInt(id),

@@ -1,6 +1,5 @@
 import { final_be } from '../../../../declarations/final_be'
 import { nftCanister } from '../../../../declarations/nftCanister'
-
 import React, { useState, useEffect } from 'react'
 import './Home.scss'
 import { Link } from 'react-router-dom'
@@ -8,8 +7,8 @@ import axios from 'axios'
 import { bufferToURI } from '../../Utils/format'
 import IntroduceComponent from './components/IntroduceComponent'
 import CarouselHeader from './components/CarouselHeader'
-import { Link } from 'react-router-dom'
 import ItemHome from './components/ItemHome'
+
 const topCenter = [
   {
     name: 'FPT University',
@@ -119,7 +118,6 @@ function Home() {
   return (
     <div>
       <CarouselHeader />
-
       <section className="tf-best-seller">
         <div className="best-seller-inner">
           <div className="container">
@@ -222,9 +220,9 @@ function Home() {
                       {listNFT.map(nft => {
                         const id = Number(nft?.id)
                         return (
-                          // <Link to={`/nft/${id}`} key={id}>
-                          <ItemHome nft={nft} />
-                          // </Link>
+                          <Link to={`/nft/${id}`} key={id}>
+                            <ItemHome nft={nft} />
+                          </Link>
                         )
                       })}
                     </div>

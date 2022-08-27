@@ -1,3 +1,4 @@
+#!/bin/sh
 dfx deploy ft
 dfx deploy nftCanister
 dfx deploy dao --argument "(principal \"$(dfx canister id ft)\")"

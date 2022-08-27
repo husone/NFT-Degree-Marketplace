@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Principal } from '@dfinity/principal'
 import { useConnect } from '@connect2ic/react'
-import { final_be } from '../../../../declarations/final_be'
-import { nftCanister } from '../../../../declarations/nftCanister'
+// import { final_be } from '../../../../declarations/final_be'
+// import { nftCanister } from '../../../../declarations/nftCanister'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -19,7 +19,7 @@ import './index.css'
 import CoinIcon from '../../Assets/Images/DBZcoin.png'
 import { MutatingDots } from 'react-loader-spinner'
 import { bufferToURI } from '../../Utils/format'
-
+import { useCanister } from '@connect2ic/react'
 const { confirm } = Modal
 
 function MyNFTDetail() {
@@ -35,6 +35,8 @@ function MyNFTDetail() {
   const [infoUpdate, setInfoUpdate] = useState({})
   const [isShowSetPrice, setIsShowSetPrice] = useState(false)
   const [price, setPrice] = useState(0)
+  const [final_be] = useCanister('final_be')
+  const [nftCanister] = useCanister('nftCanister')
 
   useEffect(() => {
     if (principal) {
@@ -129,7 +131,7 @@ function MyNFTDetail() {
       console.log(res)
       toast.success('Transfer NFT successfully')
       setIsModalVisible(false)
-      navigate('/my-nfts', { replace: true })
+      navigate('/my-nfts')
     }
     setIsModalVisible(false)
   }
@@ -273,7 +275,8 @@ function MyNFTDetail() {
       name: nft?.metadata?.name,
       cer_owner: nft?.metadata?.cer_owner,
     }
-    const res = await final_be.setPublic(BigInt(id), metadata)
+    console.log(await nftCanister.callerToText())
+    const res = await nftCanister.setPublic(BigInt(id), metadata)
     console.log(res)
     toast.success('Set public successfully', { autoClose: 1500 })
     setStatus({ ...status, isPublic: true })
@@ -331,24 +334,26 @@ function MyNFTDetail() {
                             Public
                           </Tag>
                         ) : (
-                          <Tag
-                            color="default"
-                            icon={<LockOutlined />}
-                            className="d-flex align-items-center justify-content-between ms-2"
-                            style={{
-                              letterSpacing: '2px',
-                            }}
-                          >
-                            Private
-                          </Tag>
+                          <>
+                            <Tag
+                              color="default"
+                              icon={<LockOutlined />}
+                              className="d-flex align-items-center justify-content-between ms-2"
+                              style={{
+                                letterSpacing: '2px',
+                              }}
+                            >
+                              Private
+                            </Tag>
+                            <button
+                              className="btn btn-primary"
+                              onClick={showConfirmPublic}
+                            >
+                              Set Public
+                            </button>
+                          </>
                         )}
                       </div>
-                      <button
-                        className="btn btn-primary"
-                        onClick={showConfirmPublic}
-                      >
-                        Set Public
-                      </button>
                     </div>
                   </div>
                 </div>

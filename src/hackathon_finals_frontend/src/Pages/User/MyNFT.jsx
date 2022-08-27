@@ -15,7 +15,7 @@ function MyNFT() {
 
   useEffect(() => {
     if (!isConnected) {
-      connectWallet()
+      // connectWallet()
     }
     getAllNFTs()
     setIsLoaded(true)

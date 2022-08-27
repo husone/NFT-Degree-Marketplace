@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { publicRoutes } from './Routes/index'
 import DefaultLayout from './Layouts/DefaultLayout/DefaultLayout'
-import styled from 'styled-components'
 import 'antd/dist/antd.css'
 
 import { Connect2ICProvider, ConnectDialog } from '@connect2ic/react'
@@ -15,12 +14,17 @@ import Provider from './hooks/index'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import GlobalStyle from './Layouts/GlobalStyle/index'
+import * as final_be from '../../declarations/final_be'
+import * as nftCanister from '../../declarations/nftCanister'
+import * as ft from '../../declarations/ft'
+import * as dao from '../../declarations/dao'
 
 const canisterDefinitions = {
   superheroes: { idlFactory, canisterId },
 }
 const client = createClient({
-  canisters: canisterDefinitions,
+  canisters: { nftCanister, ft, dao, final_be },
+  // canisters: canisterDefinitions,
   providers: [new PlugWallet()],
 })
 
