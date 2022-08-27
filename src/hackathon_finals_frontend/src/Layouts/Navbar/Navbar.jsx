@@ -83,7 +83,6 @@ function NavBar(props) {
 }
 
 export default withContext(NavBar)
-
 const Nav = styled.nav`
   height: 60px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
@@ -167,6 +166,9 @@ const Nav = styled.nav`
   }
 `
 const Container = styled.div`
+  position: sticky;
+  z-index: 100;
+  top: 0px;
   .dialog-styles {
     position: fixed;
     top: 50%;
