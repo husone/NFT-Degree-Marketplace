@@ -69,7 +69,6 @@
     "react-router-dom": "^6.3.0",
     "react-toastify": "^9.0.8",
     "styled-components": "^5.3.5",
-    "swiper": "^8.3.2",
     "web3.storage": "^4.3.0"
   }
 }
