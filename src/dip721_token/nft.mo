@@ -223,19 +223,6 @@ shared actor class Dip721NFT() = Self {
 
   public func getNFTPublic() : async [Types.Nft] {
     let items =  List.filter(nfts, func(token: Types.Nft) : Bool { token.isPublic});
-    // let a = List.nil<Types.Nft>();
-    // let r = Random.Finite();
-    // let c = 0;
-    // while (c<10){
-    //   for (nft in nfts){
-    //     if (r.coin()== true) {
-    //       a := List.add(a, nft);
-    //       c := c+1;
-    //     };
-    //   };
-    // };
-
-    // return List.toArray(a);
     return List.toArray(items);
   };
 
@@ -372,6 +359,27 @@ shared actor class Dip721NFT() = Self {
           return #Ok(transactionId);   
       };
     };
+  };
+
+  
+  public func setCenter(centerSet : Principal) {
+    let centerTest : Types.Center = {
+    address = centerSet;
+    volume = 0;
+  };
+    centers := List.push(centerTest, centers);
+  };
+
+
+
+
+
+  public func resetNFTs() : () {
+    nfts := List.nil<Types.Nft>();
+  };
+  
+  public func resetCenters() : (){
+    centers := List.nil<Types.Center>();
   };
 
 }

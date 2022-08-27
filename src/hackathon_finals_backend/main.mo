@@ -16,8 +16,6 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import TokenId "mo:base/Nat64";
 import Types "./Types";
-import token "token";
-import types "types";
 import Random "mo:base/Random";
 
 actor Main {
@@ -29,8 +27,7 @@ actor Main {
   stable var name : Text = init.name;
   stable var symbol : Text = init.symbol;
   // Test
-  stable var ad : Principal = init.address;
-  let DBZ : token.Token = token.Token("","DNBOIZ","DBZ",18,1000000000000000,Principal.fromText("2vxsx-fae"),0); 
+  stable var ad : Principal = init.address; 
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
@@ -40,92 +37,6 @@ actor Main {
 
   public shared(msg) func callerToText() : async [Text] {
     return [Principal.toText(msg.caller), Principal.toText(ad)];
-  };
-
-  type Operation = types.Operation;
-    type TransactionStatus = types.TransactionStatus;
-    type TxRecord = types.TxRecord;
-    type Metadata = {
-        logo : Text;
-        name : Text;
-        symbol : Text;
-        decimals : Nat8;
-        totalSupply : Nat;
-        owner : Principal;
-        fee : Nat;
-    };
-    // returns tx index or error msg
-    public type TxReceipt = {
-        #Ok: Nat;
-        #Err: {
-            #InsufficientAllowance;
-            #InsufficientBalance;
-            #ErrorOperationStyle;
-            #Unauthorized;
-            #LedgerTrap;
-            #ErrorTo;
-            #Other: Text;
-            #BlockUsed;
-            #AmountTooSmall;
-        };
-    };
-  public shared(msg) func transferDIP20(to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.transfer(msg.caller, to, value);
-    return receipt;
-  };
-
-  public shared(msg) func approveDIP20(spender: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.approve(msg.caller, spender, value);
-    return receipt;
-  };
-
-  public func allowanceDIP20(owner: Principal, spender: Principal) : async Nat{
-    let allowance = await DBZ.allowance(owner, spender);
-    return allowance;
-  };
-
-  public shared(msg) func transferFromDIP20(from: Principal, to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.transferFrom(msg.caller, from, to, value);
-    return receipt;
-  };
-
-  public shared(msg) func burnDIP20(value: Nat) : async TxReceipt{
-    let receipt = await DBZ.burn(msg.caller, value);
-    return receipt;
-  };
-
-  public shared(msg) func mintDIP20(to: Principal, value: Nat) : async TxReceipt{
-    let receipt = await DBZ.mint(msg.caller, to, value);
-    return receipt;
-  };
-
-  
-
-  
-
-  public func balanceOfDIP20(owner: Principal) : async Nat{
-    let balance = await DBZ.balanceOf(owner);
-    return balance;
-  };
-
-  public func totalSupplyDIP20() : async Nat{
-    let supply = await DBZ.totalSupply();
-    return supply;
-  };
-
-  public func symbolDIP20() : async Text{
-    let symbol = await DBZ.symbol();
-    return symbol;
-  };
-
-  public func nameDIP20() : async Text{
-    let name = await DBZ.name();
-    return name;
-  };
-
-  public func decimalsDIP20() : async Nat8{
-    let decimals = await DBZ.decimals();
-    return decimals;
   };
 
 
@@ -198,74 +109,74 @@ actor Main {
   //       return msg.caller;
   //   };
 
-  public shared({ caller }) func buyNFT(tokenID: Nat64) : async (Types.TxReceipt, ) {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
-    let price = nftPrices.get(Nat64.toText(tokenID));
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        if (
-          caller == token.owner or price == ?0 
-        ) {
-          return #Err(#Unauthorized);
-        } else {
-          switch (price){
-            case null{
-              return #Err(#Other);
-            };
-            case (? _price){
-              var t : TxReceipt = await DBZ.transfer(caller,token.owner, _price);
-              // if (t!=#Ok(_)) {
-              //   return #Err(#Other);
-              //  };
-               switch (t) {
-                case ( #Ok(_)) {
+  // public shared({ caller }) func buyNFT(tokenID: Nat64) : async (Types.TxReceipt, ) {
+  //   let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
+  //   let price = nftPrices.get(Nat64.toText(tokenID));
+  //   switch (item) {
+  //     case null {
+  //       return #Err(#InvalidTokenId);
+  //     };
+  //     case (?token) {
+  //       if (
+  //         caller == token.owner or price == ?0 
+  //       ) {
+  //         return #Err(#Unauthorized);
+  //       } else {
+  //         switch (price){
+  //           case null{
+  //             return #Err(#Other);
+  //           };
+  //           case (? _price){
+  //             var t : TxReceipt = await DBZ.transfer(caller,token.owner, _price);
+  //             // if (t!=#Ok(_)) {
+  //             //   return #Err(#Other);
+  //             //  };
+  //              switch (t) {
+  //               case ( #Ok(_)) {
 
-                };
-                case (_) {
-                  return #Err(#Other);
-                }
-               };
-              nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
-                if (item.id == token.id) {
-                  let update : Types.Nft = {
-                    isPublic = item.isPublic;
-                    minter = item.minter;
-                    owner = caller;
-                    id = item.id;
-                    metadata = token.metadata;
-                  };
-                  return update;
-                } else {
-                  return item;
-                };
-              });
-              //transfer ICP 
-              // 
-              //
+  //               };
+  //               case (_) {
+  //                 return #Err(#Other);
+  //               }
+  //              };
+  //             nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
+  //               if (item.id == token.id) {
+  //                 let update : Types.Nft = {
+  //                   isPublic = item.isPublic;
+  //                   minter = item.minter;
+  //                   owner = caller;
+  //                   id = item.id;
+  //                   metadata = token.metadata;
+  //                 };
+  //                 return update;
+  //               } else {
+  //                 return item;
+  //               };
+  //             });
+  //             //transfer ICP 
+  //             // 
+  //             //
               
 
-              centers := List.map(centers, func (center : Types.Center) : Types.Center {
-                if (center.address == token.minter) {
-                  let update : Types.Center = {
-                    address = center.address;
-                    volume = center.volume + _price;
-                  };
-                  return update;
-                } else {
-                  return center;
-                };
-              });
-              nftPrices.put(Nat64.toText(tokenID), 0);
-              return #Ok(_price);
-            };
-          };
-        };
-      };
-    };
-  };  
+  //             centers := List.map(centers, func (center : Types.Center) : Types.Center {
+  //               if (center.address == token.minter) {
+  //                 let update : Types.Center = {
+  //                   address = center.address;
+  //                   volume = center.volume + _price;
+  //                 };
+  //                 return update;
+  //               } else {
+  //                 return center;
+  //               };
+  //             });
+  //             nftPrices.put(Nat64.toText(tokenID), 0);
+  //             return #Ok(_price);
+  //           };
+  //         };
+  //       };
+  //     };
+  //   };
+  // };  
 
   public shared({ caller }) func getPrice(tokenID: Nat64) : async Nat {
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
@@ -426,246 +337,8 @@ actor Main {
     };
   };
 
-  
-
-  public query func balanceOfDip721(user: Principal) : async Nat64 {
-    return Nat64.fromNat(
-      List.size(
-        List.filter(nfts, func(token: Types.Nft) : Bool { token.owner == user })
-      )
-    );
-  };
-
-  public query func ownerOfDip721(token_id: Types.TokenId) : async Types.OwnerResult {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (item) {
-      case (null) {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        return #Ok(token.owner);
-      };
-    };
-  };
-
-  public shared({ caller }) func safeTransferFromDip721(from: Principal, to: Principal, token_id: Types.TokenId) : async Types.TxReceipt {  
-    if (to == null_address) {
-      return #Err(#ZeroAddress);
-    } else {
-      return transferFrom(from, to, token_id, caller);
-    };
-  };
-
-  public shared({ caller }) func transferFromDip721(from: Principal, to: Principal, token_id: Types.TokenId) : async Types.TxReceipt {
-    return transferFrom(from, to, token_id, caller);
-  };
-
-  func transferFrom(from: Principal, to: Principal, token_id: Types.TokenId, caller: Principal) : Types.TxReceipt {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        if (
-          caller != token.owner and
-          not (caller != ad)
-        ) {
-          return #Err(#Unauthorized);
-        } else if (Principal.notEqual(from, token.owner)) {
-          return #Err(#Other);
-        } else {
-          nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
-            if (item.id == token.id) {
-              let update : Types.Nft = {
-                isPublic = item.isPublic;
-                minter = item.minter;
-                owner = to;
-                id = item.id;
-                metadata = token.metadata;
-              };
-              return update;
-            } else {
-              return item;
-            };
-          });
-          transactionId += 1;
-          return #Ok(transactionId);   
-        };
-      };
-    };
-  };
-
-  public query func supportedInterfacesDip721() : async [Types.InterfaceId] {
-    return [#TransferNotification, #Burn, #Mint];
-  };
-
-  public query func nameDip721() : async Text {
-    return name;
-  };
-
-  public query func symbolDip721() : async Text {
-    return symbol;
-  };
-
-  public query func totalSupplyDip721() : async Nat64 {
-    return Nat64.fromNat(
-      List.size(nfts)
-    );
-  };
-
-  public query func getMetadataDip721(token_id: Types.TokenId) : async Types.MetadataResult {
-    let item = findNFT(token_id);
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        return #Ok(token.metadata);
-      }
-    };
-  };
-
   private func findNFT(token_id : Types.TokenId) : ?Types.Nft {
     List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id })
-  };
-
-  public func getNFT(token_id : Types.TokenId) : async ?Types.Nft {
-    List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id })
-  };
-
-  public func getOwner(token_id : Types.TokenId) : async ?Principal {
-    let t = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (t) {
-      case (null) {
-        return null;
-      };
-      case (?token) {
-        return ?token.owner;
-        };
-      };
-   };
-
-  public func getNFTPublic() : async [Types.Nft] {
-    let items =  List.filter(nfts, func(token: Types.Nft) : Bool { token.isPublic});
-    // let a = List.nil<Types.Nft>();
-    // let r = Random.Finite();
-    // let c = 0;
-    // while (c<10){
-    //   for (nft in nfts){
-    //     if (r.coin()== true) {
-    //       a := List.add(a, nft);
-    //       c := c+1;
-    //     };
-    //   };
-    // };
-
-    // return List.toArray(a);
-    return List.toArray(items);
-  };
-
-  public query func getCenter(token_id : Types.TokenId) : async ?Text {
-    let item = findNFT(token_id);
-    switch (item) {
-      case null {
-        null
-      };
-      case (?token) {
-        ?token.metadata.center
-      }
-      };
-    
-    };
-
-    public query func getName(token_id : Types.TokenId) : async ?Text {
-        let item = findNFT(token_id);
-      switch (item) {
-      case null {
-        null
-      };
-      case (?token) {
-        ?token.metadata.name
-      }
-      };
-    };
-
-    public query func getID(token_id : Types.TokenId) : async ?Text {
-        let item = findNFT(token_id);
-    switch (item) {
-      case null {
-        null
-      };
-      case (?token) {
-        ?token.metadata.id
-      }
-      };
-    };
-
-    public query func getCid(token_id : Types.TokenId) : async ?Text {
-        let item = findNFT(token_id);
-    switch (item) {
-      case null {
-        null
-      };
-      case (?token) {
-        ?token.metadata.cid
-      }
-      };
-    };
-
-//   public func getMetadataForUserDip721(user: Principal) : async Types.ExtendedMetadataResult {
-//     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.owner == user });
-//     switch (item) {
-//       case null {
-//         return #Err(#Other);
-//       };
-//       case (?token) {
-//         return #Ok({
-//           metadata_desc = token.metadata;
-//           token_id = token.id;
-//         });
-//       }
-//     };
-//   };
-
-//   public query func getTokenIdsForUserDip721(user: Principal) : async [Types.TokenId] {
-//     let items = List.filter(nfts, func(token: Types.Nft) : Bool { token.owner == user });
-//     let tokenIds = List.map(items, func (item : Types.Nft) : Types.TokenId { item.id });
-//     return List.toArray(tokenIds);
-//   };
-
-
-  public shared({ caller }) func mintDip721(to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
-    if (not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
-      return #Err(#Unauthorized);
-    };
-
-    let newId = Nat64.fromNat(List.size(nfts));
-    let nft : Types.Nft = {
-      isPublic = false;
-      owner = to;
-      id = newId;
-      metadata = metadata;
-      minter = caller;
-    };
-
-    nfts := List.push(nft, nfts);
-
-    transactionId += 1;
-
-    return #Ok({
-      token_id = newId;
-      id = transactionId;
-    });
-  };
-
-  public query func getAllTokens() : async [Types.Nft] {
-    // let iter : Iter.Iter<Types.Nft> = List.toIter(nfts);
-    // var array = Buffer.Buffer<Types.Nft>(Iter.size(iter));
-    // for(i in iter){
-      // array.add(i);
-    // };
-    return List.toArray(nfts);
   };
 
 
@@ -693,57 +366,6 @@ actor Main {
     centers := List.filter(centers, func (center : Types.Center) : Bool { center.address != adSet });
   };
 
-
-  public func setCenter(centerSet : Principal) {
-    let centerTest : Types.Center = {
-    address = centerSet;
-    volume = 0;
-  };
-    centers := List.push(centerTest, centers);
-  };
-
-  // func to get NFTs owner by a principal 
-  public query func getNFTsFromUser(owner: Principal) : async [Types.Nft] {
-    let items = List.filter(nfts, func(token: Types.Nft) : Bool { token.owner == owner });
-    return List.toArray(items);
-  };
-
-  //func to get NFTs which mint by a principal
-  public query func getNFTsFromCenter(center: Principal) : async [Types.Nft] {
-    let items = List.filter(nfts, func(token: Types.Nft) : Bool { token.minter == center });
-    return List.toArray(items);
-  };
-
-  // func transfer DIP721 
-  public shared({ caller }) func transferDIP721(token_id: Types.TokenId, to: Principal) : async Types.TxReceipt {
-    let item = findNFT(token_id);
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        if (not List.some(nfts, func (nft : Types.Nft) : Bool { nft.owner == caller })) {
-          return #Err(#Unauthorized);
-        };
-        nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
-            if (item.id == token.id) {
-              let update : Types.Nft = {
-                isPublic = item.isPublic;
-                minter = item.minter;
-                owner = to;
-                id = item.id;
-                metadata = token.metadata;
-              };
-              return update;
-            } else {
-              return item;
-            };
-          });
-          transactionId += 1;
-          return #Ok(transactionId);   
-      };
-    };
-  };
 
   // func check viewer is viewer of NFT or not 
   public shared({ caller }) func isViewer(token_id: Types.TokenId, viewer: Principal) : async Types.TxReceipt {
@@ -781,99 +403,6 @@ actor Main {
       };
     };
 
-      public func buyNFTABCD(caller : Principal, tokenID: Nat64) : async (Types.TxReceipt, ) {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == tokenID});
-    let price = nftPrices.get(Nat64.toText(tokenID));
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        if (
-          caller == token.owner or price == ?0 
-        ) {
-          return #Err(#Unauthorized);
-        } else {
-          switch (price){
-            case null{
-              return #Err(#Other);
-            };
-            case (? _price){
-              var t : TxReceipt = await DBZ.transfer(caller,token.owner, _price);
-              // if (t!=#Ok(_)) {
-              //   return #Err(#Other);
-              //  };
-               switch (t) {
-                case ( #Ok(_)) {
-
-                };
-                case (_) {
-                  return #Err(#Other);
-                }
-               };
-              nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
-                if (item.id == token.id) {
-                  let update : Types.Nft = {
-                    isPublic = item.isPublic;
-                    minter = item.minter;
-                    owner = caller;
-                    id = item.id;
-                    metadata = token.metadata;
-                  };
-                  return update;
-                } else {
-                  return item;
-                };
-              });
-              //transfer ICP 
-              // 
-              //
-              
-
-              centers := List.map(centers, func (center : Types.Center) : Types.Center {
-                if (center.address == token.minter) {
-                  let update : Types.Center = {
-                    address = center.address;
-                    volume = center.volume + _price;
-                  };
-                  return update;
-                } else {
-                  return center;
-                };
-              });
-              nftPrices.put(Nat64.toText(tokenID), 0);
-              return #Ok(_price);
-            };
-          };
-        };
-      };
-    };
-  }; 
-
-  public func mintDip721ABCD(caller: Principal, to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
-    if (not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
-      return #Err(#Unauthorized);
-    };
-
-    let newId = Nat64.fromNat(List.size(nfts));
-    let nft : Types.Nft = {
-      isPublic = false;
-      owner = to;
-      id = newId;
-      metadata = metadata;
-      minter = caller;
-    };
-
-    nfts := List.push(nft, nfts);
-
-    transactionId += 1;
-
-    return #Ok({
-      token_id = newId;
-      id = transactionId;
-    });
-  };
-
   public func isOwner(token_id: Types.TokenId, owner: Principal) : async Bool {
     let item = findNFT(token_id);
     switch (item) {
@@ -886,12 +415,6 @@ actor Main {
     };
   };
 
-  public func resetNFTs() : () {
-    nfts := List.nil<Types.Nft>();
-  };
   
-  public func resetCenters() : (){
-    centers := List.nil<Types.Center>();
-  };
 
 }
