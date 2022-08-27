@@ -340,8 +340,16 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
     prices := [];
   };
 
-  public func getViewers(token_id: Nat64) : async ?List.List<Principal> {
-    return allowances.get(Nat64.toText(token_id));
+  public func getViewers(token_id: Nat64) : async [Principal] {
+    var viewers : ?List.List<Principal> = allowances.get(Nat64.toText(token_id));
+    switch (viewers) {
+      case (null) {
+        return [];
+      };
+      case (?viewer) {
+        return List.toArray(viewer);
+      }
+    };
   };
 
 
