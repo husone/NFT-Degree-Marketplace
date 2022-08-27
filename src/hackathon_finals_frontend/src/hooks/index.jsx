@@ -22,14 +22,25 @@ const Provider = ({ children }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    let timer = setTimeout(() => {
+      if (!principal) {
+        setIsLoaded(true)
+      }
+    }, 3000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [])
+
+  useEffect(() => {
     if (principal) {
       getRoleUser()
       getBalanceDIP20(principal)
     }
-    setIsLoaded(true)
     console.log('principal: ' + principal)
     console.log('role: ' + role)
     if (role && principal) {
+      setIsLoaded(true)
     }
   }, [principal, role])
 

@@ -1,4 +1,4 @@
-import { Tabs, Tag, Divider } from 'antd'
+import { Tabs } from 'antd'
 import MyNFTItem from './MyNFTItem'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
