@@ -894,7 +894,4 @@ actor Main {
     centers := List.nil<Types.Center>();
   };
 
-  public func getDp721() : async Text {
-    return await dip721.getName();
-  };
 }
