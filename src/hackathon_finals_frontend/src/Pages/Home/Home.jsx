@@ -8,6 +8,7 @@ import MyNFTItem from '../User/MyNFTItem'
 import IMAGES from '../../Assets/IMAGE'
 import Carousel from 'react-bootstrap/Carousel'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
+import { Principal } from '@dfinity/principal'
 
 const topCenter = [
   {
@@ -100,7 +101,13 @@ function Home() {
   console.log(listNFT)
   useEffect(() => {
     getAllNFT()
+    getCenters()
   }, [])
+
+  const getCenters = async () => {
+    const res = await final_be.getCenters()
+    console.log(res)
+  }
 
   const getAllNFT = async () => {
     const res = await final_be.getNFTPublic()
@@ -183,15 +190,28 @@ function Home() {
                 </p>
               </div>
               <div className="col d-flex justify-content-end">
-                <button className="sc-button style letter style-2">
-                  <span>Explore More</span>{' '}
+                <button className="sc-button style letter style-2 d-flex align-items-center">
+                  <span>Explore More</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="ms-1 bi bi-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+                    />
+                  </svg>
                 </button>
               </div>
             </div>
             <div className="center_wrapper">
               {topCenter.map((center, index) => {
                 return (
-                  <div className="sc-author col" key={index}>
+                  <div className="sc-author col">
                     <div className="p-1">
                       <div className="card-avatar mb-4">
                         <img src={center.uri} alt="center uri" />
@@ -223,42 +243,67 @@ function Home() {
               <div className="sc-heading style-2">
                 <div className="content-left">
                   <div className="inner">
-                    <h3 className="text-light">Top Certificates</h3>
-                    <p className="desc text-muted">
-                      Most favorite certificates
-                    </p>
+                    <div className="row my-3">
+                      <div className="col">
+                        <h3 className="text-light">Top Certificates</h3>
+                        <p className="desc text-muted">
+                          Most favorite certificates
+                        </p>
+                      </div>
+                      <div className="col d-flex justify-content-end">
+                        <Link to="/marketplace">
+                          <button className="sc-button style letter style-2 d-flex align-items-center">
+                            <span className="text-light">Explore More</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              fill="white"
+                              className="ms-1 bi bi-arrow-right"
+                              viewBox="0 0 16 16"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+                              />
+                            </svg>
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
                     <div className="certificates_wrapper">
                       {topCertificate.map((certificate, index) => {
                         return (
                           <div>
-                            <div className="cer_img" key={index}>
+                            <div className="cer_img">
                               <img
                                 src={certificate.uri}
                                 alt="certificate uri"
                               />
                             </div>
-                            <h3 className="description mt-3 mx-3 text-light">
+                            <h6 className="description mx-3 my-3 text-light">
                               "This is description for certificate"
-                            </h3>
-                            <div className="d-flex cer_content mx-3 my-3">
-                              <img src={certificate.ownerUri} alt="owner uri" />
-                              <div className="ms-3">
-                                <h3 className="text-light m-0">
-                                  {certificate.owner}
-                                </h3>
-                                <p className="text-muted">Owner</p>
-                              </div>
-                            </div>
+                            </h6>
                             <div
-                              className="px-3 py-3 text-center"
+                              className="row d-flex cer_content px-4"
                               style={{ backgroundColor: '#14161b' }}
                             >
-                              <b>Price - </b>8 DBZ{' '}
-                              <img
-                                className="coin_logo"
-                                src={CoinLogo}
-                                alt="coin logo"
-                              />
+                              <div className="col px-0 border-end my-3">
+                                <h3 className="text-light m-0 text-center">
+                                  {certificate.owner}
+                                </h3>
+                                <p className="text-muted text-center m-0">
+                                  Owner
+                                </p>
+                              </div>
+                              <div className="col text-center px-0 my-3">
+                                <b>Price - </b>8 DBZ{' '}
+                                <img
+                                  className="coin_logo"
+                                  src={CoinLogo}
+                                  alt="coin logo"
+                                />
+                              </div>
                             </div>
                           </div>
                         )

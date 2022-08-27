@@ -249,7 +249,7 @@ function MintRequest() {
 
   return (
     <div className="pt-5">
-      <h2 className="my-4 mt-0 text-white text-center">MINT REQUESTS</h2>
+      <h2 className="my-4 mt-0 text-white text-center heading1">MINT REQUESTS</h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}

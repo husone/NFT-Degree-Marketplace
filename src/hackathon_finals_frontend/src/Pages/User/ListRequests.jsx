@@ -114,7 +114,7 @@ function ListRequests() {
 
   return (
     <div className="d-flex flex-column align-items-center">
-      <h2 className="py-4 px-4 heading1 te">LIST OF USER'S REQUEST</h2>
+      <h2 className="py-4 px-4 heading1 text-center">LIST OF USER'S REQUEST</h2>
       {isLoaded ? (
         <>
           <Table
@@ -140,7 +140,7 @@ function ListRequests() {
                         src={bufferToURI(requestModal?.imageKYC)}
                         alt="preview image"
                         srcSet=""
-                        style={{ width: '250px', height: '250px' }}
+                        style={{ width: '250px', height: '250px', borderRadius: "8px", objectFit: "cover" }}
                       />
                     </Container>
 
@@ -156,7 +156,7 @@ function ListRequests() {
                         src={bufferToURI(requestModal?.imageNFT)}
                         alt="preview image"
                         srcSet=""
-                        style={{ width: '250px', height: '250px' }}
+                        style={{ width: '250px', height: '250px', borderRadius: "8px", objectFit: "cover" }}
                       />
                     </Container>
                     <h4 className="text-center text-light">NFT Image</h4>
