@@ -9,6 +9,7 @@ import UserKYC from '../Pages/User/UserKYC'
 import ListRequests from '../Pages/User/ListRequests'
 import DetailNFT from '../Pages/NFTs/DetailNFT'
 import MyNFTDetail from '../Pages/User/MyNFTDetail'
+import Staking from "../Pages/DAO/Staking"
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -46,7 +47,7 @@ const publicRoutes = [
     desc: 'Requests',
   },
   { path: '/my-nfts', component: MyNFT, role: 'user', desc: 'My NFTs' },
-  { path: '/staking', component: MyNFT, role: 'user', desc: 'Staking' },
+  { path: '/staking', component: Staking, role: 'user', desc: 'Staking' },
   { path: '/DAO', component: MyNFT, role: 'user', desc: 'DAO' },
   { path: '/all-nfts', component: AllNFTs, role: null, desc: 'All NFTs' },
   { path: '/nft/:id', component: DetailNFT, role: null, desc: null },

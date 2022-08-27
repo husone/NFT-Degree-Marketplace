@@ -5,7 +5,7 @@ import { Input, Tabs } from 'antd'
 import Item from './Item'
 import { Link } from 'react-router-dom'
 import MyNFTItem from '../User/MyNFTItem'
-import IMAGES from '../../Assets/IMAGE'   
+import IMAGES from '../../Assets/IMAGE'
 import Carousel from 'react-bootstrap/Carousel'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
 import { Principal } from '@dfinity/principal'
@@ -98,7 +98,7 @@ function Home() {
     getCenters()
   }, [])
 
-  const  getCenters = async () => {
+  const getCenters = async () => {
     const res = await final_be.getCenters();
     console.log(res)
   }
@@ -182,7 +182,12 @@ function Home() {
                 <p className="desc text-muted">Most popular education centers </p>
               </div>
               <div className="col d-flex justify-content-end">
-                <button className="sc-button style letter style-2"><span>Explore More</span> </button>
+                <button className="sc-button style letter style-2 d-flex align-items-center">
+                  <span>Explore More</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="ms-1 bi bi-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
+                  </svg>
+                </button>
               </div>
             </div>
             <div className="center_wrapper">
@@ -226,7 +231,7 @@ function Home() {
                                 <img src={certificate.uri} alt="certificate uri" />
                               </div>
                               <h6 className="description mx-3 my-3 text-light">"This is description for certificate"</h6>
-                              <div className="row d-flex cer_content px-4" style={{backgroundColor: "#14161b"}}>
+                              <div className="row d-flex cer_content px-4" style={{ backgroundColor: "#14161b" }}>
                                 <div className='col px-0 border-end my-3'>
                                   <h3 className='text-light m-0 text-center'>{certificate.owner}</h3>
                                   <p className='text-muted text-center m-0'>Owner</p>
