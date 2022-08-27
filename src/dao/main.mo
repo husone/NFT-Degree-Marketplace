@@ -129,10 +129,10 @@ shared actor class DAO(dip20 : Principal) = Self {
     /// args on the given canister.
 
     public shared({caller}) func transfer(id : Principal, amount : Nat) : async Bool {
-        let t1 = (await daoToken.allowance(caller, Principal.fromActor(Self)));
-        let t2 = (await daoToken.balanceOf(caller));
+        let t1 = (await daoToken.allowance(id, Principal.fromActor(Self)));
+        let t2 = (await daoToken.balanceOf(id));
         if (t1>= amount and t2>= amount){
-            let t3 = await daoToken.transferFrom(caller, Principal.fromActor(Self), amount);
+            let t3 = await daoToken.transferFrom(id,Principal.fromActor(Self), amount);
             return true;
         };
         return false;
