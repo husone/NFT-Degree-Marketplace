@@ -6,6 +6,7 @@ import CoinLogo from '../../Assets/Images/DBZcoin.png'
 import { nftCanister } from '../../../../declarations/nftCanister'
 import { Link } from 'react-router-dom'
 import ItemHome from '../Home/components/ItemHome'
+import { final_be } from '../../../../declarations/final_be'
 
 const { TabPane } = Tabs
 const topCertificate = [
@@ -53,15 +54,20 @@ export default function MarketPlace() {
     console.log(key)
   }
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
   const [nftList, setNftList] = useState([])
 
   useEffect(() => {
+    checkOwner()
     getAllNFT()
   }, [])
+
+  const checkOwner = async () => {
+    const res = await final_be.isOwner(
+      BigInt(id),
+      Principal.fromText(principal)
+    )
+    setIsOwner(res)
+  }
 
   const getAllNFT = async () => {
     const res = await nftCanister.getNFTPublic()

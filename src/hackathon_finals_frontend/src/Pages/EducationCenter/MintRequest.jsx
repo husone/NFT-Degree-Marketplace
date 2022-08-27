@@ -4,15 +4,16 @@ import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import { formatDate, bufferToURI, formatDay } from '../../Utils/format'
-import { useConnect } from '@connect2ic/react'
+import { useConnect, useCanister } from '@connect2ic/react'
 import './MintRequest.scss'
 import { storeFiles } from '../../Utils/web3Storage'
-import { final_be } from '../../../../declarations/final_be'
-import { nftCanister } from '../../../../declarations/nftCanister'
+// import { final_be } from '../../../../declarations/final_be'
+// import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
 
 function MintRequest() {
+  const [nftCanister] = useCanister('nftCanister')
   const toastId = useRef(null)
   const { principal } = useConnect()
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -177,7 +178,7 @@ function MintRequest() {
     }
     const ownerPrincipal = requestModal.principal
     const resCanister = await nftCanister.mintDip721(
-      Principal.fromText(principal),
+      // Principal.fromText(principal),
       Principal.fromText(ownerPrincipal),
       metadata
     )

@@ -220,9 +220,9 @@ function Home() {
                       {listNFT.map(nft => {
                         const id = Number(nft?.id)
                         return (
-                          // <Link to={`/nft/${id}`} key={id}>
-                          <ItemHome nft={nft} />
-                          // </Link>
+                          <Link to={`/nft/${id}`} key={id}>
+                            <ItemHome nft={nft} />
+                          </Link>
                         )
                       })}
                     </div>

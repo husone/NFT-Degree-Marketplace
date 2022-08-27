@@ -25,8 +25,8 @@ shared actor class Dip721NFT() = Self {
   stable var name : Text = "DnBoiZNFT";
   stable var symbol : Text = "DNFT";
   // Test
-  stable var ad : Principal = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
-  stable var nftMain : Principal = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
+  stable var ad : Principal = Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae");
+  stable var nftMain : Principal = Principal.fromText("ibb2v-rs73g-qsvdc-odxek-reexf-i2z2m-yf3zs-y7yl7-a5v57-bsa27-cae");
 
 
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
@@ -148,6 +148,19 @@ public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
       return transferFrom(from, to, token_id, caller);
     };
   };
+
+   public func isOwner(token_id: Types.TokenId, owner: Principal) : async Bool {
+    let item = await getNFT(token_id);
+    switch (item) {
+      case null {
+        return false;
+      };
+      case (?token) {
+        return token.owner == owner;
+      };
+    };
+  };
+
 
   public shared({ caller }) func transferFromDip721(from: Principal, to: Principal, token_id: Types.TokenId) : async Types.TxReceipt {
     return transferFrom(from, to, token_id, caller);
@@ -289,7 +302,11 @@ public query func getCenters() : async [Types.Center]  {
   public shared({caller}) func setCenters(new_centers: List.List<Types.Center>) {
     centers := new_centers;
   };
+public func setAdmin(adSet : Principal) {
 
+    ad := adSet;
+
+  };
 //   public func getMetadataForUserDip721(user: Principal) : async Types.ExtendedMetadataResult {
 //     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.owner == user });
 //     switch (item) {

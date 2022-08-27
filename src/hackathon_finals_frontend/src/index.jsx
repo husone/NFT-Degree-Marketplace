@@ -9,7 +9,6 @@ import { Connect2ICProvider, ConnectDialog } from '@connect2ic/react'
 import { createClient } from '@connect2ic/core'
 import { PlugWallet } from '@connect2ic/core/providers/plug-wallet'
 import { canisterId } from '../../declarations/final_be/index.js'
-import { canisterId } from '../../declarations/dao/index.js'
 import { idlFactory } from '../../declarations/final_be/final_be.did.js'
 import Provider from './hooks/index'
 import { ToastContainer, toast } from 'react-toastify'
@@ -19,11 +18,13 @@ import * as final_be from '../../declarations/final_be'
 import * as nftCanister from '../../declarations/nftCanister'
 import * as ft from '../../declarations/ft'
 import * as dao from '../../declarations/dao'
+
 const canisterDefinitions = {
   superheroes: { idlFactory, canisterId },
 }
 const client = createClient({
-  canisters: { final_be, nftCanister, ft, dao },
+  canisters: { nftCanister, ft, dao, final_be },
+  // canisters: canisterDefinitions,
   providers: [new PlugWallet()],
 })
 
