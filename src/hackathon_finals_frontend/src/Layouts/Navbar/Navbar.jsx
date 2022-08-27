@@ -9,20 +9,48 @@ import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import CoinLogo from '../../Assets/Images/DBZ.png'
 import { Popover } from 'antd'
+import { Principal } from '@dfinity/principal'
 import './Navbar.scss'
 
+import { idlFactory } from '../../../../declarations/dao/dao.did.js'
+import { canisterId } from '../../../../declarations/dao/index.js'
 function NavBar(props) {
-  const { role, logout, login, balanceDIP20, setIsLoaded } = props
+  const { role, logout, login, balanceDIP20, setIsLoaded, connectWallet } =
+    props
   const { principal, isConnected, disconnect, onConnect, onDisconnect } =
     useConnect()
+  const send_dfx = () => {
+    console.log('1')
+  }
+  const TRANSFER_ICP_TX = {
+    idl: idlFactory,
+    canisterId: canisterId,
+    methodName: 'send_dfx',
+    args: [
+      {
+        to: Principal.from(
+          'e5uhc-kq6ct-dgmct-7x2zg-dnytg-kry5b-3rwpw-uuwqj-andm2-cmvis-nqe'
+        ),
+        fee: { e8s: BigInt(10000) },
+        amount: { e8s: BigInt(1000000) },
+        memo: BigInt(32),
+        from_subaccount: [], // For now, using default subaccount to handle ICP
+        created_at_time: [],
+      },
+    ],
+    onSuccess: async res => {
+      console.log('transferred icp successfully')
+    },
+    onFail: res => {
+      console.log('transfer icp error', res)
+    },
+  }
 
-  // useEffect(() => {
-  //   if (role || principal) {
-  //     console.log(1)
-  //     setIsLoaded(true)
-  //   }
-  // }, [role, principal])
-
+  const randomTransfers = async () => {
+    console.log('Doing a bunch of transfers')
+    await window.ic.plug.batchTransactions([TRANSFER_ICP_TX])
+    console.log('Done!')
+  }
   const onConnectWallet = () => {
     // window.ic.plug.requestConnect()
     login()
@@ -34,6 +62,10 @@ function NavBar(props) {
     console.log('Disconnected from Plug')
   }
 
+  const test = async () => {
+    const result = await window.ic.plug.requestBalance()
+    console.log(result)
+  }
   return (
     role && (
       <Container>
@@ -65,15 +97,14 @@ function NavBar(props) {
                     className="wallet_id mx-3 text-light"
                   >
                     <div className="wallet_id mx-3 text-light">{principal}</div>
-                    {/* <Button type="primary">Hover me</Button> */}
                   </Popover>
-                  {/* <div className="wallet_id mx-3 text-light">{principal}</div> */}
                 </>
               )}
               <ConnectButton
                 onConnect={onConnectWallet}
                 onDisconnect={onDisconnected}
               />
+              <button onClick={randomTransfers}>test</button>
             </div>
           </div>
         </Nav>

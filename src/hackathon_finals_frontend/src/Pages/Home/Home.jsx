@@ -1,6 +1,5 @@
 import { final_be } from '../../../../declarations/final_be'
 import { nftCanister } from '../../../../declarations/nftCanister'
-
 import React, { useState, useEffect } from 'react'
 import './Home.scss'
 import { Link } from 'react-router-dom'
@@ -8,8 +7,8 @@ import axios from 'axios'
 import { bufferToURI } from '../../Utils/format'
 import IntroduceComponent from './components/IntroduceComponent'
 import CarouselHeader from './components/CarouselHeader'
-import { Link } from 'react-router-dom'
 import ItemHome from './components/ItemHome'
+
 const topCenter = [
   {
     name: 'FPT University',

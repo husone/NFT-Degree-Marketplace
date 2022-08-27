@@ -4,10 +4,7 @@ import { useConnect } from '@connect2ic/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
-import { Principal } from '@dfinity/principal'
 import { ft } from '../../.././declarations/ft'
-
-import axios from 'axios'
 
 export const Context = createContext()
 
@@ -89,6 +86,7 @@ const Provider = ({ children }) => {
     login,
     balanceDIP20,
     setIsLoaded,
+    connectWallet,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

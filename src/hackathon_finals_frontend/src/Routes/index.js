@@ -9,8 +9,8 @@ import UserKYC from '../Pages/User/UserKYC'
 import ListRequests from '../Pages/User/ListRequests'
 import DetailNFT from '../Pages/NFTs/DetailNFT'
 import MyNFTDetail from '../Pages/User/MyNFTDetail'
-import Staking from "../Pages/DAO/Staking"
-import MarketPlace from "../Pages/Marketplace/MarketPlace"
+import Staking from '../Pages/DAO/Staking'
+import MarketPlace from '../Pages/Marketplace/MarketPlace'
 
 const publicRoutes = [
   { path: '/', component: Home },
@@ -48,9 +48,26 @@ const publicRoutes = [
     desc: 'Requests',
   },
   { path: '/my-nfts', component: MyNFT, role: 'user', desc: 'My NFTs' },
-  { path: '/staking', component: Staking, role: 'user', desc: 'Staking' },
-  { path: '/marketplace', component: MarketPlace, role: 'user', desc: 'MarketPlace' },
-  { path: '/DAO', component: MyNFT, role: 'user', desc: 'DAO' },
+  {
+    path: '/staking',
+    component: Staking,
+    role: 'user',
+    desc: 'Staking',
+    dropdown: 'DAO',
+  },
+  {
+    path: '/marketplace',
+    component: MarketPlace,
+    role: 'user',
+    desc: 'MarketPlace',
+  },
+  {
+    path: '/voting',
+    component: MyNFT,
+    role: 'user',
+    desc: 'Voting',
+    dropdown: 'DAO',
+  },
   { path: '/all-nfts', component: AllNFTs, role: null, desc: 'All NFTs' },
   { path: '/nft/:id', component: DetailNFT, role: null, desc: null },
   { path: '/me/nft/:id', component: MyNFTDetail, role: null, desc: null },
