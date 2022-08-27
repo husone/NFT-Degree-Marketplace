@@ -199,3 +199,9 @@ section {
   font-size: 20px;
   color: #fff;
 }
+
+.ant-spin-dot-spin {
+  transform: rotate(0deg) scale(5);
+  -webkit-animation: antRotate 1.2s infinite linear;
+  animation: antRotate 1.2s infinite linear;
+}

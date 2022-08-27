@@ -3,7 +3,7 @@ import Navbar from '../Navbar/Navbar'
 import styled from 'styled-components'
 import { useContext } from 'react'
 import { Context } from '../../hooks/index'
-import { InfinitySpin } from 'react-loader-spinner'
+import { Spin } from "antd"
 
 function DefaultLayout({ children }) {
   const { isLoaded } = useContext(Context)
@@ -18,7 +18,7 @@ function DefaultLayout({ children }) {
         </div>
       ) : (
         <div className="vh-100 vw-100 d-flex justify-content-center align-items-center">
-          <InfinitySpin width="500" color="#4fa94d" />
+          <Spin/>
         </div>
       )}
     </>
@@ -32,3 +32,6 @@ const Body = styled.div`
   background: #222232;
   padding-bottom: 30px;
 `
+const Loader = styled.div`
+  
+`;
