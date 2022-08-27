@@ -176,6 +176,7 @@ module {
    getName: (TokenId) -> async (? Text) ;
    getOwner: (TokenId) -> async (? Principal);
    isPublic: (TokenId) -> async (Privacy);
+   addCenter: (Center) -> async (Bool);
    mintDip721: (Principal, FullMetadata) -> async (MintReceipt);
    nameDip721: () -> async (Text) ;
    ownerOfDip721: (TokenId) -> async (OwnerResult) ;

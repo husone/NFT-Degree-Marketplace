@@ -293,7 +293,7 @@ shared actor class Dip721NFT() = Self {
 
 
   public shared({ caller }) func mintDip721(to: Principal, metadata: Types.FullMetadata) : async Types.MintReceipt {
-    if (not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) {
+    if ((not List.some(centers, func (center : Types.Center) : Bool { center.address == caller })) or caller == ad or caller == nftMain) {
       return #Err(#Unauthorized);
     };
 
@@ -314,6 +314,14 @@ shared actor class Dip721NFT() = Self {
       token_id = newId;
       id = transactionId;
     });
+  };
+
+  public shared({caller}) func addCenter(center: Types.Center) : async Bool {
+    if (!(caller ==ad or caller == nftMain)) {
+      return false;
+    };
+    centers := List.push(center, centers);
+    return true;
   };
 
   public query func getAllTokens() : async [Types.Nft] {
@@ -369,13 +377,6 @@ shared actor class Dip721NFT() = Self {
   };
 
   
-  public func setCenter(centerSet : Principal) {
-    let centerTest : Types.Center = {
-    address = centerSet;
-    volume = 0;
-  };
-    centers := List.push(centerTest, centers);
-  };
 
 
 

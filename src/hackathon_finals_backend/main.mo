@@ -43,6 +43,7 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
       return;
     };
     centers := List.push(center,centers);
+    let t = await token721.addCenter(center);
   };
 
   public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
