@@ -884,4 +884,11 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
       };
     };
   };
+
+  public func resetNFTs() : () {
+    nfts := List.nil<Types.Nft>();
+  };
+public func resetCenters() : (){
+    centers := List.nil<Types.Center>();
+  };
 }

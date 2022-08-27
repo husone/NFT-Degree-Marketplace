@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans&family=Urbanist:ital,wght@0,600;0,900;1,600;1,900&display=swap');
 @import 'normalize.css';
 
-html {}
+html {
+}
 
 body {
   color: #fff;
@@ -56,9 +57,11 @@ section {
   position: relative;
   background: #fff;
   background-size: cover;
-  background: linear-gradient(130.35deg,
-      rgba(99, 69, 237, 0.85) 17.35%,
-      rgba(220, 57, 252, 0.85) 78.23%);
+  background: linear-gradient(
+    130.35deg,
+    rgba(99, 69, 237, 0.85) 17.35%,
+    rgba(220, 57, 252, 0.85) 78.23%
+  );
 }
 
 .fl-page-title .overlay {
@@ -142,7 +145,6 @@ section {
   }
 }
 
-<<<<<<< HEAD
 .gradient-heading {
   background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
   -webkit-background-clip: text;
@@ -171,13 +173,13 @@ section {
   height: fit-content;
 
   &:hover {
-    background-image: linear-gradient(to left, #6345ED 58.12%, #DC39FC 81.74%);
+    background-image: linear-gradient(to left, #6345ed 58.12%, #dc39fc 81.74%);
     border: unset;
     background-size: 200% auto;
     border: 2px solid transparent;
   }
 }
-=======
+
 .ant-modal-body p {
   color: #fff !important;
 }
@@ -186,4 +188,3 @@ section {
   text-transform: capitalize !important;
   color: #fff !important;
 }
->>>>>>> 4a9d3d840c8f0ea60eb87f9b8e9da1a1e17d64ae
