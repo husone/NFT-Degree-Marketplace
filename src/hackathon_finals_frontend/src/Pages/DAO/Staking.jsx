@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Space, Tag } from "antd"
+import React, { useState } from 'react'
+import { Button, Space, Tag, Modal } from "antd"
 import StakedItem from "./StakedItem";
 import CoinLogo from "../../Assets/Images/DBZcoin.png"
 
@@ -45,6 +45,20 @@ const tokenData = [
 ]
 
 export default function Staking() {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
     return (
         <div>
             <div className="wrap_staking row mx-5 container">
@@ -55,10 +69,16 @@ export default function Staking() {
                     </div>
                     <Space size={15} className="col-4 d-flex align-items-center  justify-content-end">
                         <Button className="custom_add_btn">Add Token</Button>
-                        <Button className="custom_add_btn">Create Proposal</Button>
+                        <Button className="custom_add_btn" onClick={showModal}>Create Proposal</Button>
                     </Space>
                 </div>
             </div>
+
+            <Modal width={800} title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+            </Modal>
 
             <div class="container">
                 <div class="row gx-5">
