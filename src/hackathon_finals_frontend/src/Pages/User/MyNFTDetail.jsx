@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { Principal } from '@dfinity/principal'
 import { useConnect } from '@connect2ic/react'
 import { final_be } from '../../../../declarations/final_be'
-// import { final_be as canister } from '../../../'
 import { nftCanister } from '../../../../declarations/nftCanister'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -21,11 +20,16 @@ import CoinIcon from '../../Assets/Images/DBZcoin.png'
 import { MutatingDots } from 'react-loader-spinner'
 import { bufferToURI } from '../../Utils/format'
 import { useCanister } from '@connect2ic/react'
-
 const { confirm } = Modal
 
 function MyNFTDetail() {
-  console.log(canister)
+     const [final_be, { loading, error }] = useCanister('final_be')
+  console.log(final_be)
+  const test = async () => {
+    // nftCanister.increment()
+    const res = await final_be.callerToText()
+    console.log(res)
+  }
   const textInput = useRef()
   const navigate = useNavigate()
   const { principal } = useConnect()
@@ -43,6 +47,7 @@ function MyNFTDetail() {
     if (principal) {
       loadStatusNFT()
     }
+    test()
   }, [])
 
   useEffect(() => {
