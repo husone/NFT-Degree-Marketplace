@@ -167,7 +167,7 @@ const Nav = styled.nav`
 `
 const Container = styled.div`
   position: sticky;
-  z-index: 1;
+  z-index: 100;
   top: 0px;
   .dialog-styles {
     position: fixed;
