@@ -17,6 +17,8 @@ const Provider = ({ children }) => {
   const [role, setRole] = useState('user')
   const [isLoaded, setIsLoaded] = useState(false)
   const [balanceDIP20, setBalanceDIP20] = useState('0 DBZ')
+  const [isApproveGlobal, setIsApproveGlobal] = useState(false)
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -87,6 +89,8 @@ const Provider = ({ children }) => {
     balanceDIP20,
     setIsLoaded,
     connectWallet,
+    isApproveGlobal,
+    setIsApproveGlobal,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

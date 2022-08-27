@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Logo from '../../Assets/Images/logo.png'
@@ -8,50 +8,16 @@ import NavbarEducation from './components/NavbarEducation'
 import NavbarUser from './components/NavbarUser'
 import NavbarAdmin from './components/NavbarAdmin'
 import CoinLogo from '../../Assets/Images/DBZ.png'
-import { Popover } from 'antd'
+import { Popover, Popconfirm, Tag, Button } from 'antd'
 import { Principal } from '@dfinity/principal'
 import { publicRoutes } from '../../Routes/index'
 import './Navbar.scss'
-
-import { idlFactory } from '../../../../declarations/dao/dao.did.js'
-import { canisterId } from '../../../../declarations/dao/index.js'
+import { Context } from '../../hooks/index'
 function NavBar(props) {
-  const { role, logout, login, balanceDIP20, setIsLoaded, connectWallet } =
-    props
-  const { principal, isConnected, disconnect, onConnect, onDisconnect } =
-    useConnect()
-  const send_dfx = () => {
-    console.log('1')
-  }
-  const TRANSFER_ICP_TX = {
-    idl: idlFactory,
-    canisterId: canisterId,
-    methodName: 'send_dfx',
-    args: [
-      {
-        to: Principal.from(
-          'e5uhc-kq6ct-dgmct-7x2zg-dnytg-kry5b-3rwpw-uuwqj-andm2-cmvis-nqe'
-        ),
-        fee: { e8s: BigInt(10000) },
-        amount: { e8s: BigInt(1000000) },
-        memo: BigInt(32),
-        from_subaccount: [], // For now, using default subaccount to handle ICP
-        created_at_time: [],
-      },
-    ],
-    onSuccess: async res => {
-      console.log('transferred icp successfully')
-    },
-    onFail: res => {
-      console.log('transfer icp error', res)
-    },
-  }
-
-  const randomTransfers = async () => {
-    console.log('Doing a bunch of transfers')
-    await window.ic.plug.batchTransactions([TRANSFER_ICP_TX])
-    console.log('Done!')
-  }
+  const { isApproveGlobal, setIsApproveGlobal } = useContext(Context)
+  const { role, logout, login, balanceDIP20, connectWallet } = props
+  const { principal, isConnected, disconnect } = useConnect()
+  const [isApprove, setApprove] = useState(false)
   const onConnectWallet = () => {
     // window.ic.plug.requestConnect()
     login()
@@ -69,7 +35,8 @@ function NavBar(props) {
   }
 
   const confirm = e => {
-    setApprove(true)
+    setIsApproveGlobal(true)
+    // setApprove(true)
   }
 
   const cancel = e => {
@@ -86,7 +53,31 @@ function NavBar(props) {
               <Link className="navbar-brand" to="/">
                 <img src={Logo} alt="Home" />
               </Link>
-
+              <div className="dropdown">
+                <button
+                  className="btn dropdown-toggle custom_dropdown"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  DAO
+                </button>
+                <ul className="dropdown-menu">
+                  {publicRoutes.map((route, index) => {
+                    if (route.dropdown === 'DAO') {
+                      return (
+                        <Link
+                          className="dropdown-item navbar-brand custom_dropdown"
+                          to={route.path}
+                          key={index}
+                        >
+                          {route.desc}
+                        </Link>
+                      )
+                    }
+                  })}
+                </ul>
+              </div>
               {role === 'user' && <NavbarUser />}
               {role === 'education' && <NavbarEducation />}
               {role === 'admin' && <NavbarAdmin />}
@@ -104,18 +95,18 @@ function NavBar(props) {
                       />
                     </div>
                     <Popconfirm
-                      title="Are you sure to delete this task?"
+                      title="Are you want to approve?"
                       onConfirm={confirm}
                       onCancel={cancel}
                       okText="Yes"
                       cancelText="No"
                       className="cf_pop"
                     >
-                      {!isApprove && (
+                      {!isApproveGlobal && (
                         <Button className="custom_approve_btn">Approve</Button>
                       )}
                     </Popconfirm>
-                    {isApprove && (
+                    {isApproveGlobal && (
                       <Tag color="green" className="custom_approve">
                         Approved
                       </Tag>
@@ -134,7 +125,6 @@ function NavBar(props) {
                 onConnect={onConnectWallet}
                 onDisconnect={onDisconnected}
               />
-              <button onClick={randomTransfers}>test</button>
             </div>
           </div>
         </Nav>
