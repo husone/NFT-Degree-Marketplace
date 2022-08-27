@@ -25,8 +25,8 @@ const Provider = ({ children }) => {
     if (principal) {
       getRoleUser()
       getBalanceDIP20(principal)
-      setIsLoaded(true)
     }
+    setIsLoaded(true)
     console.log('principal: ' + principal)
     console.log('role: ' + role)
     if (role && principal) {

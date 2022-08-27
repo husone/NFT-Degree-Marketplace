@@ -9,6 +9,8 @@ import IMAGES from '../../Assets/IMAGE'
 import Carousel from 'react-bootstrap/Carousel'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
 import { Principal } from '@dfinity/principal'
+import axios from "axios";
+import { bufferToURI } from '../../Utils/format'
 
 const topCenter = [
   {
@@ -97,11 +99,13 @@ const { header_1, header_2, header_3, icon_1, icon_2, icon_3, icon_4 } = IMAGES
 function Home() {
   const [size, setSize] = useState('large')
   const [listNFT, setListNFT] = useState([])
+  const [education, setEducation] = useState([])
 
   console.log(listNFT)
   useEffect(() => {
     getAllNFT()
     getCenters()
+    getEducation()
   }, [])
 
   const getCenters = async () => {
@@ -118,6 +122,17 @@ function Home() {
 
   const onChange = key => {
     console.log(key)
+  }
+
+  const getEducation = () => {
+    axios.get(`${process.env.BACKEND_OFF_HEROKU}/education`)
+      .then(
+        res => {
+          console.log(res.data.education)
+          setEducation(res.data.education)
+          console.log(education)
+        }
+      )
   }
 
   return (
@@ -193,6 +208,7 @@ function Home() {
                 <button className="sc-button style letter style-2 d-flex align-items-center">
                   <span>Explore More</span>
                   <svg
+
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
@@ -209,17 +225,17 @@ function Home() {
               </div>
             </div>
             <div className="center_wrapper">
-              {topCenter.map((center, index) => {
+              {education?.map((center, index) => {
                 return (
                   <div className="sc-author col">
                     <div className="p-1">
                       <div className="card-avatar mb-4">
-                        <img src={center.uri} alt="center uri" />
+                        <img src={bufferToURI(center.imageLogo)} alt="center uri" />
                       </div>
                       <div className="infor">
                         <h6>
                           {' '}
-                          <a className="text-light" href="author.html">
+                          <a className="text-light text-capitalize" href="author.html">
                             {center.name}
                           </a>{' '}
                         </h6>
