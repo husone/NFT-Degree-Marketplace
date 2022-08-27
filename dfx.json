@@ -5,7 +5,7 @@
       "type": "motoko"
     },
     "ft": {
-      "main": "src/dip20_token/main.mo",
+      "main": "src/dip20_token/token.mo",
       "type": "motoko"
     },
     "nft": {
