@@ -23,13 +23,6 @@ import Cap "./cap/Cap";
 import Root "./cap/Root";
 
 shared(msg) actor class Token(
-    _logo: Text,
-    _name: Text,
-    _symbol: Text,
-    _decimals: Nat8,
-    _totalSupply: Nat,
-    _owner: Principal,
-    _fee: Nat
     ) = this {
     type Operation = Types.Operation;
     type TransactionStatus = Types.TransactionStatus;
@@ -59,19 +52,19 @@ shared(msg) actor class Token(
         };
     };
 
-    private stable var owner_ : Principal = _owner;
-    private stable var logo_ : Text = _logo;
-    private stable var name_ : Text = _name;
-    private stable var decimals_ : Nat8 = _decimals;
-    private stable var symbol_ : Text = _symbol;
-    private stable var totalSupply_ : Nat = _totalSupply;
-    private stable var blackhole : Principal = Principal.fromText("aaaaa-aa");
-    private stable var feeTo : Principal = owner_;
-    private stable var fee : Nat = _fee;
-    private stable var balanceEntries : [(Principal, Nat)] = [];
-    private stable var allowanceEntries : [(Principal, [(Principal, Nat)])] = [];
-    private var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
-    private var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
+    stable var owner_ : Principal = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
+    stable var logo_ : Text = "https://seeklogo.com//images/T/tether-usdt-logo-FA55C7F397-seeklogo.com.png";
+    stable var name_ : Text = "DnBoiZ";
+    stable var decimals_ : Nat8 = 18;
+    stable var symbol_ : Text = "DBZ";
+    stable var totalSupply_ : Nat = 1000_000_000;
+    stable var blackhole : Principal = Principal.fromText("aaaaa-aa");
+    stable var feeTo : Principal = owner_;
+    stable var fee : Nat = 0;
+    stable var balanceEntries : [(Principal, Nat)] = [];
+    stable var allowanceEntries : [(Principal, [(Principal, Nat)])] = [];
+     var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
+     var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
     balances.put(owner_, totalSupply_);
     private stable let genesis : TxRecord = {
         caller = ?owner_;
