@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import { final_be } from '../../../../declarations/final_be'
 import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
-import { useConnect } from '@connect2ic/react'
+import { useConnect, useBalance } from '@connect2ic/react'
 import axios from 'axios'
 import { MutatingDots } from 'react-loader-spinner'
 import { bufferToURI } from '../../Utils/format'
@@ -24,6 +24,8 @@ function DetailNFT() {
   const [status, setStatus] = useState(null)
   const [price, setPrice] = useState(0)
   const [isOwner, setIsOwner] = useState(false)
+  const [assets, { refetch, error }] = useBalance()
+  const [infoUser, setInfoUser] = useState({})
   useEffect(() => {
     if (isConnected) {
       checkOwner()
@@ -114,12 +116,19 @@ function DetailNFT() {
   }
 
   const showConfirm = () => {
+    let amount = assets[0].amount
+    setInfoUser({ amount: assets[0].amount })
     confirm({
-      title: `Buy this NFT with price ${nft?.price}`,
+      title: `Buy this NFT with price ${price}`,
       icon: <DollarTwoTone />,
 
       onOk() {
-        buyNFT()
+        console.log(`amount: ${amount}, price: ${price}`)
+        if (amount < price) {
+          toast.warn('No enough token to by')
+        } else {
+          buyNFT()
+        }
       },
 
       onCancel() {
