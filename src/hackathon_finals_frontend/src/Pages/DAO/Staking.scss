@@ -47,19 +47,20 @@
     padding: 3px 8px;
     border-radius: 50px;
 }
-.principle_staking2{
+
+.principle_staking2 {
     width: 120px;
 }
 
-.btn_cancel{
+.btn_cancel {
     background-color: rgb(255, 45, 45) !important;
 }
 
-.btn_ok{
+.btn_ok {
     background-color: #17d65a !important;
 }
 
-.ant-alert-message{
+.ant-alert-message {
     background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -67,9 +68,8 @@
 }
 
 
-.ant-btn:hover{
-    background-color: #8328c0 !important;
-}
-.ant-btn:active{
+.ant-btn:hover,
+.ant-btn:focus,
+.ant-btn:active {
     background-color: #8328c0 !important;
 }
