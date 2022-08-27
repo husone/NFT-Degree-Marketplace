@@ -22,7 +22,6 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
 
   private var token20 : Types.IDIP20 = actor(Principal.toText(dip20)) : Types.IDIP20;
   private var token721 : Types.IDIP721 = actor(Principal.toText(dip721)) : Types.IDIP721;
-  stable var centers = List.nil<Types.Center>();
   stable var ad = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
@@ -36,28 +35,7 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
   };
 
 
-  // add, delete center 
-  public shared({ caller }) func addCenter(center : Types.Center)  {
-    // assert caller == ad;
-    if ( List.some(centers, func (c : Types.Center) : Bool { c == center })) {
-      return;
-    };
-    centers := List.push(center,centers);
-    let t = await token721.addCenter(center);
-  };
-
-  public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
-    // assert caller == ad;
-    var center  = List.find(centers, func (c : Types.Center) : Bool { c.address == centerPrincipal});
-    centers := List.filter(centers, func (c : Types.Center) : Bool {
-      return (?c != center);
-    });
-  };
-
-  public shared({ caller }) func getCenters() : async [Types.Center]  {
-    // assert caller == ad;
-    return List.toArray(centers);
-  };
+  
 
   // trade NFT 
   stable var prices : [(Text, Nat)] = [];
@@ -142,8 +120,8 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
               //transfer ICP 
               // 
               //
-
-              centers := List.map(centers, func (center : Types.Center) : Types.Center {
+              var centers = List.fromArray(await token721.getCenters()); 
+              var new_centers = List.map(centers, func (center : Types.Center) : Types.Center {
                 if (center.address == token.minter) {
                   let update : Types.Center = {
                     address = center.address;
@@ -154,6 +132,8 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
                   return center;
                 };
               });
+              
+              // centers := 
               nftPrices.put(Nat64.toText(tokenID), 0);
               return #Ok(_price);
               };
@@ -310,10 +290,13 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
     #User;
   };
 
-  public query func getRole(principal : Principal) : async Role {
+  public func getRole(principal : Principal) : async Role {
+    var centers = List.fromArray(await token721.getCenters()); 
+    var stmt = List.some(centers, func (center : Types.Center) : Bool { center.address == principal });
     if (principal == ad){
       return #Admin;
-    } else if (List.some(centers, func (center : Types.Center) : Bool { center.address == principal })) {
+    } else if (stmt
+      ) {
       return #Education;
     } else {
       return #User;
@@ -324,8 +307,9 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
 
 
   public func setAdmin(adSet : Principal) {
+
     ad := adSet;
-    centers := List.filter(centers, func (center : Types.Center) : Bool { center.address != adSet });
+
   };
 
 
