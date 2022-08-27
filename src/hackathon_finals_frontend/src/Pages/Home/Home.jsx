@@ -225,15 +225,14 @@ function Home() {
                               <div className="cer_img">
                                 <img src={certificate.uri} alt="certificate uri" />
                               </div>
-                              <h3 className="description mt-3 mx-3 text-light">"This is description for certificate"</h3>
-                              <div className="d-flex cer_content mx-3 my-3">
-                                <img src={certificate.ownerUri} alt="owner uri" />
-                                <div className='ms-3'>
-                                  <h3 className='text-light m-0'>{certificate.owner}</h3>
-                                  <p className='text-muted'>Owner</p>
+                              <h6 className="description mx-3 my-3 text-light">"This is description for certificate"</h6>
+                              <div className="row d-flex cer_content px-4" style={{backgroundColor: "#14161b"}}>
+                                <div className='col px-0 border-end my-3'>
+                                  <h3 className='text-light m-0 text-center'>{certificate.owner}</h3>
+                                  <p className='text-muted text-center m-0'>Owner</p>
                                 </div>
+                                <div className='col text-center px-0 my-3'><b>Price - </b>8 DBZ <img className='coin_logo' src={CoinLogo} alt="coin logo" /></div>
                               </div>
-                              <div className='px-3 py-3 text-center' style={{backgroundColor: "#14161b"}}><b>Price - </b>8 DBZ <img className='coin_logo' src={CoinLogo} alt="coin logo" /></div>
                             </div>
                           );
                         })
