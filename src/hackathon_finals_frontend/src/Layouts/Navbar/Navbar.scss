@@ -16,11 +16,32 @@
 
 .custom_dropdown,
 .navbar-brand {
-  font-size: 17px !important;
+  font-size: 18px !important;
   color: #fff !important;
 }
 
 // POPOVER
 .ant-popover-inner-content {
   font-size: 10px !important;
+}
+
+
+.custom_approve{
+  height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 11px !important;
+  width: fit-content !important;
+  padding: 7px 10px !important;
+}
+.custom_approve_btn{
+  width: 100% !important;
+  height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 11px !important;
+  width: fit-content !important;
+  padding: 7px 10px !important;
+  border: 0px !important;
+  margin: 0px !important;
 }

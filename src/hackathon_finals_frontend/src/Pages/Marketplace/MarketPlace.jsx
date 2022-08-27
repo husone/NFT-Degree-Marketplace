@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tabs } from "antd"
 import { useConnect } from '@connect2ic/react'
 import "./MarketPlace.scss"
@@ -43,6 +43,10 @@ export default function MarketPlace() {
     const onChange = key => {
         console.log(key)
     }
+
+    useEffect(() => {
+        window.scrollTo(0,0)
+    }, [])
 
     return (
         <div>
