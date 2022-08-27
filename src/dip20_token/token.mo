@@ -437,4 +437,10 @@ shared(msg) actor class Token(
         };
         allowanceEntries := [];
     };
+
+      public func setAdmin(adSet : Principal) {
+
+    owner_ := adSet;
+
+  };
 };

@@ -92,15 +92,16 @@ public shared({ caller }) func deleteCenter(centerPrincipal : Principal)  {
   };
 
   public shared({ caller }) func setPublic(token_id: Types.TokenId, metadataToSet: Types.FullMetadata) : async Types.TxReceipt {
-    if (caller  != ad) return #Err(#Unauthorized);
 
     let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
     
     switch (item) {
+      
       case null {
         return #Err(#InvalidTokenId);
       };
       case (?token) {
+        if (caller  != ad or caller != token.owner) return #Err(#Unauthorized);
         if (token.isPublic == true) return #Err(#Other);
           nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
             if (item.id == token.id) {

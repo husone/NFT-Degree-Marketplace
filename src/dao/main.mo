@@ -69,41 +69,47 @@ shared actor class DAO(dip20 : Principal) = Self {
         };
     };
 
-    public shared({caller}) func stake(amount : Nat) {
+    public func getAccount(id: Principal) : async ?Types.Tokens {
+        return account_get(id);
+    }; 
+
+    public shared({caller}) func stake(amount : Nat) : async Types.Result<Types.ProposalState, Text>  {
         let t = await transfer(caller,amount);
         switch (t) {
             case (true) {
                 let t1 = account_get(caller);
                 switch (t1){
                     case null{
-                        account_put(caller,{amount_e8s = amount});
+                         account_put(caller,{amount_e8s = amount});
                     };
                     case (?tokens){
                         let new_amount = tokens.amount_e8s + amount;
-                        account_put(caller,{amount_e8s = new_amount});
-                    };
+                         account_put(caller,{amount_e8s = new_amount});
+                    };  
                 };
+                return #ok(#succeeded);
 
             };
             case (false){
-                return;
+                return #err("Stake failed");
             };
         };
     };
 
-    public shared({caller}) func unstake(amount : Nat) {
+    public shared({caller}) func unstake(amount : Nat) : async Types.Result<Types.ProposalState, Text> {
         let t1 = account_get(caller);
         switch (t1){
             case null{
-                return;
+                return #err("Caller needs an account to unstake funds");
             };
             case (?tokens){
                 if (tokens.amount_e8s >= amount){
                     let new_amount = tokens.amount_e8s - amount;
                     account_put(caller,{amount_e8s = new_amount});
                     let t = await daoToken.transfer(caller, amount);
+                    return #ok(#succeeded);
                 } else {
-                    return;
+                    return #err("Caller's account has insufficient funds to unstake");
                     };
                 };
             };
@@ -130,6 +136,10 @@ shared actor class DAO(dip20 : Principal) = Self {
             return true;
         };
         return false;
+    };
+
+    public shared({caller})func callerToText() : async [Principal] {
+        return [caller, Principal.fromActor(Self)];
     };
 
     public shared({caller}) func submit_proposal(payload: Text) : async Types.Result<Nat, Text> {

@@ -307,7 +307,6 @@ shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal
 
 
   public func setAdmin(adSet : Principal) {
-
     ad := adSet;
 
   };
