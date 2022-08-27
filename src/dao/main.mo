@@ -10,7 +10,7 @@ import List "mo:base/List";
 import Time "mo:base/Time";
 import Types "./Types";
 
-shared actor class DAO(dip20 : Principal, init : Types.BasicDaoStableStorage) = Self {
+shared actor class DAO(dip20 : Principal) = Self {
 
     stable var daoToken : Types.IDIP20 = actor (Principal.toText(dip20));
     stable var accounts = Trie.empty<Principal, Types.Tokens>();
