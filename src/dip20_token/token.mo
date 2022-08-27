@@ -22,15 +22,7 @@ import ExperimentalCycles "mo:base/ExperimentalCycles";
 import Cap "./cap/Cap";
 import Root "./cap/Root";
 
-module {
-    public class Token(
-    _logo: Text,
-    _name: Text,
-    _symbol: Text,
-    _decimals: Nat8,
-    _totalSupply: Nat,
-    _owner: Principal,
-    _fee: Nat
+shared(msg) actor class Token(
     ) = this {
     type Operation = Types.Operation;
     type TransactionStatus = Types.TransactionStatus;
@@ -60,21 +52,21 @@ module {
         };
     };
 
-    private var owner_ : Principal = _owner;
-    private var logo_ : Text = _logo;
-    private var name_ : Text = _name;
-    private var decimals_ : Nat8 = _decimals;
-    private var symbol_ : Text = _symbol;
-    private var totalSupply_ : Nat = _totalSupply;
-    private var blackhole : Principal = Principal.fromText("aaaaa-aa");
-    private var feeTo : Principal = owner_;
-    private var fee : Nat = _fee;
-    private var balanceEntries : [(Principal, Nat)] = [];
-    private var allowanceEntries : [(Principal, [(Principal, Nat)])] = [];
-    private var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
-    private var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
+    stable var owner_ : Principal = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
+    stable var logo_ : Text = "https://seeklogo.com//images/T/tether-usdt-logo-FA55C7F397-seeklogo.com.png";
+    stable var name_ : Text = "DnBoiZ";
+    stable var decimals_ : Nat8 = 18;
+    stable var symbol_ : Text = "DBZ";
+    stable var totalSupply_ : Nat = 1000_000_000;
+    stable var blackhole : Principal = Principal.fromText("aaaaa-aa");
+    stable var feeTo : Principal = owner_;
+    stable var fee : Nat = 0;
+    stable var balanceEntries : [(Principal, Nat)] = [];
+    stable var allowanceEntries : [(Principal, [(Principal, Nat)])] = [];
+     var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
+     var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
     balances.put(owner_, totalSupply_);
-    private let genesis : TxRecord = {
+    private stable let genesis : TxRecord = {
         caller = ?owner_;
         op = #mint;
         index = 0;
@@ -86,7 +78,7 @@ module {
         status = #succeeded;
     };
     
-    private var txcounter: Nat = 0;
+    private stable var txcounter: Nat = 0;
     private var cap: ?Cap.Cap = null;
     private func addRecord(
         caller: Principal,
@@ -95,7 +87,7 @@ module {
         ): async () {
         let c = switch(cap) {
             case(?c) { c };
-            case(_) { Cap.Cap(owner_, 2_000_000_000_000) };
+            case(_) { Cap.Cap(Principal.fromActor(this), 2_000_000_000_000) };
         };
         cap := ?c;
         let record: Root.IndefiniteEvent = {
@@ -151,18 +143,18 @@ module {
     *   Core interfaces:
     *       update calls:
     *           transfer/transferFrom/approve
-    *        calls:
+    *       query calls:
     *           logo/name/symbol/decimal/totalSupply/balanceOf/allowance/getMetadata
     *           historySize/getTransaction/getTransactions
     */
 
     /// Transfers value amount of tokens to Principal to.
-    public func transfer(caller : Principal,to: Principal, value: Nat) : async TxReceipt {
-        if (_balanceOf(caller) < value + fee) { return #Err(#InsufficientBalance); };
-        _chargeFee(caller, fee);
-        _transfer(caller, to, value);
+    public shared(msg) func transfer(to: Principal, value: Nat) : async TxReceipt {
+        if (_balanceOf(msg.caller) < value + fee) { return #Err(#InsufficientBalance); };
+        _chargeFee(msg.caller, fee);
+        _transfer(msg.caller, to, value);
         ignore addRecord(
-            caller, "transfer",
+            msg.caller, "transfer",
             [
                 ("to", #Principal(to)),
                 ("value", #U64(u64(value))),
@@ -174,27 +166,27 @@ module {
     };
 
     /// Transfers value amount of tokens from Principal from to Principal to.
-    public func transferFrom(caller : Principal, from: Principal, to: Principal, value: Nat) : async TxReceipt {
+    public shared(msg) func transferFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
         if (_balanceOf(from) < value + fee) { return #Err(#InsufficientBalance); };
-        let allowed : Nat = _allowance(from, caller);
+        let allowed : Nat = _allowance(from, msg.caller);
         if (allowed < value + fee) { return #Err(#InsufficientAllowance); };
         _chargeFee(from, fee);
         _transfer(from, to, value);
         let allowed_new : Nat = allowed - value - fee;
         if (allowed_new != 0) {
             let allowance_from = Types.unwrap(allowances.get(from));
-            allowance_from.put(caller, allowed_new);
+            allowance_from.put(msg.caller, allowed_new);
             allowances.put(from, allowance_from);
         } else {
             if (allowed != 0) {
                 let allowance_from = Types.unwrap(allowances.get(from));
-                allowance_from.delete(caller);
+                allowance_from.delete(msg.caller);
                 if (allowance_from.size() == 0) { allowances.delete(from); }
                 else { allowances.put(from, allowance_from); };
             };
         };
         ignore addRecord(
-            caller, "transferFrom",
+            msg.caller, "transferFrom",
             [
                 ("from", #Principal(from)),
                 ("to", #Principal(to)),
@@ -203,31 +195,31 @@ module {
             ]
         );
         txcounter += 1;
-        return #Ok(0);
+        return #Ok(txcounter - 1);
     };
 
     /// Allows spender to withdraw from your account multiple times, up to the value amount.
     /// If this function is called again it overwrites the current allowance with value.
-    public func approve(caller : Principal, spender: Principal, value: Nat) : async TxReceipt {
-        if(_balanceOf(caller) < fee) { return #Err(#InsufficientBalance); };
-        _chargeFee(caller, fee);
+    public shared(msg) func approve(spender: Principal, value: Nat) : async TxReceipt {
+        if(_balanceOf(msg.caller) < fee) { return #Err(#InsufficientBalance); };
+        _chargeFee(msg.caller, fee);
         let v = value + fee;
-        if (value == 0 and Option.isSome(allowances.get(caller))) {
-            let allowance_caller = Types.unwrap(allowances.get(caller));
+        if (value == 0 and Option.isSome(allowances.get(msg.caller))) {
+            let allowance_caller = Types.unwrap(allowances.get(msg.caller));
             allowance_caller.delete(spender);
-            if (allowance_caller.size() == 0) { allowances.delete(caller); }
-            else { allowances.put(caller, allowance_caller); };
-        } else if (value != 0 and Option.isNull(allowances.get(caller))) {
+            if (allowance_caller.size() == 0) { allowances.delete(msg.caller); }
+            else { allowances.put(msg.caller, allowance_caller); };
+        } else if (value != 0 and Option.isNull(allowances.get(msg.caller))) {
             var temp = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
             temp.put(spender, v);
-            allowances.put(caller, temp);
-        } else if (value != 0 and Option.isSome(allowances.get(caller))) {
-            let allowance_caller = Types.unwrap(allowances.get(caller));
+            allowances.put(msg.caller, temp);
+        } else if (value != 0 and Option.isSome(allowances.get(msg.caller))) {
+            let allowance_caller = Types.unwrap(allowances.get(msg.caller));
             allowance_caller.put(spender, v);
-            allowances.put(caller, allowance_caller);
+            allowances.put(msg.caller, allowance_caller);
         };
         ignore addRecord(
-            caller, "approve",
+            msg.caller, "approve",
             [
                 ("to", #Principal(spender)),
                 ("value", #U64(u64(value))),
@@ -238,15 +230,15 @@ module {
         return #Ok(txcounter - 1);
     };
 
-    public func mint(caller : Principal, to: Principal, value: Nat): async TxReceipt {
-        if(caller != owner_) {
+    public shared(msg) func mint(to: Principal, value: Nat): async TxReceipt {
+        if(msg.caller != owner_) {
             return #Err(#Unauthorized);
         };
         let to_balance = _balanceOf(to);
         totalSupply_ += value;
         balances.put(to, to_balance + value);
         ignore addRecord(
-            caller, "mint",
+            msg.caller, "mint",
             [
                 ("to", #Principal(to)),
                 ("value", #U64(u64(value))),
@@ -257,17 +249,17 @@ module {
         return #Ok(txcounter - 1);
     };
 
-    public func burn(caller : Principal, amount: Nat): async TxReceipt {
-        let from_balance = _balanceOf(caller);
+    public shared(msg) func burn(amount: Nat): async TxReceipt {
+        let from_balance = _balanceOf(msg.caller);
         if(from_balance < amount) {
             return #Err(#InsufficientBalance);
         };
         totalSupply_ -= amount;
-        balances.put(caller, from_balance - amount);
+        balances.put(msg.caller, from_balance - amount);
         ignore addRecord(
-            caller, "burn",
+            msg.caller, "burn",
             [
-                ("from", #Principal(caller)),
+                ("from", #Principal(msg.caller)),
                 ("value", #U64(u64(amount))),
                 ("fee", #U64(u64(0)))
             ]
@@ -276,39 +268,39 @@ module {
         return #Ok(txcounter - 1);
     };
 
-    public  func logo() : async Text {
+    public query func logo() : async Text {
         return logo_;
     };
 
-    public  func name() : async Text {
+    public query func name() : async Text {
         return name_;
     };
 
-    public  func symbol() : async Text {
+    public query func symbol() : async Text {
         return symbol_;
     };
 
-    public  func decimals() : async Nat8 {
+    public query func decimals() : async Nat8 {
         return decimals_;
     };
 
-    public  func totalSupply() : async Nat {
+    public query func totalSupply() : async Nat {
         return totalSupply_;
     };
 
-    public  func getTokenFee() : async Nat {
+    public query func getTokenFee() : async Nat {
         return fee;
     };
 
-    public  func balanceOf(who: Principal) : async Nat {
+    public query func balanceOf(who: Principal) : async Nat {
         return _balanceOf(who);
     };
 
-    public  func allowance(owner: Principal, spender: Principal) : async Nat {
+    public query func allowance(owner: Principal, spender: Principal) : async Nat {
         return _allowance(owner, spender);
     };
 
-    public  func getMetadata() : async Metadata {
+    public query func getMetadata() : async Metadata {
         return {
             logo = logo_;
             name = name_;
@@ -321,7 +313,7 @@ module {
     };
 
     /// Get transaction history size
-    public  func historySize() : async Nat {
+    public query func historySize() : async Nat {
         return txcounter;
     };
 
@@ -331,6 +323,30 @@ module {
     *       getUserTransactionsAmount/getUserTransactions
     *       getTokenInfo/getHolders/getUserApprovals
     */
+    public shared(msg) func setName(name: Text) {
+        assert(msg.caller == owner_);
+        name_ := name;
+    };
+
+    public shared(msg) func setLogo(logo: Text) {
+        assert(msg.caller == owner_);
+        logo_ := logo;
+    };
+
+    public shared(msg) func setFeeTo(to: Principal) {
+        assert(msg.caller == owner_);
+        feeTo := to;
+    };
+
+    public shared(msg) func setFee(_fee: Nat) {
+        assert(msg.caller == owner_);
+        fee := _fee;
+    };
+
+    public shared(msg) func setOwner(_owner: Principal) {
+        assert(msg.caller == owner_);
+        owner_ := _owner;
+    };
 
     public type TokenInfo = {
         metadata: Metadata;
@@ -341,7 +357,7 @@ module {
         holderNumber: Nat;
         cycles: Nat;
     };
-    public  func getTokenInfo(): async TokenInfo {
+    public query func getTokenInfo(): async TokenInfo {
         {
             metadata = {
                 logo = logo_;
@@ -360,7 +376,7 @@ module {
         }
     };
 
-    public  func getHolders(start: Nat, limit: Nat) : async [(Principal, Nat)] {
+    public query func getHolders(start: Nat, limit: Nat) : async [(Principal, Nat)] {
         let temp =  Iter.toArray(balances.entries());
         func order (a: (Principal, Nat), b: (Principal, Nat)) : Order.Order {
             return Nat.compare(b.1, a.1);
@@ -378,7 +394,7 @@ module {
         return Array.freeze(res);
     };
 
-    public  func getAllowanceSize() : async Nat {
+    public query func getAllowanceSize() : async Nat {
         var size : Nat = 0;
         for ((k, v) in allowances.entries()) {
             size += v.size();
@@ -386,7 +402,7 @@ module {
         return size;
     };
 
-    public func getUserApprovals(who : Principal) : async [(Principal, Nat)] {
+    public query func getUserApprovals(who : Principal) : async [(Principal, Nat)] {
         switch (allowances.get(who)) {
             case (?allowance_who) {
                 return Iter.toArray(allowance_who.entries());
@@ -400,7 +416,7 @@ module {
     /*
     * upgrade functions
     */
-    func preupgrade() {
+    system func preupgrade() {
         balanceEntries := Iter.toArray(balances.entries());
         var size : Nat = allowances.size();
         var temp : [var (Principal, [(Principal, Nat)])] = Array.init<(Principal, [(Principal, Nat)])>(size, (owner_, []));
@@ -412,7 +428,7 @@ module {
         allowanceEntries := Array.freeze(temp);
     };
 
-    func postupgrade() {
+    system func postupgrade() {
         balances := HashMap.fromIter<Principal, Nat>(balanceEntries.vals(), 1, Principal.equal, Principal.hash);
         balanceEntries := [];
         for ((k, v) in allowanceEntries.vals()) {
@@ -422,5 +438,3 @@ module {
         allowanceEntries := [];
     };
 };
-
-}

@@ -54,13 +54,7 @@ jobs:
       - name : run dfx
         run : |
           dfx start --background
-          dfx deploy --argument "(
-            record {
-              name = \"My DIP721\";
-              symbol = \"DFXB\";
-              address = principal\"$(dfx identity get-principal)\"
-            }
-          )"
+          dfx deploy --argument="(\"\", \"DFinance Coin\", \"DFC\", 8, 10000000000000000, principal \"4qehi-lqyo6-afz4c-hwqwo-lubfi-4evgk-5vrn5-rldx2-lheha-xs7a4-gae\", 10000)" 
         # - name: mint NFT
         # run : dfx canister call final_be mintNFT \ "( principal\"$(dfx identity get-principal)\", opt record {desc=\"Test\"; name=\"test\"} )"
 
