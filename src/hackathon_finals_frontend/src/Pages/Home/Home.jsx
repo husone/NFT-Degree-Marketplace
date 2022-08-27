@@ -11,78 +11,84 @@ import CoinLogo from '../../Assets/Images/DBZcoin.png'
 
 const topCenter = [
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
   },
   {
-    name: "FPT University",
-    uri: "https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png"
-  }
+    name: 'FPT University',
+    uri: 'https://dnuni.fpt.edu.vn/wp-content/uploads/2021/11/FPTUDN-3-1598x900.png',
+  },
 ]
 
 const topCertificate = [
   {
-    owner: "H.T.Ha",
-    uri: "https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg",
-    ownerUri: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+    owner: 'H.T.Ha',
+    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+    ownerUri:
+      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
   },
   {
-    owner: "H.T.Ha",
-    uri: "https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg",
-    ownerUri: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+    owner: 'H.T.Ha',
+    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+    ownerUri:
+      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
   },
   {
-    owner: "H.T.Ha",
-    uri: "https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg",
-    ownerUri: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+    owner: 'H.T.Ha',
+    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+    ownerUri:
+      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
   },
   {
-    owner: "H.T.Ha",
-    uri: "https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg",
-    ownerUri: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+    owner: 'H.T.Ha',
+    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+    ownerUri:
+      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
   },
   {
-    owner: "H.T.Ha",
-    uri: "https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg",
-    ownerUri: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+    owner: 'H.T.Ha',
+    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+    ownerUri:
+      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
   },
   {
-    owner: "H.T.Ha",
-    uri: "https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg",
-    ownerUri: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-  }
+    owner: 'H.T.Ha',
+    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+    ownerUri:
+      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+  },
 ]
 const { Search } = Input
 const { TabPane } = Tabs
@@ -101,7 +107,7 @@ function Home() {
     setListNFT(res)
   }
 
-  const onSearch = () => { }
+  const onSearch = () => {}
 
   const onChange = key => {
     console.log(key)
@@ -172,30 +178,39 @@ function Home() {
             <div className="row my-3">
               <div className="col">
                 <h3 className="text-light">Top Centers</h3>
-                <p className="desc text-muted">Most popular education centers </p>
+                <p className="desc text-muted">
+                  Most popular education centers{' '}
+                </p>
               </div>
               <div className="col d-flex justify-content-end">
-                <button className="sc-button style letter style-2"><span>Explore More</span> </button>
+                <button className="sc-button style letter style-2">
+                  <span>Explore More</span>{' '}
+                </button>
               </div>
             </div>
             <div className="center_wrapper">
-              {
-                topCenter.map((center, index) => {
-                  return (
-                    <div className="sc-author col">
-                      <div className="p-1">
-                        <div className="card-avatar mb-4">
-                          <img src={center.uri} alt="center uri" />
-                        </div>
-                        <div className="infor">
-                          <h6> <a className='text-light' href="author.html">{center.name}</a> </h6>
-                        </div>
-                        <a href="#" className="top_center_btn"><span>Follow</span></a>
+              {topCenter.map((center, index) => {
+                return (
+                  <div className="sc-author col" key={index}>
+                    <div className="p-1">
+                      <div className="card-avatar mb-4">
+                        <img src={center.uri} alt="center uri" />
                       </div>
+                      <div className="infor">
+                        <h6>
+                          {' '}
+                          <a className="text-light" href="author.html">
+                            {center.name}
+                          </a>{' '}
+                        </h6>
+                      </div>
+                      <a href="#" className="top_center_btn">
+                        <span>Follow</span>
+                      </a>
                     </div>
-                  );
-                })
-              }
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -209,28 +224,45 @@ function Home() {
                 <div className="content-left">
                   <div className="inner">
                     <h3 className="text-light">Top Certificates</h3>
-                    <p className="desc text-muted">Most favorite certificates</p>
-                    <div className='certificates_wrapper'>
-                      {
-                        topCertificate.map((certificate, index) => {
-                          return (
-                            <div>
-                              <div className="cer_img">
-                                <img src={certificate.uri} alt="certificate uri" />
-                              </div>
-                              <h3 className="description mt-3 mx-3 text-light">"This is description for certificate"</h3>
-                              <div className="d-flex cer_content mx-3 my-3">
-                                <img src={certificate.ownerUri} alt="owner uri" />
-                                <div className='ms-3'>
-                                  <h3 className='text-light m-0'>{certificate.owner}</h3>
-                                  <p className='text-muted'>Owner</p>
-                                </div>
-                              </div>
-                              <div className='px-3 py-3 text-center' style={{backgroundColor: "#14161b"}}><b>Price - </b>8 DBZ <img className='coin_logo' src={CoinLogo} alt="coin logo" /></div>
+                    <p className="desc text-muted">
+                      Most favorite certificates
+                    </p>
+                    <div className="certificates_wrapper">
+                      {topCertificate.map((certificate, index) => {
+                        return (
+                          <div>
+                            <div className="cer_img" key={index}>
+                              <img
+                                src={certificate.uri}
+                                alt="certificate uri"
+                              />
                             </div>
-                          );
-                        })
-                      }
+                            <h3 className="description mt-3 mx-3 text-light">
+                              "This is description for certificate"
+                            </h3>
+                            <div className="d-flex cer_content mx-3 my-3">
+                              <img src={certificate.ownerUri} alt="owner uri" />
+                              <div className="ms-3">
+                                <h3 className="text-light m-0">
+                                  {certificate.owner}
+                                </h3>
+                                <p className="text-muted">Owner</p>
+                              </div>
+                            </div>
+                            <div
+                              className="px-3 py-3 text-center"
+                              style={{ backgroundColor: '#14161b' }}
+                            >
+                              <b>Price - </b>8 DBZ{' '}
+                              <img
+                                className="coin_logo"
+                                src={CoinLogo}
+                                alt="coin logo"
+                              />
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
@@ -312,7 +344,9 @@ function Home() {
                 </div>
                 <div className="content">
                   <h5>
-                    <a href="author.html" className='gradient-heading'>Add Your NFTs</a>
+                    <a href="author.html" className="gradient-heading">
+                      Add Your NFTs
+                    </a>
                   </h5>
                   <p className="">
                     Sed ut perspiciatis unde omnste natus error sit voluptatem{' '}

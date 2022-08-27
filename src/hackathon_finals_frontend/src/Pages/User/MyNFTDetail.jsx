@@ -16,6 +16,9 @@ import {
 import { toast } from 'react-toastify'
 import './index.css'
 import CoinIcon from '../../Assets/Images/DBZcoin.png'
+import { MutatingDots } from 'react-loader-spinner'
+import { bufferToURI } from '../../Utils/format'
+
 const { confirm } = Modal
 
 function MyNFTDetail() {
@@ -27,12 +30,10 @@ function MyNFTDetail() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [status, setStatus] = useState(null)
   const [viewers, setViewers] = useState([])
-  const [action, setAction] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [infoUpdate, setInfoUpdate] = useState({})
   const [isShowSetPrice, setIsShowSetPrice] = useState(false)
 
-  console.log(nft)
   useEffect(() => {
     if (principal) {
       loadStatusNFT()
@@ -91,8 +92,9 @@ function MyNFTDetail() {
     const res = await axios.get(
       `${process.env.BACKEND_OFF_HEROKU}/nft?id=${id}`
     )
+    console.log(res)
     console.log(res?.data?.nft[0])
-    const { education, name, cer_owner, tokenID, imgURI, studentID } =
+    const { education, name, cer_owner, tokenID, imgURI, studentID, image } =
       res?.data?.nft[0]
     setNft({
       id: tokenID,
@@ -104,6 +106,7 @@ function MyNFTDetail() {
         cid: imgURI,
         cer_owner: cer_owner,
       },
+      image: bufferToURI(image),
     })
   }
 
@@ -185,7 +188,8 @@ function MyNFTDetail() {
 
   const getNFTViewer = async () => {
     const res = await final_be.getViewers(BigInt(id))
-    setViewers(res[0])
+    console.log(res)
+    setViewers(res)
   }
 
   const setPrice = async () => {
@@ -220,7 +224,13 @@ function MyNFTDetail() {
         Principal.fromText(infoUpdate.prinpViewer)
       )
       console.log(res)
-      toast.success('Approve viewer NFT successfully')
+      if (res.Ok) {
+        getNFTViewer()
+        setInfoUpdate({ ...infoUpdate, prinpViewer: '' })
+        toast.success('Approve viewer NFT successfully')
+      } else {
+        toast.error('Approve viewer NFT fail')
+      }
     } else {
       toast.warn('Enter wallet address!')
       textInput.current.focus()
@@ -273,14 +283,12 @@ function MyNFTDetail() {
 
   return (
     <div className="container h-100 pt-5">
-      {isLoaded && (
+      {isLoaded ? (
         <Container className="">
           <div className="row">
             <div className="col-lg-5">
               <div className="img_wrapper">
-                {nft?.metadata?.cid && (
-                  <img src={nft?.metadata?.cid} alt="item" />
-                )}
+                {nft?.metadata?.cid && <img src={nft?.image} alt="item" />}
               </div>
               <div>
                 <div className="card card-style mt-3">
@@ -463,7 +471,8 @@ function MyNFTDetail() {
                         <div className="accordion-body">
                           <ul className="list-group">
                             {viewers.map((viewer, index) => {
-                              const prinp = viewer.toString()
+                              console.log(viewer)
+                              let prinp = viewer.toString()
                               return (
                                 <li
                                   className="list-group-item d-flex justify-content-between align-items-center"
@@ -524,6 +533,20 @@ function MyNFTDetail() {
             </Form.Item>
           </Modal>
         </Container>
+      ) : (
+        <div className="d-flex justify-content-center align-items-center">
+          <MutatingDots
+            height="100"
+            width="100"
+            color="#4fa94d"
+            secondaryColor="#4fa94d"
+            radius="12.5"
+            ariaLabel="mutating-dots-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
       )}
     </div>
   )
