@@ -114,7 +114,7 @@ function ListRequests() {
 
   return (
     <div className="d-flex flex-column align-items-center">
-      <h2 className="py-4 px-4 heading1 te">LIST OF USER'S REQUEST</h2>
+      <h2 className="py-4 px-4 heading1 text-center">LIST OF USER'S REQUEST</h2>
       {isLoaded ? (
         <>
           <Table
