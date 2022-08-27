@@ -53,9 +53,10 @@ export default function Staking() {
                         <h1 className="heading1">Tokens</h1>
                         <Tag className="ms-3" color="green">DBZ</Tag>
                     </div>
-                    <div className="col-4 d-flex align-items-center  justify-content-end">
+                    <Space size={15} className="col-4 d-flex align-items-center  justify-content-end">
                         <Button className="custom_add_btn">Add Token</Button>
-                    </div>
+                        <Button className="custom_add_btn">Create Proposal</Button>
+                    </Space>
                 </div>
             </div>
 
