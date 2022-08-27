@@ -16,7 +16,7 @@ const Provider = ({ children }) => {
   const [principalStorage, setPrincipalStorage] = useState(
     localStorage.getItem('prinp')
   )
-  const [role, setRole] = useState('')
+  const [role, setRole] = useState('user')
   const [isLoaded, setIsLoaded] = useState(false)
   const [balanceDIP20, setBalanceDIP20] = useState('0 DBZ')
   const navigate = useNavigate()
@@ -28,7 +28,7 @@ const Provider = ({ children }) => {
     }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
-    if (role && principal) {
+    if (role || principal) {
       setIsLoaded(true)
     }
   }, [principal, role])
