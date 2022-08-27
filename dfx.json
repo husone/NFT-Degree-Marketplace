@@ -1,7 +1,7 @@
 {
   "canisters": {
     "final_be": {
-      "dependencies": ["nft", "ft"],
+      "dependencies": ["nftCanister", "ft"],
       "main": "src/hackathon_finals_backend/main.mo",
       "type": "motoko"
     },
@@ -9,7 +9,7 @@
       "main": "src/dip20_token/token.mo",
       "type": "motoko"
     },
-    "nft": {
+    "nftCanister": {
       "main": "src/dip721_token/nft.mo",
       "type": "motoko"
     },
