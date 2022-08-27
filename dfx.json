@@ -10,7 +10,7 @@
       "type": "motoko"
     },
     "nft": {
-      "main": "src/dip721_token/main.mo",
+      "main": "src/dip721_token/nft.mo",
       "type": "motoko"
     },
     "final_fe": {

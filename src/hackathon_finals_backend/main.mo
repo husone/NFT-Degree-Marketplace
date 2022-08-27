@@ -19,7 +19,7 @@ import Types "./Types";
 import token "token";
 import types "types";
 import Random "mo:base/Random";
-import A "../dip20_token/token";
+import dip721 "canister:nft";
 
 actor Main {
   stable var init : Types.Dip721NonFungibleToken = { name = "My DIP721";symbol = "DFXB";
@@ -893,5 +893,9 @@ actor Main {
   
   public func resetCenters() : (){
     centers := List.nil<Types.Center>();
+  };
+
+  public func getDp721() : async Text {
+    return await dip721.getName();
   };
 }
