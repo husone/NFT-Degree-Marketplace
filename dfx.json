@@ -4,6 +4,14 @@
       "main": "src/hackathon_finals_backend/main.mo",
       "type": "motoko"
     },
+    "ft": {
+      "main": "src/dip20_token/main.mo",
+      "type": "motoko"
+    },
+    "nft": {
+      "main": "src/dip721_token/main.mo",
+      "type": "motoko"
+    },
     "final_fe": {
       "dependencies": ["final_be"],
       "frontend": {
