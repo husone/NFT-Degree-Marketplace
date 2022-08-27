@@ -16,3 +16,5 @@ src/declarations/
 # frontend code
 node_modules/
 dist/
+src/hackathon_finals_frontend/src/Assets/Images/DBZ.png:Zone.Identifier
+*.Identifier

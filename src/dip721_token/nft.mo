@@ -19,7 +19,7 @@ import Random "mo:base/Random";
 import Types "type";
 
 
-actor Dip721NFT {
+shared {caller} actor class Dip721NFT {
   stable var transactionId: Types.TransactionId = 0;
   stable var nfts = List.nil<Types.Nft>();
   stable var centers = List.nil<Types.Center>();
