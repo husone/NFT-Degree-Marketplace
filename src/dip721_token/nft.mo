@@ -26,11 +26,18 @@ shared actor class Dip721NFT() = Self {
   stable var symbol : Text = "DNFT";
   // Test
   stable var ad : Principal = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
+  stable var nftMain : Principal = Principal.fromText("dazko-eyre7-hrc4k-riign-wus2a-shzd2-nvyfm-b73sb-zaqzf-eiyyh-rae");
+
+
   // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
   let null_address : Principal = Principal.fromText("aaaaa-aa");
   stable var entries : [(Text, List.List<Principal>)] = [];
 
   //DIP20
+    public shared({caller}) func setnftMain(p : Principal) {
+    if (caller != ad) return;
+    nftMain := p;
+  };
 
   public shared(msg) func callerToText() : async [Text] {
     return [Principal.toText(msg.caller), Principal.toText(ad)];
@@ -143,8 +150,8 @@ shared actor class Dip721NFT() = Self {
       };
       case (?token) {
         if (
-          caller != token.owner and
-          not (caller != ad)
+          not(caller == token.owner or
+           (caller == ad) or (caller == nftMain) )
         ) {
           return #Err(#Unauthorized);
         } else if (Principal.notEqual(from, token.owner)) {

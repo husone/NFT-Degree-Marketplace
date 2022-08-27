@@ -18,9 +18,9 @@ import TokenId "mo:base/Nat64";
 import Types "./Types";
 import Random "mo:base/Random";
 
-actor Main {
-  stable var init : Types.Dip721NonFungibleToken = { name = "My DIP721";symbol = "DFXB";
-              address = Principal.fromText("2vxsx-fae")};
+shared({caller}) actor class NFTMarketplace(dip20 : Principal, dip721: Principal) = Self {
+
+  private var token : IDIP20 = actor(Principal.toText) : IDIP20;
   stable var transactionId: Types.TransactionId = 0;
   stable var nfts = List.nil<Types.Nft>();
   stable var centers = List.nil<Types.Center>();
