@@ -26,6 +26,7 @@ function AdminPage() {
     const res = await axios.get(
       `${process.env.BACKEND_OFF_HEROKU}/education?status=pending`
     )
+    console.log(res)
     const filteredRequest = res.data.education.map(education => {
       console.log(education)
       return {

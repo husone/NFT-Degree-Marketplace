@@ -208,7 +208,6 @@ function Home() {
                 <button className="sc-button style letter style-2 d-flex align-items-center">
                   <span>Explore More</span>
                   <svg
-
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
