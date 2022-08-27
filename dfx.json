@@ -1,6 +1,7 @@
 {
   "canisters": {
     "final_be": {
+      "dependencies": ["nft", "ft"],
       "main": "src/hackathon_finals_backend/main.mo",
       "type": "motoko"
     },
@@ -30,7 +31,7 @@
       "packtool": ""
     }
   },
-  "dfx": "0.11.1",
+  "dfx": "0.11.0",
   "networks": {
     "local": {
       "bind": "127.0.0.1:8000",

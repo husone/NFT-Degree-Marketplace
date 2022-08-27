@@ -15,13 +15,15 @@ import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import TokenId "mo:base/Nat64";
-import Type "Types";
 import Types "./Types";
 import token "token";
 import types "types";
 import Random "mo:base/Random";
+import A "../dip20_token/token";
 
-shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
+actor Main {
+  stable var init : Types.Dip721NonFungibleToken = { name = "My DIP721";symbol = "DFXB";
+              address = Principal.fromText("2vxsx-fae")};
   stable var transactionId: Types.TransactionId = 0;
   stable var nfts = List.nil<Types.Nft>();
   stable var centers = List.nil<Types.Center>();
@@ -745,7 +747,7 @@ shared actor class Dip721NFT(init : Types.Dip721NonFungibleToken) = Self {
   };
 
   // func check viewer is viewer of NFT or not 
-  public shared({ caller }) func isViewer(token_id: Types.TokenId, viewer: Principal) : async Type.TxReceipt {
+  public shared({ caller }) func isViewer(token_id: Types.TokenId, viewer: Principal) : async Types.TxReceipt {
     let item = findNFT(token_id);
     switch (item) {
       case null {
