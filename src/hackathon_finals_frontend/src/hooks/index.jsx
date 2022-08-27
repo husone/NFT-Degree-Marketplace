@@ -1,11 +1,12 @@
-import { createContext, useState, useEffect, useLayoutEffect } from 'react'
+import { createContext, useState, useEffect } from 'react'
 import { checkRole } from '../Utils/CheckRole'
 import { useConnect } from '@connect2ic/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
-import { final_be } from '../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
+import { ft } from '../../.././declarations/ft'
+
 import axios from 'axios'
 
 export const Context = createContext()
@@ -45,7 +46,7 @@ const Provider = ({ children }) => {
   }, [principal, role])
 
   const getBalanceDIP20 = async principal => {
-    const res = await final_be.balanceOfDIP20(Principal.fromText(principal))
+    const res = await ft.balanceOf(Principal.fromText(principal))
     setBalanceDIP20(`${Number(res).toString()} DBZ`)
   }
   const connectWallet = () => {
