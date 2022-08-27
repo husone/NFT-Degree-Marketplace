@@ -12,7 +12,7 @@ import Types "./Types";
 
 shared actor class DAO(dip20 : Principal) = Self {
 
-    stable var daoToken : Types.IDIP20 = actor (Principal.toText(dip20));
+    stable var daoToken : Types.IDIP20 = actor (Principal.toText(dip20)) : Types.IDIP20;
     stable var accounts = Trie.empty<Principal, Types.Tokens>();
     stable var proposals = Trie.empty<Nat, Types.Proposal>();
     stable var next_proposal_id : Nat = 0;
