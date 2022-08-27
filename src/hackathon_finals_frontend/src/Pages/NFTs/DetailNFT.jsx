@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Tag, Modal } from 'antd'
 import styled from 'styled-components'
-import { ExclamationCircleOutlined, DollarTwoTone } from '@ant-design/icons'
+import { LockOutlined, DollarTwoTone } from '@ant-design/icons'
 import './DetailNFT.scss'
 import { toast } from 'react-toastify'
 import { final_be } from '../../../../declarations/final_be'
@@ -12,7 +12,8 @@ import { useConnect } from '@connect2ic/react'
 import axios from 'axios'
 import { Context } from '../../hooks/index'
 import { MutatingDots } from 'react-loader-spinner'
-
+import { bufferToURI } from '../../Utils/format'
+import CoinIcon from '../../Assets/Images/DBZcoin.png'
 const { confirm } = Modal
 
 function DetailNFT() {
@@ -22,7 +23,7 @@ function DetailNFT() {
   const [nft, setNft] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [status, setStatus] = useState(null)
-
+  const [price, setPrice] = useState(0)
   useEffect(() => {
     if (principal) {
       loadStatusNFT()
@@ -39,6 +40,9 @@ function DetailNFT() {
         })
       } else {
         getNftFromDB()
+      }
+      if (isPublic) {
+        getPriceNFT()
       }
       setIsLoaded(true)
     }
@@ -64,6 +68,12 @@ function DetailNFT() {
       },
       image: bufferToURI(image),
     })
+  }
+
+  const getPriceNFT = async () => {
+    const priceNFT = await final_be.getPrice(BigInt(id))
+    console.log(priceNFT)
+    setPrice(Number(priceNFT))
   }
 
   const getNft = async () => {
@@ -131,40 +141,7 @@ function DetailNFT() {
                     <div
                       className="card-text d-flex justify-content-between align-items-center"
                       style={{ width: '250px' }}
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <div>Status: </div>
-                        {status.isPublic ? (
-                          <Tag
-                            color="success"
-                            icon={<UnlockOutlined />}
-                            className="d-flex align-items-center justify-content-between ms-2"
-                            style={{
-                              letterSpacing: '2px',
-                            }}
-                          >
-                            Public
-                          </Tag>
-                        ) : (
-                          <Tag
-                            color="default"
-                            icon={<LockOutlined />}
-                            className="d-flex align-items-center justify-content-between ms-2"
-                            style={{
-                              letterSpacing: '2px',
-                            }}
-                          >
-                            Private
-                          </Tag>
-                        )}
-                      </div>
-                      <button
-                        className="btn btn-primary"
-                        onClick={showConfirmPublic}
-                      >
-                        Set Public
-                      </button>
-                    </div>
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -190,19 +167,21 @@ function DetailNFT() {
                         className="text-white fw-bold ms-2"
                         style={{ margin: 'auto 0' }}
                       >
-                        {`${nft?.price} DBZ`}
+                        {`${price} DBZ`}
                       </h2>
                     </div>
 
-                    <button
-                      className="btn btn-info ms-3 text-white d-flex align-items-center"
-                      onClick={transfer}
-                    >
-                      <span className="material-symbols-outlined me-2">
-                        published_with_changes
-                      </span>
-                      Transfer
-                    </button>
+                    {price > 0 && (
+                      <button
+                        className="btn btn-info ms-3 text-white d-flex align-items-center"
+                        onClick={showConfirm}
+                      >
+                        <span className="material-symbols-outlined me-2">
+                          published_with_changes
+                        </span>
+                        Buy
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

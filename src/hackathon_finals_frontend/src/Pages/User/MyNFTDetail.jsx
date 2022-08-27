@@ -205,7 +205,7 @@ function MyNFTDetail() {
         toast.warn('Please enter price')
       }
     }
-    setIsModalVisible(false)
+    setIsShowSetPrice(false)
   }
 
   const transfer = async () => {
@@ -224,13 +224,10 @@ function MyNFTDetail() {
         Principal.fromText(infoUpdate.prinpViewer)
       )
       console.log(res)
-      if (res.Ok) {
-        getNFTViewer()
-        setInfoUpdate({ ...infoUpdate, prinpViewer: '' })
-        toast.success('Approve viewer NFT successfully')
-      } else {
-        toast.error('Approve viewer NFT fail')
-      }
+
+      getNFTViewer()
+      setInfoUpdate({ ...infoUpdate, prinpViewer: '' })
+      toast.success('Approve viewer NFT successfully')
     } else {
       toast.warn('Enter wallet address!')
       textInput.current.focus()
@@ -240,8 +237,8 @@ function MyNFTDetail() {
   const removeAllView = async () => {
     toast('Removing...', { autoClose: 1500 })
     const res = await final_be.removeAllView(BigInt(id))
+    getNFTViewer()
     toast.success('Remove all viewer successfully')
-    console.log(res)
   }
 
   const removeView = async principal => {
@@ -252,6 +249,7 @@ function MyNFTDetail() {
         Principal.fromText(principal)
       )
       console.log(res)
+      getNFTViewer()
       toast.success('Remove viewer successfully')
     }
   }
@@ -471,7 +469,6 @@ function MyNFTDetail() {
                         <div className="accordion-body">
                           <ul className="list-group">
                             {viewers.map((viewer, index) => {
-                              console.log(viewer)
                               let prinp = viewer.toString()
                               return (
                                 <li
