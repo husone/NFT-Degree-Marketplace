@@ -175,7 +175,7 @@ export default function Staking() {
       </div>
 
       <Modal
-        width={800}
+        width={600}
         title="Enter amount"
         visible={isModalVisible}
         onOk={handleOk}
@@ -195,7 +195,7 @@ export default function Staking() {
         </Form>
       </Modal>
       <Modal
-        width={800}
+        width={600}
         title="Enter amount"
         visible={isModalUnStakeVisible}
         onOk={handleOkUnStake}
@@ -244,18 +244,38 @@ export default function Staking() {
       <div className="container">
         <div className="row gx-5">
           <div className="col-8 ">
-            <div className="rounded" style={{ backgroundColor: '#343444' }}>
-              <div className="row py-3 px-3">
-                {/* <div className="col-8 staking_title">HOLDER</div>
-                <div className="col-2 staking_title">BALANCE</div> */}
-              </div>
-              <h1 className="text-white">Total Stake: {totalStake}</h1>
-              <h2 className="text-white">My Staking: {myStaking} </h2>
-              <div className="token_wrapper pt-2">
-                {/* {tokenData.map((data, index) => {
-                  return <StakedItem data={data} />
-                })} */}
-              </div>
+            <div
+              className="rounded d-flex flex-column align-items-center"
+              style={{ backgroundColor: '#343444' }}
+            >
+              <h1 className="infor_text mx-3 pt-5 d-flex align-items-center">
+                <div className="d-flex align-items-center">
+                  Total Stake:
+                  <b className="text-light mx-3">{totalStake}</b>
+                </div>
+                <div className="d-flex align-items-center">
+                  DBZ
+                  <img
+                    className="ms-2 coin_logo"
+                    src={CoinLogo}
+                    alt="coin logo"
+                  />
+                </div>
+              </h1>
+              <h1 className="infor_text mx-3 d-flex pb-5 align-items-center">
+                <div className="d-flex align-items-center">
+                  My Staking:
+                  <b className="text-light mx-3">{myStaking}</b>
+                </div>
+                <div className="d-flex align-items-center">
+                  DBZ
+                  <img
+                    className="ms-2 coin_logo"
+                    src={CoinLogo}
+                    alt="coin logo"
+                  />
+                </div>
+              </h1>
             </div>
           </div>
           <div className="col-4">
