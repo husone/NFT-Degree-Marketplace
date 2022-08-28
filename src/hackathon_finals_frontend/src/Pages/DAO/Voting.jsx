@@ -89,9 +89,8 @@ export default function Voting() {
             <div className="rounded" style={{ backgroundColor: '#343444' }}>
               <div className="row py-3 px-3">
                 <h2 className="text-muted">{info.payload}</h2>
-                <div className="ms-2 mb-5 ">
-                  <h4 className="text-white">{`Proposal #${info.id}`}</h4>
-                  <h5 className="text-white">{`${info.proposer}`}</h5>
+                <div className="ms-2 mb-5 principle_staking">
+                  {`Proposal #${info.id} ${info.proposer}`}
                 </div>
 
                 <div className="d-flex align-items-center">

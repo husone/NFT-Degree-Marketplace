@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Tabs, Button } from 'antd'
-import { useConnect } from '@connect2ic/react'
+import { useConnect, useCanister } from '@connect2ic/react'
 import './MarketPlace.scss'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
 import { nftCanister } from '../../../../declarations/nftCanister'
@@ -9,7 +9,6 @@ import ItemHome from '../Home/components/ItemHome'
 import { final_be } from '../../../../declarations/final_be'
 import { ft } from '../../../../declarations/ft'
 import { Principal } from '@dfinity/principal'
-
 
 const { TabPane } = Tabs
 const topCertificate = [
@@ -54,6 +53,7 @@ const topCertificate = [
 export default function MarketPlace() {
   const { principal } = useConnect()
   const [listNFT, setListNFT] = useState([])
+  const [ft] = useCanister('ft')
   const onChange = key => {
     console.log(key)
   }
@@ -104,7 +104,7 @@ export default function MarketPlace() {
           </Button>
         </div>
       </section>
-      
+
       <div className="container">
         <Tabs className="mt-4 " defaultActiveKey="1" onChange={onChange}>
           <TabPane tab="Top certificate" key="1" className="my-5">
