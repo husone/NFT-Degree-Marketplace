@@ -59,10 +59,10 @@ const fakeNFT = [
       cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
       ownerUri:
         'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-      center: "FPT Univertisy",
-      name: "..."
+      center: 'FPT Univertisy',
+      name: '...',
     },
-    id: 0
+    id: 0,
   },
   {
     metadata: {
@@ -70,10 +70,10 @@ const fakeNFT = [
       cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
       ownerUri:
         'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-      center: "FPT Univertisy",
-      name: "..."
+      center: 'FPT Univertisy',
+      name: '...',
     },
-    id: 1
+    id: 1,
   },
   {
     metadata: {
@@ -81,10 +81,10 @@ const fakeNFT = [
       cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
       ownerUri:
         'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-      center: "FPT Univertisy",
-      name: "..."
+      center: 'FPT Univertisy',
+      name: '...',
     },
-    id: 2
+    id: 2,
   },
   {
     metadata: {
@@ -92,10 +92,10 @@ const fakeNFT = [
       cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
       ownerUri:
         'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-      center: "FPT Univertisy",
-      name: "..."
+      center: 'FPT Univertisy',
+      name: '...',
     },
-    id: 3
+    id: 3,
   },
   {
     metadata: {
@@ -103,10 +103,10 @@ const fakeNFT = [
       cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
       ownerUri:
         'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-      center: "FPT Univertisy",
-      name: "..."
+      center: 'FPT Univertisy',
+      name: '...',
     },
-    id: 4
+    id: 4,
   },
   {
     metadata: {
@@ -114,10 +114,10 @@ const fakeNFT = [
       cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
       ownerUri:
         'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
-      center: "FPT Univertisy",
-      name: "..."
+      center: 'FPT Univertisy',
+      name: '...',
     },
-    id: 5
+    id: 5,
   },
 ]
 
@@ -247,7 +247,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="certificates_wrapper">
-                      {fakeNFT.map(nft => {
+                      {listNFT.map(nft => {
                         const id = Number(nft?.id)
                         return (
                           <Link to={`/nft/${id}`} key={id}>

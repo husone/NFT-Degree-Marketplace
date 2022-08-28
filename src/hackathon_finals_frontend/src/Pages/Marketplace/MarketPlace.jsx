@@ -50,29 +50,18 @@ const topCertificate = [
 
 export default function MarketPlace() {
   const { principal } = useConnect()
+  const [listNFT, setListNFT] = useState([])
   const onChange = key => {
     console.log(key)
   }
-
-  const [nftList, setNftList] = useState([])
-
   useEffect(() => {
-    checkOwner()
     getAllNFT()
   }, [])
-
-  const checkOwner = async () => {
-    const res = await final_be.isOwner(
-      BigInt(id),
-      Principal.fromText(principal)
-    )
-    setIsOwner(res)
-  }
 
   const getAllNFT = async () => {
     const res = await nftCanister.getNFTPublic()
     console.log(res)
-    setNftList(res)
+    setListNFT(res)
   }
 
   return (
@@ -90,7 +79,8 @@ export default function MarketPlace() {
         <Tabs className="mt-4 " defaultActiveKey="1" onChange={onChange}>
           <TabPane tab="Top certificate" key="1" className="my-5">
             <div className="certificates_wrapper">
-              {nftList.map((nft, index) => {
+              {listNFT.map((nft, index) => {
+                const id = Number(nft?.id)
                 return (
                   // <div>
                   //     <div className="cer_img">
@@ -105,7 +95,9 @@ export default function MarketPlace() {
                   //         <div className='col text-center px-0 my-3 text-light'><b>Price - </b>8 DBZ <img className='coin_logo' src={CoinLogo} alt="coin logo" /></div>
                   //     </div>
                   // </div>
-                  <ItemHome nft={nft} />
+                  <Link to={`/nft/${id}`} key={id}>
+                    <ItemHome nft={nft} />
+                  </Link>
                 )
               })}
             </div>
