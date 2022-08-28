@@ -10,7 +10,8 @@ export default function Voting() {
   const [dao] = useCanister('dao')
   const [ft] = useCanister('ft')
   const [proList, setProList] = useState([])
-
+  const [info, setInfo] = useState({})
+  const [isShow, setIsShow] = useState(false)
   useEffect(() => {
     getList()
   }, [])
@@ -25,13 +26,34 @@ export default function Voting() {
 
   const getList = async () => {
     const res = await dao.list_proposals()
-    console.log(res)
+    const { id, proposer, payload, state } = res[0]
+    setInfo({
+      id: Number(id),
+      proposer: proposer.toString(),
+      payload,
+      state,
+    })
+
+    if (Object.keys(state)[0] === 'succeeded') {
+      setIsShow(false)
+    } else {
+      setIsShow(true)
+    }
     setProList(res)
   }
 
-  const doNo = async () => {}
+  const doNo = async () => {
+    // const res = await dao.vote(
+    //   { vote: 'no' },
+    //   BigInt(proList[proList.length - 1]?.id)
+    // )
+    // console.log(res)
+  }
 
-  const doYes = async () => {}
+  const doYes = async () => {
+    // const res = await dao.vote( { {no: null} , BigInt(proList[proList.length - 1]?.id)})
+    // console.log(res)
+  }
   return (
     <div>
       <div className="wrap_staking row mx-5 container">
@@ -66,9 +88,10 @@ export default function Voting() {
           <div className="col-8 ">
             <div className="rounded" style={{ backgroundColor: '#343444' }}>
               <div className="row py-3 px-3">
-                <p className="text-muted">Created by</p>
-                <div className="ms-2 mb-5 principle_staking">
-                  {`Proposal ${Number(proList[proList.length - 1]?.id)}`}
+                <h2 className="text-muted">{info.payload}</h2>
+                <div className="ms-2 mb-5 ">
+                  <h4 className="text-white">{`Proposal #${info.id}`}</h4>
+                  <h5 className="text-white">{`${info.proposer}`}</h5>
                 </div>
 
                 <div className="d-flex align-items-center">
@@ -115,22 +138,24 @@ export default function Voting() {
                     0 DBZ
                   </p>
                 </div>
-                <Space size={15} className="mt-3 mb-5">
-                  <Button
-                    className="btn_cancel"
-                    style={{ width: '80px', border: '0px' }}
-                    onClick={doNo}
-                  >
-                    No
-                  </Button>
-                  <Button
-                    className="btn_ok"
-                    style={{ width: '80px', border: '0px' }}
-                    onClick={doYes}
-                  >
-                    Yes
-                  </Button>
-                </Space>
+                {isShow && (
+                  <Space size={15} className="mt-3 mb-5">
+                    <Button
+                      className="btn_cancel"
+                      style={{ width: '80px', border: '0px' }}
+                      onClick={doNo}
+                    >
+                      No
+                    </Button>
+                    <Button
+                      className="btn_ok"
+                      style={{ width: '80px', border: '0px' }}
+                      onClick={doYes}
+                    >
+                      Yes
+                    </Button>
+                  </Space>
+                )}
                 <Alert
                   message="Informational Notes"
                   description="Voting with 10000 DBZ. This was your balance when the vote started."
