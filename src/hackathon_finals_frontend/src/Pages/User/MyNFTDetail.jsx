@@ -213,6 +213,7 @@ function MyNFTDetail() {
         toast('Setting price...', { autoClose: 1500 })
         const res = await final_be.listing(BigInt(id), BigInt(infoUpdate.price))
         setPrice(Number(res))
+        getPriceNFT()
       } else {
         toast.warn('Please enter price')
       }
