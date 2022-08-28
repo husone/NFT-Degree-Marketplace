@@ -26,7 +26,7 @@ export default function Voting() {
 
   const getList = async () => {
     const res = await dao.list_proposals()
-    const { id, proposer, payload, state } = res[0]
+    const { id, proposer, payload, state } = res[res.length - 1]
     setInfo({
       id: Number(id),
       proposer: proposer.toString(),

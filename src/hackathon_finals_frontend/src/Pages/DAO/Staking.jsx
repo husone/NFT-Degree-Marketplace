@@ -105,6 +105,8 @@ export default function Staking() {
       const res = await dao.stake(BigInt(amount))
       setAmount(0)
       console.log(res)
+      getTotalStake()
+      getMyStaking()
       toast.success('Stake successfully')
     }
     setIsModalVisible(false)
@@ -114,8 +116,9 @@ export default function Staking() {
     const res = await dao.unstake(BigInt(amountUn))
     setAmount(0)
     console.log(res)
+    getTotalStake()
+    getMyStaking()
     toast.success('Unstake successfully')
-
     setIsModalVisible(false)
   }
 
@@ -124,6 +127,7 @@ export default function Staking() {
     console.log(BigInt(time))
     const res = await dao.submit_proposal(proposalContent, BigInt(time))
     console.log(res)
+    setIsModalProposalVisible(false)
   }
 
   const getTotalStake = async () => {
