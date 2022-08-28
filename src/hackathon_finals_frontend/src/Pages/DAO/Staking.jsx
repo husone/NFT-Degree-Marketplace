@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Space, Tag, Modal, Form, Input } from 'antd'
 import StakedItem from './StakedItem'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
-
+import { useCanister } from '@connect2ic/react'
+import { ft } from '../../../../declarations/ft'
+import { dao } from '../../../../declarations/dao'
 import './Staking.scss'
 
 const tokenData = [
@@ -58,12 +60,24 @@ export default function Staking() {
   const [isModalProposalVisible, setIsModalProposalVisible] = useState(false)
   const [amount, setAmount] = useState(0)
   const [proposal, setProposal] = useState('')
+  const [supply, setSupply] = useState(0)
+  const [ft] = useCanister('ft')
+  const [dao] = useCanister('dao')
 
+  useEffect(() => {
+    getSupply()
+  }, [])
+
+  const getSupply = async () => {
+    const res = await ft.totalSupply()
+    console.log('supply: ' + res)
+    setSupply(Number(res))
+  }
   const handleOk = () => {
     setIsModalVisible(false)
   }
 
-  const handleOkProposal = () => {}
+  const handleOkProposal = async () => {}
 
   return (
     <div>
@@ -83,7 +97,13 @@ export default function Staking() {
               className="custom_add_btn"
               onClick={() => setIsModalVisible(true)}
             >
-              Add Token
+              Stake Token
+            </Button>
+            <Button
+              className="custom_add_btn"
+              onClick={() => setIsModalProposalVisible(true)}
+            >
+              Unstake token
             </Button>
             <Button
               className="custom_add_btn"
@@ -96,7 +116,7 @@ export default function Staking() {
       </div>
 
       <Modal
-        width={800}
+        width={500}
         title="Enter amount"
         visible={isModalVisible}
         onOk={handleOk}
@@ -159,7 +179,7 @@ export default function Staking() {
                 <div className="mx-3">
                   <div className="d-flex justify-content-between align-items-center">
                     <h1>Total supply</h1>
-                    <h1 style={{ color: '#ff00aa' }}>10000</h1>
+                    <h1 style={{ color: '#ff00aa' }}>{supply}</h1>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <h1>Transferable</h1>
