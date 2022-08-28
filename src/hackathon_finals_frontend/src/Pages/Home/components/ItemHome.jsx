@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 function ItemHome({ nft }) {
   return (
-    <Container>
+    <Container className="boxShadowD">
       <div className="cer_img">
         <img src={nft?.metadata?.cid} alt="nft uri" />
       </div>

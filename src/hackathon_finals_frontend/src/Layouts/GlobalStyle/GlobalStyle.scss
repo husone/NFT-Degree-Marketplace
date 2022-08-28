@@ -279,3 +279,10 @@ section {
 .ant-btn-primary{
   background-color: #6345ed !important;
 }
+
+.boxShadowD{
+  transition: all .3s linear;
+  &:hover{
+    box-shadow: 0px 0px 10px 5px #00000030;
+  }
+}
