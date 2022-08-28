@@ -168,8 +168,7 @@ shared actor class DAO(dip20 : Principal) = Self {
         return [caller, Principal.fromActor(Self)];
     };
 
-    public shared({caller}) func submit_proposal(payload: Text, s : Nat) : async Types.Result<Nat, Text> {
-        let second = Nat.toInt(s);
+    public shared({caller}) func submit_proposal(payload: Text, second : Int) : async Types.Result<Nat, Text> {
         let t = await transfer(caller, 1000);
         switch (t){
             case (true){

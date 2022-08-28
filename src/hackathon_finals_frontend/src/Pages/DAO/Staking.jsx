@@ -83,7 +83,6 @@ export default function Staking() {
     }))
   }
 
-  const DAO_WALLET = 'rno2w-sqaaa-aaaaa-aaacq-cai'
   useEffect(() => {
     getSupply()
     getMyStaking()
@@ -101,6 +100,7 @@ export default function Staking() {
     if (!isApproveGlobal) {
       toast.warn('You have to approve! Click approve at navbar')
     } else {
+      console.log(amount)
       const res = await dao.stake(BigInt(amount))
       setAmount(0)
       console.log(res)
@@ -120,12 +120,13 @@ export default function Staking() {
 
   const handleOkProposal = async () => {
     const { proposalContent, time } = proposal
-    // const res = await dao.submit_proposal(proposalContent, parseInt(time) IntN. )
+    console.log(BigInt(time))
+    const res = await dao.submit_proposal(proposalContent, BigInt(time))
     console.log(res)
   }
 
   const getTotalStake = async () => {
-    const res = await ft.balanceOf(Principal.fromText(DAO_WALLET))
+    const res = await ft.balanceOf(Principal.fromText(process.env.DAO_WALLET))
     setTotalStake(Number(res))
     console.log(res)
   }

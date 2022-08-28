@@ -10,7 +10,7 @@ export const Context = createContext()
 
 const Provider = ({ children }) => {
   let location = useLocation()
-  const DAO_WALLET = 'rno2w-sqaaa-aaaaa-aaacq-cai'
+
   const { principal, isConnected, connect, isConnecting } = useConnect()
   const [principalStorage, setPrincipalStorage] = useState(
     localStorage.getItem('prinp')
@@ -23,6 +23,7 @@ const Provider = ({ children }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    console.log(process.env.DAO_WALLET)
     let timer = setTimeout(() => {
       if (!principal) {
         setIsLoaded(true)
@@ -47,11 +48,11 @@ const Provider = ({ children }) => {
   }, [principal, role])
 
   const checkAllowance = async () => {
-    console.log(DAO_WALLET)
+    console.log(process.env.DAO_WALLET)
     console.log(principal)
     const res = await ft.allowance(
       Principal.fromText(principal),
-      Principal.fromText(DAO_WALLET)
+      Principal.fromText(process.env.DAO_WALLET)
     )
     console.log(res)
     if (Number(res) > 0) {
