@@ -118,9 +118,11 @@ export default function Staking() {
     setIsModalVisible(false)
   }
 
-  // const handleOkProposal = async () => {
-  //   const res = await dao.submitProposal()
-  // }
+  const handleOkProposal = async () => {
+    const { proposalContent, time } = proposal
+    // const res = await dao.submit_proposal(proposalContent, parseInt(time) IntN. )
+    console.log(res)
+  }
 
   const getTotalStake = async () => {
     const res = await ft.balanceOf(Principal.fromText(DAO_WALLET))
@@ -224,7 +226,7 @@ export default function Staking() {
             onChange={handleChange}
             name="proposalContent"
             id="proposalContent"
-            value={proposalContent || ''}
+            value={proposal.proposalContent || ''}
             className="text-white"
           />
           <Input
@@ -232,7 +234,7 @@ export default function Staking() {
             onChange={handleChange}
             name="time"
             id="time"
-            value={time || ''}
+            value={proposal.time || ''}
             className="text-white"
           />
         </Form>
