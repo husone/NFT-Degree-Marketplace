@@ -1,8 +1,9 @@
 import CoinLogo from '../../../Assets/Images/DBZcoin.png'
+import styled from "styled-components"
 
 function ItemHome({ nft }) {
   return (
-    <div>
+    <Container className="boxShadowD">
       <div className="cer_img">
         <img src={nft?.metadata?.cid} alt="nft uri" />
       </div>
@@ -24,8 +25,11 @@ function ItemHome({ nft }) {
           <img className="coin_logo" src={CoinLogo} alt="coin logo" />
         </div>
       </div>
-    </div>
+    </Container>
   )
 }
 
 export default ItemHome
+const Container = styled.div`
+  box-shadow: 0px 0px 10px 5px #00000025;
+`;

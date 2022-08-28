@@ -121,7 +121,7 @@ function ListRequests() {
             columns={columns}
             dataSource={requestsFilter}
             style={{ color: '#333' }}
-            className="px-4"
+            className="px-4 "
           />
 
           <Modal
@@ -131,7 +131,7 @@ function ListRequests() {
             onCancel={handleCancel}
             width={600}
           >
-            <Container className="d-flex justify-content-around">
+            <Container className="d-flex justify-content-around boxShadowD">
               <div>
                 {requestModal?.imageKYC && ( // render image if exist, replace false by uri
                   <>

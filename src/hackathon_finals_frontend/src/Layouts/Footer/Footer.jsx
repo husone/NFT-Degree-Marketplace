@@ -108,8 +108,7 @@ const FooterWrapper = styled.div`
     list-style: none;
     a{
       color: rgb(200, 200, 200);
-      font-size: 16px;
-      line-height: 35px;
+      font-size: 18px;
       &:hover{
         background-image: linear-gradient(45deg, #ff00aa, #3f35ff) !important;
         -webkit-background-clip: text !important;

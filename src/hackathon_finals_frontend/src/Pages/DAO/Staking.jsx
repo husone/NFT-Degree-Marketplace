@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Button, Space, Tag, Modal, Form, Input } from 'antd'
 import StakedItem from './StakedItem'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
-import { useCanister } from '@connect2ic/react'
-import { ft } from '../../../../declarations/ft'
-import { dao } from '../../../../declarations/dao'
+
 import './Staking.scss'
 
 const tokenData = [
@@ -60,30 +58,18 @@ export default function Staking() {
   const [isModalProposalVisible, setIsModalProposalVisible] = useState(false)
   const [amount, setAmount] = useState(0)
   const [proposal, setProposal] = useState('')
-  const [supply, setSupply] = useState(0)
-  const [ft] = useCanister('ft')
-  const [dao] = useCanister('dao')
 
-  useEffect(() => {
-    getSupply()
-  }, [])
-
-  const getSupply = async () => {
-    const res = await ft.totalSupply()
-    console.log('supply: ' + res)
-    setSupply(Number(res))
-  }
   const handleOk = () => {
     setIsModalVisible(false)
   }
 
-  const handleOkProposal = async () => {}
+  const handleOkProposal = () => {}
 
   return (
     <div>
-      <div className="wrap_staking row mx-5 container">
-        <div className="row">
-          <div className="col-8 d-flex align-items-center justify-content-start">
+      <div className="wrap_staking container">
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex align-items-center justify-content-start">
             <h1 className="heading1">Tokens</h1>
             <Tag className="ms-3" color="green">
               DBZ
@@ -91,19 +77,13 @@ export default function Staking() {
           </div>
           <Space
             size={15}
-            className="col-4 d-flex align-items-center  justify-content-end"
+            className="d-flex align-items-center  justify-content-end"
           >
             <Button
               className="custom_add_btn"
               onClick={() => setIsModalVisible(true)}
             >
-              Stake Token
-            </Button>
-            <Button
-              className="custom_add_btn"
-              onClick={() => setIsModalProposalVisible(true)}
-            >
-              Unstake token
+              Add Token
             </Button>
             <Button
               className="custom_add_btn"
@@ -116,7 +96,7 @@ export default function Staking() {
       </div>
 
       <Modal
-        width={500}
+        width={800}
         title="Enter amount"
         visible={isModalVisible}
         onOk={handleOk}
@@ -162,7 +142,7 @@ export default function Staking() {
                 <div className="col-8 staking_title">HOLDER</div>
                 <div className="col-2 staking_title">BALANCE</div>
               </div>
-              <div className="token_wrapper">
+              <div className="token_wrapper pt-2">
                 {tokenData.map((data, index) => {
                   return <StakedItem data={data} />
                 })}
@@ -179,7 +159,7 @@ export default function Staking() {
                 <div className="mx-3">
                   <div className="d-flex justify-content-between align-items-center">
                     <h1>Total supply</h1>
-                    <h1 style={{ color: '#ff00aa' }}>{supply}</h1>
+                    <h1 style={{ color: '#ff00aa' }}>10000</h1>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <h1>Transferable</h1>
