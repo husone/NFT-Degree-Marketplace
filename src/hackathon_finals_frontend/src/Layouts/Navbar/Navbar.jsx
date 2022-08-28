@@ -39,6 +39,7 @@ function NavBar(props) {
   }
 
   const confirm = async e => {
+    console.log(process.env.DAO_WALLET)
     const res = await ft.approve(
       Principal.fromText(process.env.DAO_WALLET),
       BigInt(1000000000)

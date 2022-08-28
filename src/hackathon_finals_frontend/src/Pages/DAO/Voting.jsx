@@ -1,9 +1,59 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Tag, Button, Space, Alert } from 'antd'
-
+import { dao } from '../../../../declarations/dao'
+import { ft } from '../../../../declarations/ft'
 import './Staking.scss'
+import { useCanister, useConnect } from '@connect2ic/react'
+import { Principal } from '@dfinity/principal'
 
 export default function Voting() {
+  const [dao] = useCanister('dao')
+  const [ft] = useCanister('ft')
+  const [proList, setProList] = useState([])
+  const [info, setInfo] = useState({})
+  const [isShow, setIsShow] = useState(false)
+  useEffect(() => {
+    getList()
+  }, [])
+
+  const approve = async () => {
+    const res = await ft.approve(
+      Principal.fromText('rno2w-sqaaa-aaaaa-aaacq-cai'),
+      BigInt(1000000000)
+    )
+    console.log(res)
+  }
+
+  const getList = async () => {
+    const res = await dao.list_proposals()
+    const { id, proposer, payload, state } = res[0]
+    setInfo({
+      id: Number(id),
+      proposer: proposer.toString(),
+      payload,
+      state,
+    })
+
+    if (Object.keys(state)[0] === 'succeeded') {
+      setIsShow(false)
+    } else {
+      setIsShow(true)
+    }
+    setProList(res)
+  }
+
+  const doNo = async () => {
+    // const res = await dao.vote(
+    //   { vote: 'no' },
+    //   BigInt(proList[proList.length - 1]?.id)
+    // )
+    // console.log(res)
+  }
+
+  const doYes = async () => {
+    // const res = await dao.vote( { {no: null} , BigInt(proList[proList.length - 1]?.id)})
+    // console.log(res)
+  }
   return (
     <div>
       <div className="wrap_staking row mx-5 container">
@@ -12,7 +62,7 @@ export default function Voting() {
             <h1 className="heading1">Voting</h1>
           </div>
           <div className="col-4 d-flex align-items-center  justify-content-end">
-            <Button className="custom_add_btn">
+            <Button className="custom_add_btn" onClick={approve}>
               <svg
                 className="me-2"
                 xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +77,7 @@ export default function Voting() {
                   d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
                 />
               </svg>
-              Back
+              Approve
             </Button>
           </div>
         </div>
@@ -38,11 +88,9 @@ export default function Voting() {
           <div className="col-8 ">
             <div className="rounded" style={{ backgroundColor: '#343444' }}>
               <div className="row py-3 px-3">
-                <p className="text-muted">Created by</p>
+                <h2 className="text-muted">{info.payload}</h2>
                 <div className="ms-2 mb-5 principle_staking">
-                  {
-                    'zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe'
-                  }
+                  {`Proposal #${info.id} ${info.proposer}`}
                 </div>
 
                 <div className="d-flex align-items-center">
@@ -89,20 +137,24 @@ export default function Voting() {
                     0 DBZ
                   </p>
                 </div>
-                <Space size={15} className="mt-3 mb-5">
-                  <Button
-                    className="btn_cancel"
-                    style={{ width: '80px', border: '0px' }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className="btn_ok"
-                    style={{ width: '80px', border: '0px' }}
-                  >
-                    OK
-                  </Button>
-                </Space>
+                {isShow && (
+                  <Space size={15} className="mt-3 mb-5">
+                    <Button
+                      className="btn_cancel"
+                      style={{ width: '80px', border: '0px' }}
+                      onClick={doNo}
+                    >
+                      No
+                    </Button>
+                    <Button
+                      className="btn_ok"
+                      style={{ width: '80px', border: '0px' }}
+                      onClick={doYes}
+                    >
+                      Yes
+                    </Button>
+                  </Space>
+                )}
                 <Alert
                   message="Informational Notes"
                   description="Voting with 10000 DBZ. This was your balance when the vote started."

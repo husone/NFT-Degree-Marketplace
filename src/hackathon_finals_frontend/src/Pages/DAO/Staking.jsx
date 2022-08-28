@@ -101,6 +101,7 @@ export default function Staking() {
       toast.warn('You have to approve! Click approve at navbar')
     } else {
       console.log(amount)
+      console.log(await dao.callerToText())
       const res = await dao.stake(BigInt(amount))
       setAmount(0)
       console.log(res)
