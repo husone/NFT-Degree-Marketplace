@@ -5,6 +5,7 @@ import { Principal } from '@dfinity/principal'
 import '../Navbar.scss'
 import { Input, Form, Modal } from 'antd'
 import { final_be } from '../../../../../declarations/final_be'
+import { ft } from '../../../../../declarations/ft'
 import { toast } from 'react-toastify'
 
 function NavbarEducation() {
@@ -32,7 +33,7 @@ function NavbarEducation() {
       autoClose: false,
     })
     const { prinp, amount } = infoMint
-    const res = await final_be.mintDIP20(
+    const res = await ft.mintDIP20(
       Principal.fromText(prinp),
       BigInt(amount)
     )
