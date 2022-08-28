@@ -142,7 +142,7 @@ export default function Staking() {
                 <div className="col-8 staking_title">HOLDER</div>
                 <div className="col-2 staking_title">BALANCE</div>
               </div>
-              <div className="token_wrapper">
+              <div className="token_wrapper pt-2">
                 {tokenData.map((data, index) => {
                   return <StakedItem data={data} />
                 })}
