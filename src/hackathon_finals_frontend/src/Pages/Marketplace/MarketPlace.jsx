@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Tabs } from 'antd'
+import { Tabs, Button } from 'antd'
 import { useConnect } from '@connect2ic/react'
 import './MarketPlace.scss'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
@@ -7,6 +7,9 @@ import { nftCanister } from '../../../../declarations/nftCanister'
 import { Link } from 'react-router-dom'
 import ItemHome from '../Home/components/ItemHome'
 import { final_be } from '../../../../declarations/final_be'
+import { ft } from '../../../../declarations/ft'
+import { Principal } from '@dfinity/principal'
+
 
 const { TabPane } = Tabs
 const topCertificate = [
@@ -58,6 +61,14 @@ export default function MarketPlace() {
     getAllNFT()
   }, [])
 
+  const approve = async () => {
+    const res = await ft.approve(
+      Principal.fromText('rno2w-sqaaa-aaaaa-aaacq-cai'),
+      BigInt(1000000000)
+    )
+    console.log(res)
+  }
+
   const getAllNFT = async () => {
     const res = await nftCanister.getNFTPublic()
     console.log(res)
@@ -73,8 +84,27 @@ export default function MarketPlace() {
           </h1>
           <p className="text-white-50 mb-0">Wallet Address</p>
           <p className="text-white">{principal}</p>
+
+          <Button className="custom_add_btn_white" onClick={approve}>
+            <svg
+              className="me-2"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="white"
+              class="bi bi-arrow-left"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+              />
+            </svg>
+            Approve
+          </Button>
         </div>
       </section>
+      
       <div className="container">
         <Tabs className="mt-4 " defaultActiveKey="1" onChange={onChange}>
           <TabPane tab="Top certificate" key="1" className="my-5">
