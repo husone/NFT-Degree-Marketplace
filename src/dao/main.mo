@@ -28,7 +28,7 @@ shared actor class DAO(dip20 : Principal) = Self {
     func execute() : async() {
         let a = await list_proposals();
         for (p in a.vals()){
-            if (p.endTime > Time.now()){
+            if (p.endTime < Time.now()){
                 let newP = {
                             id = p.id;
                               votes_yes = p.votes_yes;                         
