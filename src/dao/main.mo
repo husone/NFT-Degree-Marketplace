@@ -22,9 +22,30 @@ shared actor class DAO(dip20 : Principal) = Self {
     stable let proposal_submission_deposit : Types.Tokens = {amount_e8s = 100};
     stable var system_params : Types.SystemParams = {transfer_fee = transfer_fee; proposal_vote_threshold = proposal_vote_threshold; proposal_submission_deposit = proposal_submission_deposit};
 
-    system func heartbeat() : async () {
-        // await execute_accepted_proposals();
+        system func heartbeat() : async () {
+        await execute();        // await execute_accepted_proposals();
     };
+    func execute() : async() {
+        let a = await list_proposals();
+        for (p in a.vals()){
+            if (p.endTime < Time.now()){
+                let newP = {
+                            id = p.id;
+                              votes_yes = p.votes_yes;                         
+                              votes_no = p.votes_no;
+                              voters = p.voters;
+                              state = #succeeded;
+                              endTime = p.endTime;
+                              timestamp = p.timestamp;
+                              proposer = p.proposer;
+                              payload = p.payload;
+                };
+                proposal_put(p.id,newP);
+            };
+        };
+        
+    };
+
 
     func account_get(id : Principal) : ?Types.Tokens = Trie.get(accounts, Types.account_key(id), Principal.equal);
     func account_put(id : Principal, tokens : Types.Tokens) {
@@ -147,7 +168,7 @@ shared actor class DAO(dip20 : Principal) = Self {
         return [caller, Principal.fromActor(Self)];
     };
 
-    public shared({caller}) func submit_proposal(payload: Text) : async Types.Result<Nat, Text> {
+    public shared({caller}) func submit_proposal(payload: Text, second : Int) : async Types.Result<Nat, Text> {
         let t = await transfer(caller, 1000);
         switch (t){
             case (true){
@@ -157,6 +178,7 @@ shared actor class DAO(dip20 : Principal) = Self {
             let proposal : Types.Proposal = {
                 id = proposal_id;
                 timestamp = Time.now();
+                endTime = Time.now() + second * 1000_000_000;
                 proposer = caller;
                 payload;
                 state = #open;
@@ -227,6 +249,7 @@ shared actor class DAO(dip20 : Principal) = Self {
                               votes_no = { amount_e8s = votes_no };
                               voters;
                               state;
+                              endTime = proposal.endTime;
                               timestamp = proposal.timestamp;
                               proposer = proposal.proposer;
                               payload = proposal.payload;
