@@ -247,7 +247,7 @@ export default function Staking() {
                             <h1 className="infor_text mx-3 pt-5 d-flex align-items-center">
                                 <div className="d-flex align-items-center"> 
                                     Total Stake:
-                                    <b className='text-light me-3'>{totalStake}</b>
+                                    <b className='text-light mx-3'>{totalStake}</b>
                                 </div>
                                 <div className="d-flex align-items-center">
                                     DBZ
@@ -257,7 +257,7 @@ export default function Staking() {
                             <h1 className="infor_text mx-3 d-flex pb-5 align-items-center">
                                 <div className="d-flex align-items-center">
                                     My Staking:
-                                    <b className='text-light me-3'>{myStaking}</b>
+                                    <b className='text-light mx-3'>{myStaking}</b>
                                 </div>
                                 <div className="d-flex align-items-center">
                                     DBZ
