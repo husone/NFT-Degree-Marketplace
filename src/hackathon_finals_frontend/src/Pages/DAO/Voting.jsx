@@ -1,9 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Tag, Button, Space, Alert } from 'antd'
-
+import { dao } from '../../../../declarations/dao'
 import './Staking.scss'
+import { useCanister, useConnect } from '@connect2ic/react'
 
 export default function Voting() {
+  const [dao] = useCanister('dao')
+  const [proList, setProList] = useState([])
+
+  useEffect(() => {
+    getList()
+  }, [])
+
+  const getList = async () => {
+    const res = await dao.list_proposals()
+    console.log(res)
+    setProList(res)
+  }
   return (
     <div>
       <div className="wrap_staking row mx-5 container">
@@ -40,9 +53,7 @@ export default function Voting() {
               <div className="row py-3 px-3">
                 <p className="text-muted">Created by</p>
                 <div className="ms-2 mb-5 principle_staking">
-                  {
-                    'zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe'
-                  }
+                  {`Proposal ${Number(proList[proList.length - 1]?.id)}`}
                 </div>
 
                 <div className="d-flex align-items-center">
