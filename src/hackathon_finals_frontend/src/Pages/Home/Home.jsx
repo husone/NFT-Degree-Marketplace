@@ -52,42 +52,72 @@ const topCenter = [
   },
 ]
 
-const topCertificate = [
+const fakeNFT = [
   {
-    owner: 'H.T.Ha',
-    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
-    ownerUri:
-      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+    metadata: {
+      owner: 'H.T.Ha',
+      cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+      ownerUri:
+        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+      center: "FPT Univertisy",
+      name: "..."
+    },
+    id: 0
   },
   {
-    owner: 'H.T.Ha',
-    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
-    ownerUri:
-      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+    metadata: {
+      owner: 'H.T.Ha',
+      cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+      ownerUri:
+        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+      center: "FPT Univertisy",
+      name: "..."
+    },
+    id: 1
   },
   {
-    owner: 'H.T.Ha',
-    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
-    ownerUri:
-      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+    metadata: {
+      owner: 'H.T.Ha',
+      cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+      ownerUri:
+        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+      center: "FPT Univertisy",
+      name: "..."
+    },
+    id: 2
   },
   {
-    owner: 'H.T.Ha',
-    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
-    ownerUri:
-      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+    metadata: {
+      owner: 'H.T.Ha',
+      cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+      ownerUri:
+        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+      center: "FPT Univertisy",
+      name: "..."
+    },
+    id: 3
   },
   {
-    owner: 'H.T.Ha',
-    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
-    ownerUri:
-      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+    metadata: {
+      owner: 'H.T.Ha',
+      cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+      ownerUri:
+        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+      center: "FPT Univertisy",
+      name: "..."
+    },
+    id: 4
   },
   {
-    owner: 'H.T.Ha',
-    uri: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
-    ownerUri:
-      'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+    metadata: {
+      owner: 'H.T.Ha',
+      cid: 'https://lambang-toanquoc.com/wp-content/uploads/2020/10/lam-bang-dai-hoc-cntt1-1536x1093.jpg',
+      ownerUri:
+        'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745',
+      center: "FPT Univertisy",
+      name: "..."
+    },
+    id: 5
   },
 ]
 
@@ -217,7 +247,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="certificates_wrapper">
-                      {listNFT.map(nft => {
+                      {fakeNFT.map(nft => {
                         const id = Number(nft?.id)
                         return (
                           <Link to={`/nft/${id}`} key={id}>
