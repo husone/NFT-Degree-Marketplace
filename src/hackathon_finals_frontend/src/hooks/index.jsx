@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { checkRole } from '../Utils/CheckRole'
-import { useConnect } from '@connect2ic/react'
+import { useConnect, useCanister } from '@connect2ic/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { final_be } from '../../.././declarations/final_be'
 import { Principal } from '@dfinity/principal'
@@ -10,6 +10,7 @@ export const Context = createContext()
 
 const Provider = ({ children }) => {
   let location = useLocation()
+  const DAO_WALLET = 'rno2w-sqaaa-aaaaa-aaacq-cai'
   const { principal, isConnected, connect, isConnecting } = useConnect()
   const [principalStorage, setPrincipalStorage] = useState(
     localStorage.getItem('prinp')
@@ -36,6 +37,7 @@ const Provider = ({ children }) => {
     if (principal) {
       getRoleUser()
       getBalanceDIP20(principal)
+      checkAllowance()
     }
     console.log('principal: ' + principal)
     console.log('role: ' + role)
@@ -43,6 +45,19 @@ const Provider = ({ children }) => {
       setIsLoaded(true)
     }
   }, [principal, role])
+
+  const checkAllowance = async () => {
+    console.log(DAO_WALLET)
+    console.log(principal)
+    const res = await ft.allowance(
+      Principal.fromText(principal),
+      Principal.fromText(DAO_WALLET)
+    )
+    console.log(res)
+    if (Number(res) > 0) {
+      setIsApproveGlobal(true)
+    }
+  }
 
   const getBalanceDIP20 = async principal => {
     const res = await ft.balanceOf(Principal.fromText(principal))

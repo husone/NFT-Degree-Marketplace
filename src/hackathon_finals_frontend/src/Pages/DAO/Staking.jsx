@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Button, Space, Tag, Modal, Form, Input } from 'antd'
 import StakedItem from './StakedItem'
 import CoinLogo from '../../Assets/Images/DBZcoin.png'
-
+import { Context } from '../../hooks/index'
+import { useCanister, useConnect } from '@connect2ic/react'
+import { ft } from '../../../../declarations/ft'
+import { dao } from '../../../../declarations/dao'
 import './Staking.scss'
+import { toast } from 'react-toastify'
+import { Principal } from '@dfinity/principal'
 
 const tokenData = [
   {
@@ -54,16 +59,81 @@ const tokenData = [
 ]
 
 export default function Staking() {
+  const { principal } = useConnect()
+  const { isApproveGlobal, setIsApproveGlobal } = useContext(Context)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isModalProposalVisible, setIsModalProposalVisible] = useState(false)
+  const [isModalUnStakeVisible, setIsModalUnStakelVisible] = useState(false)
   const [amount, setAmount] = useState(0)
-  const [proposal, setProposal] = useState('')
+  const [amountUn, setAmountUn] = useState(0)
+  const [proposal, setProposal] = useState({})
+  const [supply, setSupply] = useState(0)
+  const [totalStake, setTotalStake] = useState(0)
+  const [myStaking, setMyStaking] = useState(0)
 
-  const handleOk = () => {
+  const [ft] = useCanister('ft')
+  const [dao] = useCanister('dao')
+
+  const handleChange = event => {
+    const name = event.target.name
+    const value = event.target.value
+    setProposal(values => ({
+      ...values,
+      [name]: value,
+    }))
+  }
+
+  const DAO_WALLET = 'rno2w-sqaaa-aaaaa-aaacq-cai'
+  useEffect(() => {
+    getSupply()
+    getMyStaking()
+    getTotalStake()
+  }, [])
+
+  const getSupply = async () => {
+    const res = await ft.totalSupply()
+    console.log('supply: ' + res)
+    setSupply(Number(res))
+  }
+
+  const handleOk = async () => {
+    console.log(isApproveGlobal)
+    if (!isApproveGlobal) {
+      toast.warn('You have to approve! Click approve at navbar')
+    } else {
+      const res = await dao.stake(BigInt(amount))
+      setAmount(0)
+      console.log(res)
+      toast.success('Stake successfully')
+    }
     setIsModalVisible(false)
   }
 
-  const handleOkProposal = () => {}
+  const handleOkUnStake = async () => {
+    const res = await dao.unstake(BigInt(amountUn))
+    setAmount(0)
+    console.log(res)
+    toast.success('Unstake successfully')
+
+    setIsModalVisible(false)
+  }
+
+  // const handleOkProposal = async () => {
+  //   const res = await dao.submitProposal()
+  // }
+
+  const getTotalStake = async () => {
+    const res = await ft.balanceOf(Principal.fromText(DAO_WALLET))
+    setTotalStake(Number(res))
+    console.log(res)
+  }
+
+  const getMyStaking = async () => {
+    console.log(principal)
+    const res = await dao.getAccount(Principal.fromText(principal))
+    console.log(res)
+    setMyStaking(Number(res[0]?.amount_e8s))
+  }
 
   return (
     <div>
@@ -83,7 +153,13 @@ export default function Staking() {
               className="custom_add_btn"
               onClick={() => setIsModalVisible(true)}
             >
-              Add Token
+              Stake Token
+            </Button>
+            <Button
+              className="custom_add_btn"
+              onClick={() => setIsModalUnStakelVisible(true)}
+            >
+              Unstake Token
             </Button>
             <Button
               className="custom_add_btn"
@@ -117,6 +193,26 @@ export default function Staking() {
       </Modal>
       <Modal
         width={800}
+        title="Enter amount"
+        visible={isModalUnStakeVisible}
+        onOk={handleOkUnStake}
+        onCancel={() => {
+          setIsModalUnStakelVisible(false)
+        }}
+      >
+        <Form>
+          <Input
+            placeholder="Enter amount token to unstake..."
+            onChange={e => setAmountUn(e.target.value)}
+            name="amount"
+            id="amount"
+            value={amountUn || ''}
+            className="text-white"
+          />
+        </Form>
+      </Modal>
+      <Modal
+        width={800}
         title="Enter proposal"
         visible={isModalProposalVisible}
         onOk={handleOkProposal}
@@ -125,10 +221,18 @@ export default function Staking() {
         <Form>
           <Input
             placeholder="Enter your proposal to stake..."
-            onChange={e => setProposal(e.target.value)}
-            name="amount"
-            id="amount"
-            value={amount || ''}
+            onChange={handleChange}
+            name="proposalContent"
+            id="proposalContent"
+            value={proposalContent || ''}
+            className="text-white"
+          />
+          <Input
+            placeholder="Enter the time in second"
+            onChange={handleChange}
+            name="time"
+            id="time"
+            value={time || ''}
             className="text-white"
           />
         </Form>
@@ -139,13 +243,15 @@ export default function Staking() {
           <div className="col-8 ">
             <div className="rounded" style={{ backgroundColor: '#343444' }}>
               <div className="row py-3 px-3">
-                <div className="col-8 staking_title">HOLDER</div>
-                <div className="col-2 staking_title">BALANCE</div>
+                {/* <div className="col-8 staking_title">HOLDER</div>
+                <div className="col-2 staking_title">BALANCE</div> */}
               </div>
+              <h1 className="text-white">Total Stake: {totalStake}</h1>
+              <h2 className="text-white">My Staking: {myStaking} </h2>
               <div className="token_wrapper pt-2">
-                {tokenData.map((data, index) => {
+                {/* {tokenData.map((data, index) => {
                   return <StakedItem data={data} />
-                })}
+                })} */}
               </div>
             </div>
           </div>
@@ -159,7 +265,7 @@ export default function Staking() {
                 <div className="mx-3">
                   <div className="d-flex justify-content-between align-items-center">
                     <h1>Total supply</h1>
-                    <h1 style={{ color: '#ff00aa' }}>10000</h1>
+                    <h1 style={{ color: '#ff00aa' }}>{supply}</h1>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <h1>Transferable</h1>
@@ -173,32 +279,6 @@ export default function Staking() {
                       DBZ
                       <img className="ms-2" src={CoinLogo} alt="coin logo" />
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="rounded p-0"
-              style={{ backgroundColor: '#343444', height: 'fit-content' }}
-            >
-              <div className="p-3 staking_title">OWNERSHIP DISTRIBUTION</div>
-              <div className="token_infor_wrapper m-0 py-2">
-                <div className="mx-3">
-                  <div className="d-flex justify-content-between my-2">
-                    <div className="principle_staking principle_staking2">
-                      {
-                        'zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe'
-                      }
-                    </div>
-                    <div>87%</div>
-                  </div>
-                  <div className="d-flex justify-content-between my-2 align-items-center">
-                    <div className="principle_staking principle_staking2">
-                      {
-                        'zf6wq-lz2a5-icdgs-xwagp-w5tt2-f52g3-zemkb-5yfez-tqtbg-arhq5-4qe'
-                      }
-                    </div>
-                    <div>23%</div>
                   </div>
                 </div>
               </div>

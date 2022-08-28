@@ -13,11 +13,15 @@ import { Principal } from '@dfinity/principal'
 import { publicRoutes } from '../../Routes/index'
 import './Navbar.scss'
 import { Context } from '../../hooks/index'
+import { ft } from '../../../../declarations/ft'
+import { useCanister } from '@connect2ic/react'
+
 function NavBar(props) {
   const { isApproveGlobal, setIsApproveGlobal } = useContext(Context)
   const { role, logout, login, balanceDIP20, connectWallet } = props
   const { principal, isConnected, disconnect } = useConnect()
   const [isApprove, setApprove] = useState(false)
+  const [ft] = useCanister('ft')
   const onConnectWallet = () => {
     // window.ic.plug.requestConnect()
     login()
@@ -34,7 +38,12 @@ function NavBar(props) {
     console.log(result)
   }
 
-  const confirm = e => {
+  const confirm = async e => {
+    const res = await ft.approve(
+      Principal.fromText('rno2w-sqaaa-aaaaa-aaacq-cai'),
+      BigInt(1000000000)
+    )
+    console.log(res)
     setIsApproveGlobal(true)
     // setApprove(true)
   }

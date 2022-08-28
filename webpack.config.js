@@ -3,6 +3,9 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
+const CopyPlugin = require('copy-webpack-plugin')
+
+// const final_be_IC = "fij5p-siaaa-aaaai-acata-cai"
 
 function initCanisterEnv() {
   let localCanisters, prodCanisters
@@ -29,6 +32,7 @@ function initCanisterEnv() {
     return prev
   }, {})
 }
+
 const canisterEnvVariables = initCanisterEnv()
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -93,7 +97,7 @@ module.exports = {
       Buffer: [require.resolve('buffer/'), 'Buffer'],
       process: require.resolve('process/browser'),
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
       React: 'react',
     }),

@@ -14,6 +14,9 @@ import { MutatingDots } from 'react-loader-spinner'
 import { bufferToURI } from '../../Utils/format'
 import CoinIcon from '../../Assets/Images/DBZcoin.png'
 const { confirm } = Modal
+import { Principal } from '@dfinity/principal'
+// import { canisterId } from '../../declarations/final_be/index.js'
+// import { idlFactory } from '../../declarations/final_be/final_be.did.js'
 
 function DetailNFT() {
   const navigate = useNavigate()
@@ -123,6 +126,7 @@ function DetailNFT() {
       icon: <DollarTwoTone />,
 
       onOk() {
+        // doBuy(amount)
         console.log(`amount: ${amount}, price: ${price}`)
         if (amount < price) {
           toast.warn('No enough token to by')
@@ -137,6 +141,59 @@ function DetailNFT() {
     })
   }
 
+  // const doBuy = async amount => {
+  //   if (price > amount) {
+  //     const requestTransferArg = {
+  //       // to: Principal.fromText(
+  //       to: '2woe5-4d62t-kzbbl-rdhs4-6qw5m-oboqs-d5vl7-6fbth-ywnnh-dqtvj-mae',
+  //       // ),
+
+  //       amount: amount,
+  //     }
+  //     const transfer = await window.ic?.plug?.requestTransfer(
+  //       requestTransferArg
+  //     )
+
+  //     const transferStatus = transfer?.transactions?.transactions[0]?.status
+  //     console.log(transferStatus)
+  //   }
+  // }
+  // const TRANSFER_ICP_TX = {
+  //   idl: idlFactory,
+  //   canisterId: canisterId,
+  //   methodName: 'send_dfx',
+  //   args: [
+  //     {
+  //       to: getAccountId(
+  //         Principal.from(
+  //           'e5uhc-kq6ct-dgmct-7x2zg-dnytg-kry5b-3rwpw-uuwqj-andm2-cmvis-nqe'
+  //         )
+  //       ),
+  //       fee: { e8s: BigInt(10000) },
+  //       amount: { e8s: BigInt(1000000) },
+  //       memo: RandomBigInt(32),
+  //       from_subaccount: [], // For now, using default subaccount to handle ICP
+  //       created_at_time: [],
+  //     },
+  //   ],
+  //   onSuccess: async res => {
+  //     console.log('transferred icp successfully')
+  //   },
+  //   onFail: res => {
+  //     console.log('transfer icp error', res)
+  //   },
+  // }
+
+  // const randomTransfers = async () => {
+  //   console.log('Doing a bunch of transfers')
+  //   await window.ic.plug.batchTransactions([
+  //     TRANSFER_XTC_TX,
+  //     TRANSFER_ICP_TX,
+  //     TRANSFER_STARVERSE_TX,
+  //     FLIP_TRANSACTION(1),
+  //   ])
+  //   console.log('Done!')
+  // }
   return (
     <div className="container h-100 pt-5">
       {isLoaded ? (
