@@ -1,0 +1,84 @@
+.custom_add_btn {
+    border: 0px !important;
+}
+
+.token_wrapper {
+    max-height: 300px;
+    overflow-y: scroll;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    box-shadow: inset 0px 10px 10px 5px #00000020;
+}
+
+.token_infor_wrapper {
+    height: fit-content;
+    min-height: 60px;
+    box-shadow: inset 0px 10px 10px 5px #00000020;
+
+    h1 {
+        font-size: 16px;
+        color: rgb(116, 125, 166);
+    }
+
+    img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.staking_title {
+    background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.principle_staking {
+    width: 200px;
+    background-color: #00000030;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 3px 8px;
+    border-radius: 50px;
+}
+
+.principle_staking2 {
+    width: 120px;
+}
+
+.btn_cancel {
+    background-color: rgb(255, 45, 45) !important;
+}
+
+.btn_ok {
+    background-color: #17d65a !important;
+}
+
+.ant-alert-message {
+    background-image: linear-gradient(45deg, #ff00aa, #3f35ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+
+.ant-btn:hover,
+.ant-btn:focus,
+.ant-btn:active {
+    background-color: #8328c0 !important;
+}
+
+.infor_text {
+    font-size: 20px;
+    color: rgb(116, 125, 166);
+}
+.coin_logo{
+    width: 35px;
+    height: 35px;
+}

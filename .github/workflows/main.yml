@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "mmain" , "fe", "be", "be-*" ]
+    branches: [ "main" , "fe", "be", "be-*" ]
   pull_request:
     branches: [ "main", "be", "be-*" ]
 
@@ -54,13 +54,7 @@ jobs:
       - name : run dfx
         run : |
           dfx start --background
-          dfx deploy --argument "(
-            record {
-              name = \"My DIP721\";
-              symbol = \"DFXB\";
-              address = principal\"$(dfx identity get-principal)\"
-            }
-          )"
+          sh ./scripts/deploy.sh
         # - name: mint NFT
         # run : dfx canister call final_be mintNFT \ "( principal\"$(dfx identity get-principal)\", opt record {desc=\"Test\"; name=\"test\"} )"
 

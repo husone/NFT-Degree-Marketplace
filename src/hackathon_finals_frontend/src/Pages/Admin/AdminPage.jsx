@@ -5,17 +5,19 @@ import { EyeOutlined } from '@ant-design/icons'
 import { Table, Button, Modal, Form, Input, Tag } from 'antd'
 import styled from 'styled-components'
 import { formatDate, bufferToURI } from '../.././Utils/format'
+import { nftCanister } from '../../../../declarations/nftCanister'
 import { final_be } from '../../../../declarations/final_be'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
 import { MutatingDots } from 'react-loader-spinner'
-
+import { useConnect, useCanister } from '@connect2ic/react'
 function AdminPage() {
   const [requestKYC, setRequestKYC] = useState([])
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [filteredRequestKYC, setFilteredRequestKYC] = useState([])
   const [requestModal, setRequestModal] = useState({})
   const [isLoaded, setIsLoaded] = useState(false)
+  const [nftCanister] = useCanister('nftCanister')
 
   useEffect(() => {
     fetchRequestKYC()
@@ -26,6 +28,7 @@ function AdminPage() {
     const res = await axios.get(
       `${process.env.BACKEND_OFF_HEROKU}/education?status=pending`
     )
+    console.log(res)
     const filteredRequest = res.data.education.map(education => {
       console.log(education)
       return {
@@ -53,19 +56,6 @@ function AdminPage() {
       dataIndex: 'createdAt',
       key: 'createdAt',
     },
-    // {
-    //   title: 'Status',
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   render: (_, { status }) => {
-    //     let color = 'green'
-    //     if (status === 'Deny') {
-    //       color = 'volcano'
-    //       return <Tag color={color}>Deny</Tag>
-    //     }
-    //     return <Tag color={color}>Accept</Tag>
-    //   },
-    // },
     {
       title: 'Preview',
       key: 'preview',
@@ -100,8 +90,8 @@ function AdminPage() {
     const principal = requestModal.principal
     try {
       toast('Approving...', { autoClose: 1500 })
-      console.log(await final_be.callerToText())
-      await final_be.addCenter({
+
+      await nftCanister.addCenter({
         address: Principal.fromText(principal),
         volume: 0,
       })
@@ -177,7 +167,7 @@ function AdminPage() {
         visible={isModalVisible}
         onOk={approveRequest}
         onCancel={handleCancel}
-        width={600}
+        width={680}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Cancel
@@ -246,7 +236,7 @@ function AdminPage() {
                 </Container>
               </Form.Item>
 
-              <Form.Item label="Logo Image">
+              <Form.Item label="NFT Image">
                 <Container>
                   {requestModal?.imageLogo && ( // render image if exist, replace false by uri
                     <img

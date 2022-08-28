@@ -114,14 +114,14 @@ function ListRequests() {
 
   return (
     <div className="d-flex flex-column align-items-center">
-      <h2 className="py-4 px-4 heading1 te">LIST OF USER'S REQUEST</h2>
+      <h2 className="py-4 px-4 heading1 text-center">LIST OF USER'S REQUEST</h2>
       {isLoaded ? (
         <>
           <Table
             columns={columns}
             dataSource={requestsFilter}
             style={{ color: '#333' }}
-            className="px-4"
+            className="px-4 "
           />
 
           <Modal
@@ -131,7 +131,7 @@ function ListRequests() {
             onCancel={handleCancel}
             width={600}
           >
-            <Container className="d-flex justify-content-around">
+            <Container className="d-flex justify-content-around boxShadowD">
               <div>
                 {requestModal?.imageKYC && ( // render image if exist, replace false by uri
                   <>
@@ -140,7 +140,7 @@ function ListRequests() {
                         src={bufferToURI(requestModal?.imageKYC)}
                         alt="preview image"
                         srcSet=""
-                        style={{ width: '250px', height: '250px' }}
+                        style={{ width: '250px', height: '250px', borderRadius: "8px", objectFit: "cover" }}
                       />
                     </Container>
 
@@ -156,7 +156,7 @@ function ListRequests() {
                         src={bufferToURI(requestModal?.imageNFT)}
                         alt="preview image"
                         srcSet=""
-                        style={{ width: '250px', height: '250px' }}
+                        style={{ width: '250px', height: '250px', borderRadius: "8px", objectFit: "cover" }}
                       />
                     </Container>
                     <h4 className="text-center text-light">NFT Image</h4>

@@ -4,14 +4,16 @@ import { Table, Button, Space, Modal, Form, Input } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import { formatDate, bufferToURI, formatDay } from '../../Utils/format'
-import { useConnect } from '@connect2ic/react'
+import { useConnect, useCanister } from '@connect2ic/react'
 import './MintRequest.scss'
 import { storeFiles } from '../../Utils/web3Storage'
-import { final_be } from '../../../../declarations/final_be'
+// import { final_be } from '../../../../declarations/final_be'
+// import { nftCanister } from '../../../../declarations/nftCanister'
 import { Principal } from '@dfinity/principal'
 import { toast } from 'react-toastify'
 
 function MintRequest() {
+  const [nftCanister] = useCanister('nftCanister')
   const toastId = useRef(null)
   const { principal } = useConnect()
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -29,11 +31,16 @@ function MintRequest() {
     const resFirst = await axios.get(
       `${process.env.BACKEND_OFF_HEROKU}/education?principal=${principal}`
     )
+    console.log(resFirst)
     const educationId = resFirst?.data?.education[0]?._id
+    console.log('educationID: ' + educationId)
     const res = await axios.get(
       `${process.env.BACKEND_OFF_HEROKU}/request?status=pending&educationId=${educationId}`
     )
-    const request = res.data.request
+    const request = res?.data?.request
+    // const request = res?.data?.request.filter(data => {
+    //   data?.education?._id === educationId
+    // })
     console.log(request)
     const filtered = request.map(request => {
       const newRequest = {
@@ -156,8 +163,8 @@ function MintRequest() {
   }
   const mintNFT = async fileImg => {
     console.log('Minting')
-    // const cid = await storeFiles([fileImg])
-    const cid = 'bafybeiagkizddtmt4cubpjsatybhs3dhkmf2g3n527h7u6foawb3fhzro4'
+    const cid = await storeFiles([fileImg])
+    // const cid = 'bafybeiagkizddtmt4cubpjsatybhs3dhkmf2g3n527h7u6foawb3fhzro4'
     const fileNameImg = fileImg.name
     const tokenURI = `https://${cid}.${process.env.IPFS_LINK}/${fileNameImg}`
     const { name, education, studentID, nationID, dob, certificate, _id } =
@@ -170,8 +177,8 @@ function MintRequest() {
       cer_owner: '',
     }
     const ownerPrincipal = requestModal.principal
-    const resCanister = await final_be.mintDip721ABCD(
-      Principal.fromText(principal),
+    const resCanister = await nftCanister.mintDip721(
+      // Principal.fromText(principal),
       Principal.fromText(ownerPrincipal),
       metadata
     )
@@ -244,7 +251,9 @@ function MintRequest() {
 
   return (
     <div className="pt-5">
-      <h2 className="my-4 mt-0 text-white text-center">MINT REQUESTS</h2>
+      <h2 className="my-4 mt-0 text-white text-center heading1">
+        MINT REQUESTS
+      </h2>
       <Table
         columns={columns}
         dataSource={requestsFilter}

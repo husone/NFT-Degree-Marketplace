@@ -25,9 +25,13 @@ function NavbarUser() {
         </button>
         <ul className="dropdown-menu">
           {pathRoles.map((route, index) => {
-            if (route.dropdown) {
+            if (route.dropdown && route.dropdown !== 'DAO') {
               return (
-                <Link className="dropdown-item navbar-brand custom_dropdown" to={route.path} key={index}>
+                <Link
+                  className="dropdown-item navbar-brand custom_dropdown"
+                  to={route.path}
+                  key={index}
+                >
                   {route.desc}
                 </Link>
               )
