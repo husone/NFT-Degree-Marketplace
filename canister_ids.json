@@ -1,5 +1,15 @@
-{ "ft": {
-  "ic": "t76ga-jyaaa-aaaap-qaqjq-cai"
+{
+  "dao": {
+    "ic": "td24r-6yaaa-aaaap-qaqlq-cai"
+  },
+  "final_be": {
+    "ic": "souy7-rqaaa-aaaap-qaqma-cai"
+  },
+  "final_fe": {
+    "ic": "sjv6l-4iaaa-aaaap-qaqmq-cai"
+  },
+  "ft": {
+    "ic": "t76ga-jyaaa-aaaap-qaqjq-cai"
   },
   "nftCanister": {
     "ic": "te32f-taaaa-aaaap-qaqla-cai"
