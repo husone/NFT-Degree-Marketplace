@@ -1,22 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import { Tag, Button, Space, Alert } from 'antd'
 import { dao } from '../../../../declarations/dao'
+import { ft } from '../../../../declarations/ft'
 import './Staking.scss'
 import { useCanister, useConnect } from '@connect2ic/react'
+import { Principal } from '@dfinity/principal'
 
 export default function Voting() {
   const [dao] = useCanister('dao')
+  const [ft] = useCanister('ft')
   const [proList, setProList] = useState([])
 
   useEffect(() => {
     getList()
   }, [])
 
+  const approve = async () => {
+    const res = await ft.approve(
+      Principal.fromText('rno2w-sqaaa-aaaaa-aaacq-cai'),
+      BigInt(1000000000)
+    )
+    console.log(res)
+  }
+
   const getList = async () => {
     const res = await dao.list_proposals()
     console.log(res)
     setProList(res)
   }
+
+  const doNo = async () => {}
+
+  const doYes = async () => {}
   return (
     <div>
       <div className="wrap_staking row mx-5 container">
@@ -25,7 +40,7 @@ export default function Voting() {
             <h1 className="heading1">Voting</h1>
           </div>
           <div className="col-4 d-flex align-items-center  justify-content-end">
-            <Button className="custom_add_btn">
+            <Button className="custom_add_btn" onClick={approve}>
               <svg
                 className="me-2"
                 xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +55,7 @@ export default function Voting() {
                   d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
                 />
               </svg>
-              Back
+              Approve
             </Button>
           </div>
         </div>
@@ -104,14 +119,16 @@ export default function Voting() {
                   <Button
                     className="btn_cancel"
                     style={{ width: '80px', border: '0px' }}
+                    onClick={doNo}
                   >
-                    Cancel
+                    No
                   </Button>
                   <Button
                     className="btn_ok"
                     style={{ width: '80px', border: '0px' }}
+                    onClick={doYes}
                   >
-                    OK
+                    Yes
                   </Button>
                 </Space>
                 <Alert
